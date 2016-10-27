@@ -4,6 +4,9 @@
 *.o
 *.obj
 
+# Intellisense database
+*.VC.db
+
 # Precompiled Headers
 *.gch
 *.pch
