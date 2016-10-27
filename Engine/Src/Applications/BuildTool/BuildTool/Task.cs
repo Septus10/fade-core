@@ -152,14 +152,25 @@ namespace Fade
                 return true;
             }
 
-            private void GetSourceFiles(string Path, ref List<SourceFile> HeaderFiles, ref List<SourceFile> SourceFiles)
+            private void GetSourceFiles(string Path, string Denom, ref List<SourceFile> HeaderFiles, ref List<SourceFile> SourceFiles)
             {
                 var files = Directory.GetFiles(Path);
 
                 foreach (var file in files)
                 {
                     SourceFile temp = new SourceFile();
-                    temp.Directory = Path;
+                    int start = Path.IndexOf(Denom) + 1;
+                    if (start == -1)
+                    {
+                        start = 0;
+                    }
+                    string newPath = Path.Substring(start);
+                    if (!filters.Contains(newPath))
+                    {
+                        filters.Add(newPath);
+                    }
+
+                    temp.Directory = newPath;
                     temp.FileName = file;
 
                     string ext = file.Substring(file.LastIndexOf('.'));
@@ -176,7 +187,7 @@ namespace Fade
                 var dirs = Directory.GetDirectories(Path);
                 foreach (var dir in dirs)
                 {
-                    GetSourceFiles(dir, ref HeaderFiles, ref SourceFiles);
+                    GetSourceFiles(dir, Denom, ref HeaderFiles, ref SourceFiles);
                 }
                 
             }
@@ -211,6 +222,13 @@ namespace Fade
                     return false;
                 }
 
+                string filterTemplate = FileToString("filter_template.txt");
+                if (filterTemplate == "")
+                {
+                    LastError = "Unable to find file: \"./filter_template.txt\"";
+                    return false;
+                }
+
                 //==============================================================
                 // Generate project files
                 //==============================================================
@@ -219,19 +237,27 @@ namespace Fade
                     List<SourceFile> headerFiles = new List<SourceFile>();
                     List<SourceFile> sourceFiles = new List<SourceFile>();
 
-                    GetSourceFiles(mod.Path + "\\Interfaces", ref headerFiles, ref sourceFiles);
-                    GetSourceFiles(mod.Path + "\\Implementations\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles);
+                    GetSourceFiles(mod.Path + "\\Interfaces", "\\Interfaces",ref headerFiles, ref sourceFiles);
+                    GetSourceFiles(mod.Path + "\\Implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles);
 
                     string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { Module = mod, HeaderFiles = headerFiles, SourceFiles = sourceFiles });            
                     string projectPath = $"{ProjectPath}\\Intermediate\\{mod.Name}.vcxproj";
 
+                    string filterResult = Engine.Razor.RunCompile(filterTemplate, "filter", null, new { Filters = filters, HeaderFiles = headerFiles, SourceFiles = sourceFiles });
+                    string filterPath = $"{ProjectPath}\\Intermediate\\{mod.Name}.vcxproj.filters";
+
                     if (File.Exists(projectPath))
                     {
-                        Console.WriteLine($"File exists: {projectPath}");
                         File.Delete(projectPath);
                     }
 
+                    if (File.Exists(filterPath))
+                    {
+                        File.Delete(filterPath);
+                    }
+
                     File.WriteAllText(projectPath, projectResult);
+                    File.WriteAllText(filterPath, filterResult);
                 }
 
                 return true;
@@ -247,6 +273,7 @@ namespace Fade
             private Project Proj;
             private Config Cfg;
             private List<Module> Modules = new List<Module>();
+            private List<string> filters = new List<string>();
         }
     }
 }
