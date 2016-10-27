@@ -1,0 +1,12 @@
+{
+	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
+	"ProjectType": "Application",
+	"Modules": 
+	[
+		{ 
+			"Name": "Run",
+			"Path": "Src/Runtime/Run/Run.fade_module",
+			"Implementation": "Default",
+		},
+	]
+}

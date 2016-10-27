@@ -1,0 +1,20 @@
+{
+	"$schema": "http://schema.vnunen.nl/fade_project.json#",
+	"Name": "Fade Engine",
+	"Version": "0.0.1",
+	"Configs": 
+	[
+		{
+			"Name": "Engine",
+			"Path": "Config/FadeEngine.fade_build"
+		},
+		{
+			"Name": "Editor",
+			"Path": "Config/FadeEditor.fade_build"
+		},
+		{
+			"Name": "Game",
+			"Path": "Config/FadeGame.fade_build"
+		}
+	]
+}
