@@ -152,7 +152,7 @@ namespace Fade
                 return true;
             }
 
-            private void GetSourceFiles(string Path, string Denom, ref List<SourceFile> HeaderFiles, ref List<SourceFile> SourceFiles)
+            private void GetSourceFiles(string Path, string Denom, ref List<SourceFile> HeaderFiles, ref List<SourceFile> SourceFiles, ref List<string> Filters)
             {
                 var files = Directory.GetFiles(Path);
 
@@ -165,9 +165,9 @@ namespace Fade
                         start = 0;
                     }
                     string newPath = Path.Substring(start);
-                    if (!filters.Contains(newPath))
+                    if (!Filters.Contains(newPath))
                     {
-                        filters.Add(newPath);
+                        Filters.Add(newPath);
                     }
 
                     temp.Directory = newPath;
@@ -187,7 +187,7 @@ namespace Fade
                 var dirs = Directory.GetDirectories(Path);
                 foreach (var dir in dirs)
                 {
-                    GetSourceFiles(dir, Denom, ref HeaderFiles, ref SourceFiles);
+                    GetSourceFiles(dir, Denom, ref HeaderFiles, ref SourceFiles, ref Filters);
                 }
                 
             }
@@ -237,12 +237,21 @@ namespace Fade
                     List<SourceFile> headerFiles = new List<SourceFile>();
                     List<SourceFile> sourceFiles = new List<SourceFile>();
 
-                    GetSourceFiles(mod.Path + "\\Interfaces", "\\Interfaces",ref headerFiles, ref sourceFiles);
-                    GetSourceFiles(mod.Path + "\\Implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles);
+                    List<Module> dependencies = new List<Module>();
+                    List<string> filters = new List<string>();
 
-                    string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { Module = mod, HeaderFiles = headerFiles, SourceFiles = sourceFiles });            
+                    foreach (var dep in mod.Dependencies)
+                    {
+                        Module temp = Modules.First(item => item.Name == dep.Name);
+                        dependencies.Add(temp);
+                    }
+
+                    GetSourceFiles(mod.Path + "\\Interfaces", "\\Interfaces",ref headerFiles, ref sourceFiles, ref filters);
+                    GetSourceFiles(mod.Path + "\\Implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters);
+
+                    string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { Module = mod, Dependencies = dependencies, HeaderFiles = headerFiles, SourceFiles = sourceFiles });            
                     string projectPath = $"{ProjectPath}\\Intermediate\\{mod.Name}.vcxproj";
-
+    
                     string filterResult = Engine.Razor.RunCompile(filterTemplate, "filter", null, new { Filters = filters, HeaderFiles = headerFiles, SourceFiles = sourceFiles });
                     string filterPath = $"{ProjectPath}\\Intermediate\\{mod.Name}.vcxproj.filters";
 
@@ -273,7 +282,6 @@ namespace Fade
             private Project Proj;
             private Config Cfg;
             private List<Module> Modules = new List<Module>();
-            private List<string> filters = new List<string>();
         }
     }
 }
