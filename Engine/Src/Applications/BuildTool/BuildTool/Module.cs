@@ -30,5 +30,12 @@ namespace Fade
             public Guid GUID { get; set; }
             public string Path { get; set; }
         }
+
+        class Implementation
+        {
+            public string Name { get; set; }
+            public string Version { get; set; }
+            public List<Dependency> Dependencies { get; set; }
+        }
     }
 }

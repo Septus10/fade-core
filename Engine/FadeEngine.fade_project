@@ -5,16 +5,16 @@
 	"Configs": 
 	[
 		{
-			"Name": "Engine",
-			"Path": "Config/FadeEngine.fade_build"
-		},
-		{
 			"Name": "Editor",
 			"Path": "Config/FadeEditor.fade_build"
 		},
 		{
 			"Name": "Game",
 			"Path": "Config/FadeGame.fade_build"
+		},
+		{
+			"Name": "Server",
+			"Path": "Config/FadeServer.fade_build"
 		}
 	]
 }

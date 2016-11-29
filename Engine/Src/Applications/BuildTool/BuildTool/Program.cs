@@ -45,13 +45,10 @@ namespace Fade
                     Console.ReadLine();
                     return;
                 }
-
-                Console.ReadLine();   
             }
 
             private static bool CheckCommandLine(string[] args, out BuildTask buildTask)
             {
-                Console.WriteLine(args.Length);
                 buildTask = null;
                 string projectFilePath = null;
                 Task task = Task.ENull;
@@ -98,7 +95,7 @@ namespace Fade
                             task = Task.ENull;
                             return false;
                     }
-
+                    
                     projectFilePath = Path.GetFullPath(args[1]);
                     if (!Path.HasExtension(projectFilePath)) projectFilePath += ".fade_project";
                     if (!File.Exists(projectFilePath))
@@ -129,7 +126,6 @@ namespace Fade
                     Console.WriteLine("Error getting project information");
                     return false;
                 }
-                Console.WriteLine("\n\n");
 
                 res = buildTask.ExecuteConfig();
                 if (!res)
@@ -137,7 +133,6 @@ namespace Fade
                     Console.WriteLine("Error getting build config: " + buildTask.LastError);
                     return false;
                 }
-                Console.WriteLine("\n\n");
 
                 res = buildTask.ExecuteModules();
                 if (!res)
@@ -145,7 +140,6 @@ namespace Fade
                     Console.WriteLine("Error getting modules: " + buildTask.LastError);
                     return false;
                 }
-                Console.WriteLine("\n\n");
 
                 res = buildTask.GenerateProjectFiles();
                 if (!res)

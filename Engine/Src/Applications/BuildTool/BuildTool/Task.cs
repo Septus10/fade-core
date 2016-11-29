@@ -33,18 +33,17 @@ namespace Fade
                 Config = config;
                 Proj = null;
                 ProjectPath = path;
-                Console.WriteLine($"Filepath: {filePath} \nConfig: {config}");
             }
 
             private string FileToString(string Path)
             {
-                StreamReader file = new StreamReader(Path);
-                if (file == null)
+                if (!File.Exists(Path))
                 {
                     LastError = $"File not found ({Path})";
                     return "";
                 }
 
+                StreamReader file = new StreamReader(Path);
                 string contents = file.ReadToEnd();
                 return contents;
             }
@@ -61,13 +60,6 @@ namespace Fade
                 {
                     LastError = "Unable to deserialize project file";
                     return false;
-                }
-
-                Console.WriteLine($"Project: {Proj.Name}\nConfigs:\n-----");
-                for (int i = 0; i < Proj.Configs.Count; i++)
-                {
-                    Console.WriteLine("\tConfig: " + Proj.Configs[i].Name + "\n\tPath: " + Proj.Configs[i].Path);
-                    Console.WriteLine("-----");
                 }
 
                 ProjectFilePath = ProjectFilePath.Remove(ProjectFilePath.LastIndexOf('\\') + 1);
@@ -99,13 +91,19 @@ namespace Fade
                     return false;
                 }
 
-                Console.WriteLine($"Config: {Config}\nProjectType: {Cfg.ProjectType}\nModules:\n-----");
-                for (int i = 0; i < Cfg.Modules.Count; i++)
-                {
-                    Console.WriteLine($"\tModule: {Cfg.Modules[i].Name}\n\tPath: {Cfg.Modules[i].Path}\n\tImplementation: {Cfg.Modules[i].Implementation}");
-                    Console.WriteLine("-----");
-                }
+                return true;
+            }
 
+            private bool parseVersion(string version, out int[] ints)
+            {
+                ints = new int[3];
+
+                string[] versions = version.Split('.');
+                if (!Int32.TryParse(versions[0], out ints[0]) || !Int32.TryParse(versions[1], out ints[1]) || !Int32.TryParse(versions[2], out ints[2]))
+                {
+                    LastError = "Error parsing version";
+                    return false;
+                }
                 return true;
             }
 
@@ -114,7 +112,7 @@ namespace Fade
                 for (int i = 0; i < Cfg.Modules.Count; i++)
                 {
                     string moduleFile = ProjectFilePath + Cfg.Modules[i].Path;
-                    string moduleJson = FileToString(ProjectFilePath + Cfg.Modules[i].Path);
+                    string moduleJson = FileToString(moduleFile);
                     Module module = JsonConvert.DeserializeObject<Module>(moduleJson);
                     if (module.Name == null)
                     {
@@ -124,29 +122,62 @@ namespace Fade
                     module.GUID = Guid.NewGuid();
                     module.Path = moduleFile.Substring(0, moduleFile.LastIndexOf('/') + 1);
                     module.ActiveImplementation = Cfg.Modules[i].Implementation;
-                    Console.WriteLine($"Path: {module.Path}");
+
+                    if (ModuleMap.ContainsKey(module.Name))
+                    {
+                        LastError = $"Module {module.Name} already exists\n\tPath: {moduleFile}";
+                        return false;
+                    }
+
+                    string implementationFile = ProjectFilePath + Cfg.Modules[i].Path.Substring(0, Cfg.Modules[i].Path.LastIndexOf('/')) + "\\Implementations\\" + module.ActiveImplementation + $"\\{module.ActiveImplementation}.fade_implementation";
+                    string implementationJson = FileToString(implementationFile);
+                    if (implementationJson != "")
+                    {
+                        Implementation impl = JsonConvert.DeserializeObject<Implementation>(implementationJson);
+                        foreach (var dep in impl.Dependencies)
+                        {
+                            module.Dependencies.Add(dep);
+                        }
+                    }
+
                     Modules.Add(module);
+                    ModuleMap.Add(module.Name, module);
                 }
+
+                // check if dependencies exist and if versions are correct
 
                 for (int i = 0; i < Modules.Count; i++)
                 {
-                    Console.WriteLine($"Module:\n-----");
-                    Module temp = Modules[i];
-                    Console.WriteLine($"\tName: {temp.Name}\n\tVersion: {temp.Version}\n\tDependencies:\n\t-----");
-                    for (int j = 0; j < temp.Dependencies.Count; j++)
+                    Module mod = Modules[i];
+                    for (int j = 0; j < mod.Dependencies.Count; j++)
                     {
-                        Dependency dep = temp.Dependencies[j];
-                        Console.WriteLine($"\t\tName: {dep.Name}\n\t\tRequired version:\n\t\t\tMin: {dep.RequiredVersion.Min}\n\t\t\tMax: {dep.RequiredVersion.Max}");
-                        Console.WriteLine("\t-----");
+                        Dependency dep = mod.Dependencies[j];
+                        if (ModuleMap.ContainsKey(dep.Name))
+                        {
+                            Module temp = ModuleMap[dep.Name];
+                            int[] vers;
+                            int[] min;
+                            int[] max;
+
+                            if (!parseVersion(temp.Version, out vers) || !parseVersion(dep.RequiredVersion.Min, out min) || !parseVersion(dep.RequiredVersion.Max, out max))
+                            {
+                                return false;
+                            }
+
+                            if (vers[0] > max[0] || vers[0] < min[0] ||
+                                vers[1] > max[1] || vers[1] < min[1] ||
+                                vers[2] > max[2] || vers[2] < min[2])
+                            {
+                                LastError = $"Dependency version {temp.Version} exceeds our module's required version (Min {dep.RequiredVersion.Min} & Max {dep.RequiredVersion.Max})";
+                                return false;
+                            }
+
+                            continue;
+                        }
+
+                        LastError = $"Dependency \"{dep.Name}\" in \"{mod.Name}\" not found in module list";
+                        return false;
                     }
-                    Console.WriteLine($"\tImplementations\n\t-----");
-                    for (int j = 0; j < temp.Implementations.Count; j++)
-                    {
-                        Console.WriteLine($"\t\tName: {temp.Implementations[j]}");
-                        Console.WriteLine("\t-----");
-                    }
-                    Console.WriteLine($"\tGUID: {temp.GUID}");
-                    Console.WriteLine("-----");
                 }
 
                 return true;
@@ -248,6 +279,7 @@ namespace Fade
 
                     GetSourceFiles(mod.Path + "\\Interfaces", "\\Interfaces",ref headerFiles, ref sourceFiles, ref filters);
                     GetSourceFiles(mod.Path + "\\Implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters);
+                    GetSourceFiles(mod.Path + "\\Includes", "\\Includes", ref headerFiles, ref sourceFiles, ref filters);
 
                     string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { Module = mod, Dependencies = dependencies, HeaderFiles = headerFiles, SourceFiles = sourceFiles });            
                     string projectPath = $"{ProjectPath}\\Intermediate\\{mod.Name}.vcxproj";
@@ -282,6 +314,7 @@ namespace Fade
             private Project Proj;
             private Config Cfg;
             private List<Module> Modules = new List<Module>();
+            private Dictionary<string, Module> ModuleMap = new Dictionary<string, Module>();
         }
     }
 }

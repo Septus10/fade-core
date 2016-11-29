@@ -8,5 +8,15 @@
 			"Path": "Src/Runtime/Run/Run.fade_module",
 			"Implementation": "Default",
 		},
+		{
+			"Name": "Core",
+			"Path": "Src/Runtime/Core/Core.fade_module",
+			"Implementation": "Default",
+		},
+		{
+			"Name": "Application",
+			"Path": "Src/Runtime/Application/Application.fade_module",
+			"Implementation": "Editor",
+		}
 	]
 }
