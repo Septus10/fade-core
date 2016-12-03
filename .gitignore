@@ -6,6 +6,7 @@
 
 # Intellisense database
 *.VC.db
+*.VC.opendb
 
 # Precompiled Headers
 *.gch
