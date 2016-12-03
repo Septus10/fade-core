@@ -20,4 +20,6 @@ private:
 	
 };
 
+std::unique_ptr<application> __declspec(dllexport) get_application();
+
 }

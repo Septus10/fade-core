@@ -46,8 +46,9 @@ void* memory::memory_manager::allocate(usize size)
 	usize temp = size;
 	// this has to be initialized as 2, so it will always be one bit more than the number we're shifting right
 	int new_chunk_size = 2;
-	while(temp >>= 1 && temp != 0)
+	while(temp != 0)
 	{
+		temp >>= 1;
 		new_chunk_size <<= 1;
 	}
 	std::cout << "Initial size: " << size << std::endl;

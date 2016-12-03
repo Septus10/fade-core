@@ -1,0 +1,28 @@
+{
+	"Name": "Run",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "Core",
+			"RequiredVersion": 
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
+			"Name": "Application",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		}
+	],
+	"Implementations": 
+	[
+		"Default"
+	],
+	"ImplementsMain": true
+}

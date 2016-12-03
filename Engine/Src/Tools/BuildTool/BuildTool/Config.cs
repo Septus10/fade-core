@@ -8,20 +8,17 @@ namespace Fade
 {
     namespace BuildTool
     {
-        struct ConfigPath
+        struct ModuleInfo
         {
             public string Name { get; set; }
-
-            public string Path { get; set; }
+            public string Type { get; set; }
+            public string Implementation { get; set; }
         }
 
-        class Project
+        class Config
         {
-            public string Name { get; set; }
-
-            public string Version { get; set; }
-
-            public List<ConfigPath> Configs { get; set; }
+            public string Application { get; set; }
+            public List<ModuleInfo> Modules { get; set; }
         }
     }
 }

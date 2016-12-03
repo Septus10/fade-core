@@ -7,16 +7,33 @@
 namespace fade
 {
 
+class function
+{
+private:
+	std::function<void()> function_;
+
+public:
+	function(std::function<void()> func) :
+		function_(func)
+	{ }
+
+	void call()
+	{
+		function_();
+	}
+};
+
+#ifdef OLD
 /**
- * I'm still having tons of trouble wrapping my head around variadic templates and meta programming
- * For that reason I'll leave this comment here explaining how the index generation works, always a nice refresher
- * gen_sec<4> : gen_sec<3, 3, 4>
- * gen_sec<3, 3, 4> : gen_sec<2, 2, 3, 4>
- * gen_sec<2, 2, 3, 4> : gen_sec<1, 1, 2, 3, 4>
- * gen_sec<1, 1, 2, 3, 4> : gen_sec<0, 0, 1, 2, 3, 4>
- * gen_sec<0, 0, 1, 2, 3, 4> : index<0, 1, 2, 3, 4>
- * index<0, 1, 2, 3, 4>
- */	
+* I'm still having tons of trouble wrapping my head around variadic templates and meta programming
+* For that reason I'll leave this comment here explaining how the index generation works, always a nice refresher
+* gen_sec<4> : gen_sec<3, 3, 4>
+* gen_sec<3, 3, 4> : gen_sec<2, 2, 3, 4>
+* gen_sec<2, 2, 3, 4> : gen_sec<1, 1, 2, 3, 4>
+* gen_sec<1, 1, 2, 3, 4> : gen_sec<0, 0, 1, 2, 3, 4>
+* gen_sec<0, 0, 1, 2, 3, 4> : index<0, 1, 2, 3, 4>
+* index<0, 1, 2, 3, 4>
+*/	
 namespace helper
 {
 	template <size_t... Ts>
@@ -30,21 +47,22 @@ namespace helper
 }
 
 /**
- * Abstract function base class, used to save multiple functions that have different parameters in one array
- */
+* Abstract function base class, used to save multiple functions that have different parameters in one array
+*/
 class function_base abstract
 {
 public:
 	/**
-	 * virtual dtor
-	 */
+	* virtual dtor
+	*/
 	virtual ~function_base() = default;
 
 	/**
-	 * use this function to invoke the saved function
-	 */
+	* use this function to invoke the saved function
+	*/
 	virtual void call() = 0;
 };
+
 
 /**
  * function template class, gives the user the ability to save functions and parameters for future use
@@ -85,5 +103,6 @@ public:
 		func(std::move(arguments_), helper::gen_seq<sizeof...(Ts)>{});
 	}
 };
+#endif
 
 }

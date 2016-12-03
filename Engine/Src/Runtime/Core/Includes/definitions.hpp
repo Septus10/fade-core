@@ -61,6 +61,6 @@ using c32 = char32_t;
 /**
  * Fade function pointer
  */
-using function_ptr = std::unique_ptr<fade::function_base>;
+using function_ptr = std::unique_ptr<fade::function>;
 
 }
