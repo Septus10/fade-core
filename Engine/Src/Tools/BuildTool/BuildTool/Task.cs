@@ -50,11 +50,18 @@ namespace Fade
 
             public bool ExecuteProject()
             {
+                //================================================================
+                // Get project file contents
+                //================================================================
                 string json = FileToString(ProjectFilePath);
                 if (json == "")
                 {
                     return false;
                 }
+
+                //================================================================
+                // Deserialize project
+                //================================================================
                 Proj = JsonConvert.DeserializeObject<Project>(json);
                 if (Proj == null)
                 {
@@ -68,24 +75,21 @@ namespace Fade
 
             public bool ExecuteConfig()
             {
-                ConfigPath configPath = new ConfigPath();
-
-                for (int i = 0; i < Proj.Configs.Count; i++)
-                {
-                    if (Proj.Configs[i].Name.ToLower() == Config.ToLower())
-                    {
-                        configPath = Proj.Configs[i];
-                    }
-                }
-
-                string json = FileToString(ProjectFilePath + configPath.Path);
+                //================================================================
+                // Get config file contents
+                //================================================================
+                string configPath = $"{ProjectFilePath}Config\\{Proj.Configuration}.fcfg";
+                string json = FileToString(configPath);
                 if (json == "")
                 {
                     return false;
                 }
 
+                //================================================================
+                // Deserialize config
+                //================================================================
                 Cfg = JsonConvert.DeserializeObject<Config>(json);
-                if (Cfg.Modules == null)
+                if (Cfg == null || Cfg.Modules == null)
                 {
                     LastError = "Unable to deserialize config file";
                     return false;
@@ -107,45 +111,99 @@ namespace Fade
                 return true;
             }
 
-            public bool ExecuteModules()
+            private bool deserializeModule(string path, string name, string implementation)
             {
-                for (int i = 0; i < Cfg.Modules.Count; i++)
+                //================================================================
+                // Get module configuration
+                //================================================================
+                string moduleFile = $"{path}{name}.fmodule";
+                string moduleJson = FileToString(moduleFile);
+                Module module = JsonConvert.DeserializeObject<Module>(moduleJson);
+                if (module == null || module.Name == null)
                 {
-                    string moduleFile = ProjectFilePath + Cfg.Modules[i].Path;
-                    string moduleJson = FileToString(moduleFile);
-                    Module module = JsonConvert.DeserializeObject<Module>(moduleJson);
-                    if (module.Name == null)
-                    {
-                        LastError = "Unable to deserialize module file";
-                        return false;
-                    }
-                    module.GUID = Guid.NewGuid();
-                    module.Path = moduleFile.Substring(0, moduleFile.LastIndexOf('/') + 1);
-                    module.ActiveImplementation = Cfg.Modules[i].Implementation;
-
-                    if (ModuleMap.ContainsKey(module.Name))
-                    {
-                        LastError = $"Module {module.Name} already exists\n\tPath: {moduleFile}";
-                        return false;
-                    }
-
-                    string implementationFile = ProjectFilePath + Cfg.Modules[i].Path.Substring(0, Cfg.Modules[i].Path.LastIndexOf('/')) + "\\Implementations\\" + module.ActiveImplementation + $"\\{module.ActiveImplementation}.fade_implementation";
-                    string implementationJson = FileToString(implementationFile);
-                    if (implementationJson != "")
-                    {
-                        Implementation impl = JsonConvert.DeserializeObject<Implementation>(implementationJson);
-                        foreach (var dep in impl.Dependencies)
-                        {
-                            module.Dependencies.Add(dep);
-                        }
-                    }
-
-                    Modules.Add(module);
-                    ModuleMap.Add(module.Name, module);
+                    LastError = $"Unable to deserialize module file: {moduleFile}";
+                    return false;
                 }
 
-                // check if dependencies exist and if versions are correct
+                //================================================================
+                // Set seperate variables
+                //================================================================
+                module.GUID = Guid.NewGuid();
+                module.Path = moduleFile.Substring(0, moduleFile.LastIndexOf('\\') + 1);
+                module.ActiveImplementation = implementation;
 
+                //================================================================
+                // Check if module has already been added
+                //================================================================
+                if (ModuleMap.ContainsKey(module.Name))
+                {
+                    LastError = $"Module {module.Name} already exists\n\tPath: {moduleFile}";
+                    return false;
+                }
+
+                //================================================================
+                // Check if the implementation we've chosen exists
+                //================================================================
+                bool implementationFound = false;
+                foreach (string impl in module.Implementations)
+                {
+                    if (impl == module.ActiveImplementation)
+                    {
+                        implementationFound = true;
+                        break;
+                    }
+                }
+
+                if (!implementationFound)
+                {
+                    LastError = $"Couldn't find implementation {module.ActiveImplementation} in Module {module.Name}";
+                    return false;
+                }
+
+                //================================================================
+                // Check if there is are implementation specific dependencies
+                //================================================================
+                string implementationFile = $"{path}\\Implementations\\{module.ActiveImplementation}\\{module.ActiveImplementation}.fade_implementation";
+                string implementationJson = FileToString(implementationFile);
+                if (implementationJson != "")
+                {
+                    Implementation impl = JsonConvert.DeserializeObject<Implementation>(implementationJson);
+                    foreach (var dep in impl.Dependencies)
+                    {
+                        module.Dependencies.Add(dep);
+                    }
+                }
+
+
+
+                Modules.Add(module);
+                ModuleMap.Add(module.Name, module);
+
+                return true;
+            }
+
+            public bool ExecuteModules()
+            {
+                //================================================================
+                // Get application module
+                //================================================================
+                if (!deserializeModule($"{ProjectFilePath}Src\\Application\\", "Application", Cfg.Application))
+                {
+                    return false;
+                }
+
+                foreach (ModuleInfo module in Cfg.Modules)
+                {
+                    if (!deserializeModule($"{ProjectFilePath}Src\\{module.Type}\\{module.Name}\\", $"{module.Name}", module.Implementation))
+                    {
+                        return false;
+                    }
+                }
+
+                //================================================================
+                // Check whether dependencies exist in our current config
+                // Check whether versions are correct
+                //================================================================
                 for (int i = 0; i < Modules.Count; i++)
                 {
                     Module mod = Modules[i];
@@ -164,6 +222,9 @@ namespace Fade
                                 return false;
                             }
 
+                            //================================================================
+                            // Check version
+                            //================================================================
                             if (vers[0] > max[0] || vers[0] < min[0] ||
                                 vers[1] > max[1] || vers[1] < min[1] ||
                                 vers[2] > max[2] || vers[2] < min[2])
@@ -175,6 +236,9 @@ namespace Fade
                             continue;
                         }
 
+                        //================================================================
+                        // Dependency doesn't seem to exist
+                        //================================================================
                         LastError = $"Dependency \"{dep.Name}\" in \"{mod.Name}\" not found in module list";
                         return false;
                     }
@@ -187,6 +251,9 @@ namespace Fade
             {
                 var files = Directory.GetFiles(Path);
 
+                //================================================================
+                // Iterate through current directory
+                //================================================================
                 foreach (var file in files)
                 {
                     SourceFile temp = new SourceFile();
@@ -207,14 +274,23 @@ namespace Fade
                     string ext = file.Substring(file.LastIndexOf('.'));
                     if (ext == ".h" || ext == ".hpp")
                     {
+                        //================================
+                        // Add header file
+                        //================================
                         HeaderFiles.Add(temp);
                     }
                     else if (ext == ".cpp")
                     {
+                        //================================
+                        // Add source file
+                        //================================
                         SourceFiles.Add(temp);
                     }
                 }
 
+                //================================================================
+                // Recursively get source files in sub directories
+                //================================================================
                 var dirs = Directory.GetDirectories(Path);
                 foreach (var dir in dirs)
                 {
@@ -225,13 +301,13 @@ namespace Fade
 
             public bool GenerateProjectFiles()
             {
-                //==============================================================
+                //================================================================
                 // Generate solution
-                //==============================================================
+                //================================================================
                 string solutionTemplate = FileToString("solution_template.txt");
                 if (solutionTemplate == "")
                 {
-                    LastError = "Unable to find file: \"./solution_template.txt\"";
+                    LastError = "Unable to find file: \".\\solution_template.txt\"";
                     return false;
                 }
 
@@ -249,14 +325,14 @@ namespace Fade
                 string projectTemplate = FileToString("project_template.txt");
                 if (projectTemplate == "")
                 {
-                    LastError = "Unable to find file: \"./solution_template.txt\"";
+                    LastError = "Unable to find file: \".\\project_template.txt\"";
                     return false;
                 }
 
                 string filterTemplate = FileToString("filter_template.txt");
                 if (filterTemplate == "")
                 {
-                    LastError = "Unable to find file: \"./filter_template.txt\"";
+                    LastError = "Unable to find file: \".\\filter_template.txt\"";
                     return false;
                 }
 

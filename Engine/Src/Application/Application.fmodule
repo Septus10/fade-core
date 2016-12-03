@@ -1,5 +1,4 @@
 {
-	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
 	"Name": "Application",
 	"Version": "0.0.1",
 	"Dependencies":

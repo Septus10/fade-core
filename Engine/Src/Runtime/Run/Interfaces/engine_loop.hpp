@@ -59,11 +59,10 @@ public:
 	/**
 	 *
 	 */
-	bool run_;
+	bool should_close() const;
 private:
 	std::unique_ptr<application> app_;
+	bool run_;
 };
-
-engine_loop g_engine_loop;
 
 }

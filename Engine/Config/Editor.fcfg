@@ -1,0 +1,26 @@
+{
+	"Application": "Editor",
+	"Modules": 
+	[
+		{
+			"Name": "Core",
+			"Type": "Runtime",
+			"Implementation": "Default"	
+		},
+		{
+			"Name": "Run",
+			"Type": "Runtime",
+			"Implementation": "Default"	
+		},
+		{
+			"Name": "Renderer",
+			"Type": "Runtime",
+			"Implementation": "OpenGL"	
+		},
+		{
+			"Name": "Console",
+			"Type": "Runtime",
+			"Implementation": "Default"	
+		},
+	]
+}

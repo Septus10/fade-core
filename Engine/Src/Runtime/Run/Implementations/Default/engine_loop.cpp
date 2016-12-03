@@ -40,6 +40,12 @@ void fade::engine_loop::should_close(bool should_close)
 	run_ = should_close;
 }
 
+bool fade::engine_loop::should_close() const
+{
+	return run_;
+}
+
+
 
 
 
