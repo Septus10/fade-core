@@ -228,4 +228,6 @@ $RECYCLE.BIN/
 Engine/Useful links.docx
 Engine/Intermediate/
 Engine/Fade Engine.sln
+!Engine/Src/External/*.dll
+!Engine/Src/External/*.lib
 *.opendb
