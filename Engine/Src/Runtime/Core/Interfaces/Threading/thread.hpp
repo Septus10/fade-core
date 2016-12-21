@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core_api.hpp>
 #include <function.hpp>
 #include <pimpl.hpp>
 
@@ -9,18 +10,16 @@ namespace fade
 namespace threading
 {
 
-class thread
+class FADE_API thread abstract
 {
 public:
-	thread();
-	~thread();
+	virtual ~thread() = default;
 
-	void add_task(fade::function task);
-
-private:
-	FADE_MAKE_PIMPL
+	virtual void add_task(std::function<void()> task) = 0;
 };
 
+
+std::unique_ptr<thread> FADE_API get_thread();
 
 }	
 

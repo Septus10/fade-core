@@ -1,11 +1,12 @@
 #pragma once
 
 #include <functional>
-#include <utility>
-#include <tuple>
+#include <core_api.hpp>
 
 namespace fade
 {
+
+#ifdef NEW
 
 class function
 {
@@ -23,7 +24,10 @@ public:
 	}
 };
 
+#endif
 #ifdef OLD
+#include <utility>
+#include <tuple>
 /**
 * I'm still having tons of trouble wrapping my head around variadic templates and meta programming
 * For that reason I'll leave this comment here explaining how the index generation works, always a nice refresher

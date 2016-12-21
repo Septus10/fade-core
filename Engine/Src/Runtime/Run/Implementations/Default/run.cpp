@@ -2,10 +2,10 @@
 
 #include <engine_loop.hpp>
 
-fade::engine_loop g_engine_loop;
-
 int fade::main()
 {
+	fade::engine_loop g_engine_loop;
+
 	std::cout << "Test\n";	
 	
 	g_engine_loop.pre_initialize();
@@ -14,14 +14,12 @@ int fade::main()
 
 	g_engine_loop.post_initialize();
 
-	while(!g_engine_loop.should_close())
+	while(g_engine_loop.should_stop())
 	{
 		g_engine_loop.tick();
 	}
 
 	g_engine_loop.deinitialize();
-
-	system("PAUSE");
 
 	return 0;
 }

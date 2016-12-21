@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
+#include <core_api.hpp>
 
 #define FADE_MAKE_PIMPL                 \
-public:									\
-    class impl;                         \
 private:								\
+    class impl;                         \
     __pragma(warning(push))             \
     __pragma(warning(disable : 4251))   \
     pimpl<impl> impl_;                  \

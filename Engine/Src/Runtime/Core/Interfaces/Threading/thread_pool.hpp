@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core_api.hpp>
 #include <definitions.hpp>
 #include <pimpl.hpp>
 
@@ -12,19 +13,16 @@ namespace threading
 {
 	
 class thread;
-class thread_pool
+class FADE_API thread_pool abstract
 {
 public:
-	thread_pool();
-	thread_pool(u32 num_threads);
-	~thread_pool();
+	virtual ~thread_pool() = default;
 
-	thread* get_thread();
-
-private:
-	FADE_MAKE_PIMPL
-
+	virtual thread* get_thread() = 0;
 };
+
+std::unique_ptr<thread_pool> FADE_API get_thread_pool();
+std::unique_ptr<thread_pool> FADE_API get_thread_pool(u32 num_threads);
 
 }	
 

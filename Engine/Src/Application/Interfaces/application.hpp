@@ -1,25 +1,47 @@
 #pragma once
 
+#include <application_api.hpp>
 #include <definitions.hpp>
 
 namespace fade
 {
 
 /**
- * Main engine loop
+ * Engine application
  */
-class application abstract
+class FADE_API application abstract
 {
 public:
 	/**
-	 * 
+	 * Virtual DTor
 	 */
-	virtual void tick() = 0;
+	virtual ~application() = default;
 
-private:
-	
+	/**
+	 * Engine application main tick function
+	 * @param delta_time delta time for main tick function
+	 */
+	virtual void tick(double delta_time) = 0;
+
+	/**
+	 * Engine application fixed tick function
+	 * @param fixed_delta_time delta time for the fixed tick function
+	 */
+	virtual void fixed_tick(double fixed_delta_time) = 0;
+
+	virtual void pre_initialize() = 0;
+
+	virtual void initialize() = 0;
+
+	virtual void post_initialize() = 0;
+
+	virtual void deinitialize() = 0;
 };
 
-std::unique_ptr<application> __declspec(dllexport) get_application();
+
+/**
+ * Application factory function
+ */
+std::unique_ptr<application> FADE_API get_application();
 
 }

@@ -163,7 +163,7 @@ namespace Fade
                 //================================================================
                 // Check if there is are implementation specific dependencies
                 //================================================================
-                string implementationFile = $"{path}\\Implementations\\{module.ActiveImplementation}\\{module.ActiveImplementation}.fade_implementation";
+                string implementationFile = $"{path}\\Implementations\\{module.ActiveImplementation}.fimpl";
                 string implementationJson = FileToString(implementationFile);
                 if (implementationJson != "")
                 {
@@ -174,9 +174,30 @@ namespace Fade
                     }
                 }
 
+                //================================================================
+                // Some mandatory null checks
+                //================================================================                
+                if (module.Dependencies == null)
+                {
+                    module.Dependencies = new List<Dependency>();
+                }
 
+                if (module.ExternalDependencies == null)
+                {
+                    module.ExternalDependencies = new List<ExternalDependency>();
+                }
 
-                Modules.Add(module);
+                //================================================================
+                // Finally we save the module
+                //================================================================
+                if (module.ImplementsMain)
+                {
+                    Modules.Insert(0, module);
+                }
+                else
+                {
+                    Modules.Add(module);
+                }
                 ModuleMap.Add(module.Name, module);
 
                 return true;
@@ -239,8 +260,40 @@ namespace Fade
                         //================================================================
                         // Dependency doesn't seem to exist
                         //================================================================
-                        LastError = $"Dependency \"{dep.Name}\" in \"{mod.Name}\" not found in module list";
-                        return false;
+                        if (dep.External) // if it's external, we load the library
+                        {
+                            string externalFolder = $"{ProjectFilePath}Src\\External\\";
+                            var folders = Directory.GetDirectories(externalFolder);
+                            foreach (var folder in folders)
+                            {
+                                string folderName = folder.Substring(folder.LastIndexOf('\\') + 1);
+                                if (folderName == dep.Name)
+                                {
+                                    string externalFile = FileToString($"{folder}\\{dep.Name}.fmodule");
+                                    ExternalDependency exdep = JsonConvert.DeserializeObject<ExternalDependency>(externalFile);
+                                    exdep.RequiredVersion = dep.RequiredVersion;
+                                    exdep.External = dep.External;
+                                    exdep.IncludeFolder = $"{folder}\\Include";
+                                    exdep.LibraryFolder = $"{folder}\\Lib";
+                                    if (exdep.LibraryName == null)
+                                    {
+                                        exdep.LibraryName = dep.Name;
+                                    }
+
+                                    if (exdep.RequiredLibraries == null)
+                                    {
+                                        exdep.RequiredLibraries = new List<string>();
+                                    }
+                                    mod.ExternalDependencies.Add(exdep);
+                                    break;
+                                }
+                            }
+                        }
+                        else // if not, we're missing a dependency
+                        {
+                            LastError = $"Dependency \"{dep.Name}\" in \"{mod.Name}\" not found in module list";
+                            return false;
+                        }
                     }
                 }
 
@@ -349,6 +402,11 @@ namespace Fade
 
                     foreach (var dep in mod.Dependencies)
                     {
+                        if (dep.External)
+                        {
+                            continue;
+                        }
+
                         Module temp = Modules.First(item => item.Name == dep.Name);
                         dependencies.Add(temp);
                     }
@@ -357,7 +415,7 @@ namespace Fade
                     GetSourceFiles(mod.Path + "\\Implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters);
                     GetSourceFiles(mod.Path + "\\Includes", "\\Includes", ref headerFiles, ref sourceFiles, ref filters);
 
-                    string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { Module = mod, Dependencies = dependencies, HeaderFiles = headerFiles, SourceFiles = sourceFiles });            
+                    string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { ProjectName = Cfg.Application, Module = mod, Dependencies = dependencies, HeaderFiles = headerFiles, SourceFiles = sourceFiles });            
                     string projectPath = $"{ProjectPath}\\Intermediate\\{mod.Name}.vcxproj";
     
                     string filterResult = Engine.Razor.RunCompile(filterTemplate, "filter", null, new { Filters = filters, HeaderFiles = headerFiles, SourceFiles = sourceFiles });

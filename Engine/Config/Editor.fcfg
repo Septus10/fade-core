@@ -13,7 +13,7 @@
 			"Implementation": "Default"	
 		},
 		{
-			"Name": "Renderer",
+			"Name": "Rendering",
 			"Type": "Runtime",
 			"Implementation": "OpenGL"	
 		},
@@ -22,5 +22,25 @@
 			"Type": "Runtime",
 			"Implementation": "Default"	
 		},
+		{
+			"Name": "Gameplay",
+			"Type": "Runtime",
+			"Implementation": "Default"	
+		},
+		{
+			"Name": "SceneGraph",
+			"Type": "Runtime",
+			"Implementation": "Default"	
+		},
+		{
+			"Name": "GUI",
+			"Type": "Runtime",
+			"Implementation": "Default"	
+		},
+		{
+			"Name": "Resources",
+			"Type": "Runtime",
+			"Implementation": "Default"
+		}
 	]
 }

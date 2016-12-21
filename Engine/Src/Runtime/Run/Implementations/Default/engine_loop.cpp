@@ -1,51 +1,64 @@
 #include <engine_loop.hpp>
+#include <application.hpp>
+#include <timer.hpp>
+#include <iostream>
 
-fade::engine_loop::engine_loop() : run_(true)
+namespace fade {
+
+engine_loop::engine_loop()
+{
+	run_ = true;
+	app_ = get_application();
+	timer_ = get_timer();
+}
+
+engine_loop::~engine_loop()
 {
 	
 }
 
-fade::engine_loop::~engine_loop()
+i32 engine_loop::pre_initialize()
 {
-	
-}
-
-fade::i32 fade::engine_loop::pre_initialize()
-{
+	app_->pre_initialize();
 	return 0;
 }
 
-fade::i32 fade::engine_loop::initialize()
+i32 engine_loop::initialize()
 {
+	app_->initialize();
 	return 0;
 }
 
-fade::i32 fade::engine_loop::post_initialize()
+i32 engine_loop::post_initialize()
 {
+	timer_->start();
+	std::cout << "engine_loop::post_initialize()\n";
+	app_->post_initialize();
 	return 0;
 }
 
-fade::i32 fade::engine_loop::deinitialize()
+i32 engine_loop::deinitialize()
 {
+	app_->deinitialize();
 	return 0;
 }
 
-void fade::engine_loop::tick()
-{
-	
+void engine_loop::tick()
+{	
+	app_->tick(timer_->elapsed());
 }
 
-void fade::engine_loop::should_close(bool should_close)
+void engine_loop::should_stop(bool should_stop)
 {
-	run_ = should_close;
+	run_ = should_stop;
 }
 
-bool fade::engine_loop::should_close() const
+bool engine_loop::should_stop() const
 {
 	return run_;
 }
 
-
+}
 
 
 

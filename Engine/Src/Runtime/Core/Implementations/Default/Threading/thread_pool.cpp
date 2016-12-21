@@ -1,54 +1,51 @@
-#include <Threading/thread_pool.hpp>
-#include <Threading/thread.hpp>
+#include <Threading/thread_pool_impl.hpp>
+
+#include <Threading/thread_impl.hpp>
 
 #include <thread>
 
-using namespace fade;
-using namespace threading;
+namespace fade { namespace threading { 
 
-class thread_pool::impl
-{
-public:
-	std::vector<std::unique_ptr<thread>> available_threads_;
-	std::vector<std::unique_ptr<thread>> working_threads_;
-};
-
-thread_pool::thread_pool()
+thread_pool_impl::thread_pool_impl()
 {
 	u32 concurrency = std::thread::hardware_concurrency();
 	for (u32 i = 0; i < concurrency; i++)
 	{
-		impl_->available_threads_.push_back(std::make_unique<thread>());
+		available_threads_.push_back(std::make_unique<thread_impl>());
 	}
 }
 
-thread_pool::thread_pool(u32 num_threads)
+thread_pool_impl::thread_pool_impl(u32 num_threads)
 {
 	for (u32 i = 0; i < num_threads; i++)
 	{
-		impl_->available_threads_.push_back(std::make_unique<thread>());
+		available_threads_.push_back(std::make_unique<thread_impl>());
 	}
 }
 
-thread_pool::~thread_pool()
+thread* thread_pool_impl::get_thread()
 {
-	
-}
-
-thread* thread_pool::get_thread()
-{
-	if (impl_->available_threads_.empty())
+	if (available_threads_.empty())
 	{
 		// no threads available
 		return nullptr;
 	}
 
-	thread* ptr = impl_->available_threads_[0].get();
-	std::unique_ptr<thread> thread = move(impl_->available_threads_[0]);
-	impl_->available_threads_.erase(impl_->available_threads_.begin());
-	impl_->working_threads_.push_back(move(thread));
+	thread* ptr = available_threads_[0].get();
+	std::unique_ptr<thread> thread = move(available_threads_[0]);
+	available_threads_.erase(available_threads_.begin());
+	working_threads_.push_back(move(thread));
 	return ptr;
 }
 
+std::unique_ptr<thread_pool> threading::get_thread_pool()
+{
+	return std::make_unique<thread_pool_impl>();
+}
 
+std::unique_ptr<thread_pool> threading::get_thread_pool(u32 num_threads)
+{
+	return std::make_unique<thread_pool_impl>(num_threads);
+}
 
+} }

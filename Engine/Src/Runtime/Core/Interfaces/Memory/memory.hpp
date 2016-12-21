@@ -1,8 +1,8 @@
 #pragma once
 
+#include <core_api.hpp>
 #include <definitions.hpp>
 #include <vector>
-#include <core_api.hpp>
 
 namespace fade
 {

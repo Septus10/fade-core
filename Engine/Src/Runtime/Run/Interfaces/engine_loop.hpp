@@ -1,9 +1,9 @@
 #pragma once
 
 #include <definitions.hpp>
+#include <pimpl.hpp>
+#include <timer.hpp>
 #include <application.hpp>
-
-#include <memory>
 
 namespace fade
 {
@@ -17,51 +17,53 @@ class engine_loop
 {
 public:
 	/**
-	 *
+	 * CTor
 	 */
 	engine_loop();
 
 	/**
-	 *
+	 * DTor
 	 */	
 	~engine_loop();
 
 	/**
-	 * 
+	 * Pre initialization, mandatory resources will be loaded
 	 */
 	i32 pre_initialize();
 
 	/**
-	 * 
+	 * Initialization, window creation and module initialization will happen here
 	 */
 	i32 initialize();
 
 	/**
-	* 
+	* Post initialization, resources that depend on everything else being initialized will be initialized here
 	*/
 	i32 post_initialize();
 
 	/**
-	* 
+	* Deinitialized all resources
 	*/
 	i32 deinitialize();
 
 	/**
-	 * 
+	 * Engine main tick function
 	 */
-	virtual void tick();
+	void tick();
 
 	/**
-	 *
+	 * Sets whether we should stop the application
 	 */
-	void should_close(bool should_close);
+	void should_stop(bool should_stop);
 
 	/**
-	 *
+	 * Gets whether we should stop the application
 	 */
-	bool should_close() const;
+	bool should_stop() const;
+
 private:
 	std::unique_ptr<application> app_;
+	std::unique_ptr<timer> timer_;
 	bool run_;
 };
 

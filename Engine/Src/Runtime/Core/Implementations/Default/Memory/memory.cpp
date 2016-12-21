@@ -2,7 +2,7 @@
 #include <cassert>
 #include <iostream>
 
-using namespace fade;
+namespace fade {
 
 memory::memory_chunk::memory_chunk(void* addr, usize size) : chunk_size_(size), size_left_(chunk_size_), start_(addr), chunk_start_(addr), next_(nullptr)
 {}
@@ -77,8 +77,7 @@ void memory::memory_manager::allocate_block(usize block_size, usize chunk_size)
 	{
 		block_last_->next_ = block;
 		block_last_ = block;
-	}
-	
+	}	
 
 	u32 num_chunks = static_cast<u32>(block_size / chunk_size);
 	for (u32 i = 0; i < num_chunks; i++)
@@ -95,4 +94,6 @@ void memory::memory_manager::allocate_block(usize block_size, usize chunk_size)
 			chunk_last_ = chunk;
 		}		
 	}
+}
+
 }

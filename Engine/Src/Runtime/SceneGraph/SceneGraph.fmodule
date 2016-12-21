@@ -1,6 +1,6 @@
 {
 	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
-	"Name": "Renderer",
+	"Name": "SceneGraph",
 	"Version": "0.0.1",
 	"Dependencies":
 	[
@@ -15,6 +15,6 @@
 	],
 	"Implementations": 
 	[
-		"OpenGL"
+		"Default"
 	],
 }

@@ -1,30 +1,15 @@
-#include <Threading/thread.hpp>
+#include <Threading/thread_impl.hpp>
 
-using namespace fade;
-using namespace threading;
+namespace fade { namespace threading { 
 
-class thread::impl
+void thread_impl::add_task(std::function<void()> task)
 {
-public:
-	impl() : task_(nullptr)
-	{}
-	fade::function task_;
-
-};
-
-thread::thread()
-{
-	impl_ = std::make_unique<thread::impl>();
+	task_ = task;
 }
 
-thread::~thread()
+std::unique_ptr<thread> threading::get_thread()
 {
-	
+	return std::make_unique<thread_impl>();
 }
 
-
-void thread::add_task(fade::function task)
-{
-	impl_->task_ = task;
-}
-
+} }

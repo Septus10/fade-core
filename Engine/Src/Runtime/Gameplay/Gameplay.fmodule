@@ -1,0 +1,28 @@
+{
+	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
+	"Name": "Gameplay",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "Core",
+			"RequiredVersion": 
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
+			"Name": "Rendering",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		}
+	],
+	"Implementations": 
+	[
+		"Default"
+	],
+}
