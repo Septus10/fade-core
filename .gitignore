@@ -1,3 +1,7 @@
+# fade engine external library files
+!**/Src/External/*.dll
+!**/Src/External/*.lib
+
 # Compiled Object files
 *.slo
 *.lo
@@ -228,6 +232,4 @@ $RECYCLE.BIN/
 Engine/Useful links.docx
 Engine/Intermediate/
 Engine/Fade Engine.sln
-!Engine/Src/External/*.dll
-!Engine/Src/External/*.lib
 *.opendb
