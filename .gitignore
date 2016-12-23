@@ -15,6 +15,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
+Engine/Bin/**/*.dll
 
 # Fortran module files
 *.mod
@@ -24,6 +25,7 @@
 *.lai
 *.la
 *.a
+Engine/Bin/**/*.lib
 
 # Executables
 *.exe
@@ -42,11 +44,11 @@
 
 # Build results
 
-[Dd]ebug/
-[Rr]elease/
-x64/
 build/
 Engine/[Bb]in/
+Engine/[Bb]in/[Dd]ebug/
+Engine/[Bb]in/[Rr]elease/
+Engine/[Bb]in/x64/
 [Oo]bj/
 
 # NuGet Packages
