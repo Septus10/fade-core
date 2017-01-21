@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <core_api.hpp>
+#include <core/core_api.hpp>
 
 namespace fade
 {

@@ -1,6 +1,7 @@
-#include <engine_loop.hpp>
+#include <run/engine_loop.hpp>
+#include <core/timer.hpp>
+
 #include <application.hpp>
-#include <timer.hpp>
 #include <iostream>
 
 namespace fade {

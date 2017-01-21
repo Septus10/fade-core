@@ -1,10 +1,10 @@
 {
-	"Name": "Application",
+	"Name": "application",
 	"Version": "0.0.1",
 	"Dependencies":
 	[
 		{
-			"Name": "Core",
+			"Name": "core",
 			"RequiredVersion": 
 			{
 				"Min": "0.0.1",
@@ -14,8 +14,8 @@
 	],
 	"Implementations": 
 	[
-		"Editor",
-		"Game",
-		"Server",
+		"editor",
+		"game",
+		"server",
 	]
 }

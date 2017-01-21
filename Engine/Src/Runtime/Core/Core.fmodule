@@ -1,6 +1,6 @@
 {
 	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
-	"Name": "Core",
+	"Name": "core",
 	"Version": "0.0.1",
 	"Dependencies":
 	[
@@ -8,6 +8,6 @@
 	],
 	"Implementations": 
 	[
-		"Default"
+		"default"
 	]
 }

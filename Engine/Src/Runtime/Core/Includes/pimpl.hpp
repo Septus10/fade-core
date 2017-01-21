@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <core_api.hpp>
+#include <core/core_api.hpp>
 
 #define FADE_MAKE_PIMPL                 \
 private:								\

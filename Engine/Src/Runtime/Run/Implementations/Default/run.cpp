@@ -1,12 +1,10 @@
 #include <iostream>
 
-#include <engine_loop.hpp>
+#include <run/engine_loop.hpp>
 
 int fade::main()
 {
-	fade::engine_loop g_engine_loop;
-
-	std::cout << "Test\n";	
+	fade::engine_loop g_engine_loop;	
 	
 	g_engine_loop.pre_initialize();
 	

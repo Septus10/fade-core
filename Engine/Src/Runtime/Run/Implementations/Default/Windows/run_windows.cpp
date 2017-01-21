@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 
-#include <core.hpp>
+#include <core/core.hpp>
+#include <run/engine_loop.hpp>
 #include <function.hpp>
-#include <engine_loop.hpp>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <Windows.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <threading/thread.hpp>
+#include <core/threading/thread.hpp>
 
 namespace fade
 {

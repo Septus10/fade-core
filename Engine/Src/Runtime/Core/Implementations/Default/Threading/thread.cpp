@@ -1,4 +1,4 @@
-#include <Threading/thread_impl.hpp>
+#include <threading/thread_impl.hpp>
 
 namespace fade { namespace threading { 
 

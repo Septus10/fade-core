@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Threading/thread_pool.hpp>
+#include <core/threading/thread_pool.hpp>
 
-#include <Threading/thread.hpp>
+#include <core/threading/thread.hpp>
 
 namespace fade
 {

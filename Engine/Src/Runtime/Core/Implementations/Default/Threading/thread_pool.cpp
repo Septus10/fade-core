@@ -1,6 +1,6 @@
-#include <Threading/thread_pool_impl.hpp>
+#include <threading/thread_pool_impl.hpp>
 
-#include <Threading/thread_impl.hpp>
+#include <threading/thread_impl.hpp>
 
 #include <thread>
 

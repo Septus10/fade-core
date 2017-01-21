@@ -1,0 +1,29 @@
+{
+	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
+	"Name": "resource_importer",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "core",
+			"RequiredVersion": 
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
+			"Name": "resource_importer_hub",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		}
+	],
+	"Implementations": 
+	[
+		"model",
+		"texture"
+	],
+}

@@ -2,11 +2,14 @@
 
 #include <application.hpp>
 #include <application_api.hpp>
-#include <pimpl.hpp>
-#include <window.hpp>
 
 namespace fade
 {
+
+namespace rendering
+{
+	class window;
+}
 
 namespace editor
 {
@@ -14,6 +17,8 @@ namespace editor
 class editor_application : public application
 {
 public:
+	~editor_application() = default;
+
 	void tick(double delta_time) override;
 
 	void fixed_tick(double fixed_delta_time) override;

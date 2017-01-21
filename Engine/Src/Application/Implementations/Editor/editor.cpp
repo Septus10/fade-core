@@ -1,6 +1,8 @@
 #include <editor.hpp>
-#include <window.hpp>
-#include <window_impl.hpp>
+
+#include <rendering/window.hpp>
+#include <core/bootstrapping/bootstrapper.hpp>
+
 #include <iostream>
 
 namespace fade { namespace editor {
@@ -18,7 +20,11 @@ void editor_application::fixed_tick(double fixed_delta_time)
 
 void editor_application::pre_initialize()
 {
+	// loading modules
+	bootstrap::load_modules();
 
+	// initialize modules
+	bootstrap::initialize_modules();
 }
 
 void editor_application::initialize()

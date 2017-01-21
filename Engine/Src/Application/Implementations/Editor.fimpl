@@ -1,11 +1,11 @@
 {
 	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
-	"Name": "Editor",
+	"Name": "editor",
 	"Version": "0.0.1",
 	"Dependencies":
 	[
 		{
-			"Name": "Rendering",
+			"Name": "rendering",
 			"RequiredVersion": 
 			{
 				"Min": "0.0.1",
