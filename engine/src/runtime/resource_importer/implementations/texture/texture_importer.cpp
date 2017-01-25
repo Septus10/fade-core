@@ -1,9 +1,11 @@
 #include <texture_importer.hpp>
 
-#include <resource.hpp>
-
 #include <core/bootstrapping/bootstrapper.hpp>
 #include <core/bootstrapping/module_info.hpp>
+
+#include <definitions.hpp>
+#include <resource.hpp>
+
 #include <iostream>
 
 using namespace fade;
@@ -12,7 +14,7 @@ using namespace resources;
 FADE_MODULE_DEFINE(texture_importer)
 FADE_BOOTSTRAP_MODULE(module_texture_importer)
 FADE_BOOTSTRAP_ON_CONSTRUCT({
-	std::cout << "Constructing model importer\n";
+	std::cout << "Constructing texture importer\n";
 })
 
 texture_importer::texture_importer()

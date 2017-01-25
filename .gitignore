@@ -32,6 +32,9 @@
 *.out
 *.app
 
+# Visual Studio project files
+*.sln
+
  Download this file using PowerShell v3 under Windows with the following comand:
 # Invoke-WebRequest https://gist.githubusercontent.com/kmorcinek/2710267/raw/ -OutFile .gitignore
 # or wget:
@@ -229,3 +232,4 @@ $RECYCLE.BIN/
 Engine/Useful links.docx
 Engine/Intermediate/
 Engine/Fade Engine.sln
+
