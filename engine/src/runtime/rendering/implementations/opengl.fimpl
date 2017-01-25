@@ -1,0 +1,26 @@
+{
+	"Name": "opengl",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "glfw",
+			"External":true,
+			"RequiredVersion":
+			{
+				"Min": "3.2.1",
+				"Max": "3.2.1"
+			},
+		},
+		{
+			"Name": "glew",
+			"External":true,
+			"RequiredVersion":
+			{
+				"Min": "2.0.0",
+				"Max": "2.0.0"
+			}
+		}
+	],
+}
+		

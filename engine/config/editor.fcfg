@@ -1,0 +1,56 @@
+{
+	"Application": "editor",
+	"Modules": 
+	[
+		{
+			"Name": "core",
+			"Type": "runtime",
+			"Implementation": "default"	
+		},
+		{
+			"Name": "run",
+			"Type": "runtime",
+			"Implementation": "default"	
+		},
+		{
+			"Name": "rendering",
+			"Type": "runtime",
+			"Implementation": "opengl"	
+		},
+		{
+			"Name": "console",
+			"Type": "runtime",
+			"Implementation": "default"	
+		},
+		{
+			"Name": "gameplay",
+			"Type": "runtime",
+			"Implementation": "default"	
+		},
+		{
+			"Name": "scene_graph",
+			"Type": "runtime",
+			"Implementation": "default"	
+		},
+		{
+			"Name": "gui",
+			"Type": "runtime",
+			"Implementation": "default"	
+		},
+		{
+			"Name": "resource_importer_hub",
+			"Type": "runtime",
+			"Implementation": "default"
+		},
+		{
+			"Name": "resource_importer",
+			"Type": "runtime",
+			"Implementation" :"model"
+		},
+		{
+			"Name": "resource_importer",
+			"Type": "runtime",
+			"Implementation" :"texture"
+		},	
+	]
+}
