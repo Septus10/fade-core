@@ -1,6 +1,6 @@
 #include <core/memory/memory.hpp>
 #include <cassert>
-#include <iostream>
+#include <fstl/iostream.hpp>
 
 namespace fade {
 
@@ -27,16 +27,16 @@ memory::memory_manager::~memory_manager()
 
 void* memory::memory_manager::allocate(usize size)
 {
-	std::cout << "Allocating memory for object with size: " << size << std::endl;
+	std::cout << "Allocating memory for object with size: " << size << "\n";
 	memory_chunk* chunk = chunk_first_;
 	while (chunk != nullptr)
 	{
 		if(chunk->size_left_ > size)
 		{
 			void* ret = chunk->start_;
-			std::cout << "Allocating at address: " << ret << std::endl;
+			std::cout << "Allocating at address: " << ret << "\n";
 			chunk->start_ = static_cast<void*>(static_cast<char*>(chunk->start_) + size);
-			std::cout << "New chunk start: " << chunk->start_ << std::endl;
+			std::cout << "New chunk start: " << chunk->start_ << "\n";
 			return ret;
 		}
 		chunk = chunk->next_;
@@ -51,8 +51,8 @@ void* memory::memory_manager::allocate(usize size)
 		temp >>= 1;
 		new_chunk_size <<= 1;
 	}
-	std::cout << "Initial size: " << size << std::endl;
-	std::cout << "New size: " << new_chunk_size << std::endl;
+	std::cout << "Initial size: " << size << "\n";
+	std::cout << "New size: " << new_chunk_size << "\n";
 	allocate_block(new_chunk_size * 4, new_chunk_size);
 	
 	return allocate(size);

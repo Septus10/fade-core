@@ -84,7 +84,6 @@ namespace fade { namespace bootstrap {
 		void invoke_module_events(event_type type);
 	}
 
-	void FADE_API load_modules();
 	void FADE_API initialize_modules();
 	void FADE_API deinitialize_modules();
 

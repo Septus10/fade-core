@@ -1,11 +1,6 @@
-#include <iostream>
-#include <vector>
-
-#include <core/core.hpp>
+#ifdef FADE_PLATFORM_WINDOWS
 #include <run/engine_loop.hpp>
-#include <function.hpp>
 
-#if defined(_WIN32) || defined(_WIN64)
 #include <Windows.h>
 
 #ifdef _DEBUG

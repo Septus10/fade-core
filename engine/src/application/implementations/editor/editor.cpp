@@ -20,18 +20,13 @@ void editor_application::fixed_tick(double fixed_delta_time)
 
 void editor_application::pre_initialize()
 {
-	// loading modules
-	bootstrap::load_modules();
-
-	// initialize modules
-	bootstrap::initialize_modules();
+	importer_hub_ = resources::get_resource_importer_hub();
+	wnd_ = rendering::get_window();
 }
 
 void editor_application::initialize()
-{
-	std::cout << "editor::initialize()\n";
-	wnd_ = rendering::get_window();
-	wnd_->create("Test", FADE_WINDOWED | FADE_FOCUSED, 720, 480, FADE_DEFAULT);
+{	
+	wnd_->create("Test", FADE_WINDOW_WINDOWED | FADE_WINDOW_FOCUSED | FADE_WINDOW_DECORATED, 720, 480, FADE_WINDOW_DEFAULT);
 }
 
 void editor_application::post_initialize()

@@ -424,11 +424,27 @@ namespace Fade
                     GetSourceFiles(mod.Path + "\\implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters);
                     GetSourceFiles(mod.Path + "\\includes", "\\includes", ref headerFiles, ref sourceFiles, ref filters);
 
-                    string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { ProjectName = Cfg.Application, Module = mod, Dependencies = dependencies, HeaderFiles = headerFiles, SourceFiles = sourceFiles });            
-                    string projectPath = $"{ProjectPath}\\intermediate\\{mod.Name}_{mod.ActiveImplementation}.vcxproj";
+                    string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { ProjectName = Cfg.Application, Module = mod, Dependencies = dependencies, HeaderFiles = headerFiles, SourceFiles = sourceFiles });
+                    string projectPath;
+                    if (mod.DynamicallyLoaded)
+                    {
+                        projectPath = $"{ProjectPath}\\intermediate\\{mod.Name}_{mod.ActiveImplementation}.vcxproj";
+                    }
+                    else
+                    {
+                        projectPath = $"{ProjectPath}\\intermediate\\{mod.Name}.vcxproj";
+                    }
     
                     string filterResult = Engine.Razor.RunCompile(filterTemplate, "filter", null, new { ModuleName = mod.Name, Filters = filters, HeaderFiles = headerFiles, SourceFiles = sourceFiles });
-                    string filterPath = $"{ProjectPath}\\intermediate\\{mod.Name}_{mod.ActiveImplementation}.vcxproj.filters";
+                    string filterPath;
+                    if (mod.DynamicallyLoaded)
+                    {
+                        filterPath = $"{ProjectPath}\\intermediate\\{mod.Name}_{mod.ActiveImplementation}.vcxproj.filters";
+                    }
+                    else
+                    {
+                        filterPath = $"{ProjectPath}\\intermediate\\{mod.Name}.vcxproj.filters";
+                    }
 
                     if (File.Exists(projectPath))
                     {

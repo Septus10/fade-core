@@ -2,6 +2,7 @@
 
 #include <application.hpp>
 #include <application_api.hpp>
+#include <resource_importer_hub/resource_importer_hub.hpp>
 
 namespace fade
 {
@@ -30,8 +31,10 @@ public:
 	void post_initialize() override;
 
 	void deinitialize() override;
+
 private:
 	std::unique_ptr<rendering::window> wnd_;
+	std::unique_ptr<resources::resource_importer_hub> importer_hub_;
 };
 
 }

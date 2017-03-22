@@ -31,29 +31,29 @@ bool window_impl::create(const char* title, i32 flags, u32 width, u32 height, i3
 		height = mode->height;
 	}
 
-	glfwWindowHint(GLFW_DECORATED, flags & FADE_DECORATED);
-	glfwWindowHint(GLFW_FOCUSED, flags & FADE_FOCUSED);
-	glfwWindowHint(GLFW_FLOATING, flags & FADE_FOCUSED);
-	glfwWindowHint(GLFW_MAXIMIZED, flags & FADE_MAXIMIZED);
-	if (!(refresh_rate & FADE_DEFAULT))
+	glfwWindowHint(GLFW_DECORATED, flags & FADE_WINDOW_DECORATED);
+	glfwWindowHint(GLFW_FOCUSED, flags & FADE_WINDOW_FOCUSED);
+	glfwWindowHint(GLFW_FLOATING, flags & FADE_WINDOW_FOCUSED);
+	glfwWindowHint(GLFW_MAXIMIZED, flags & FADE_WINDOW_MAXIMIZED);
+	if (!(refresh_rate & FADE_WINDOW_DEFAULT))
 	{
 		glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 	}
 	else
 	{
 		glfwWindowHint(GLFW_REFRESH_RATE, refresh_rate);
-	}		
+	}
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
-	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);	
+	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
 
-
-	if (!(flags & FADE_FULLSCREEN))
+	if (!(flags & FADE_WINDOW_FULLSCREEN))
 	{
 		monitor = nullptr;
+		
 	}
 
-	if (flags & FADE_BORDERLESS)
+	if (flags & FADE_WINDOW_BORDERLESS)
 	{
 		glfwWindowHint(GLFW_FLOATING, false);
 		glfwWindowHint(GLFW_DECORATED, false);

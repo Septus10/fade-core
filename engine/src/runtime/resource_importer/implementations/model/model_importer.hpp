@@ -1,9 +1,13 @@
 #pragma once
 
+#include <core/bootstrapping/module_info.hpp>
 #include <resource_importer/resource_importer.hpp>
+
+FADE_MODULE_DEFINE(model_importer)
 
 namespace fade { namespace resources {
 
+class resource;
 class texture_importer;
 class model_importer : public resource_importer
 {

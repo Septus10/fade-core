@@ -11,16 +11,17 @@ namespace resources
 
 class resource;
 class resource_importer;
-class resource_manager_impl : public resource_manager
+class resource_importer_hub_impl : public resource_importer_hub
 {
 public:
-	resource_manager_impl();
-	~resource_manager_impl();
+	resource_importer_hub_impl();
+	~resource_importer_hub_impl() override;
 
-	std::shared_ptr<resource> get_resource(std::string file_path) override;
+	bool import_resource(std::string file_path) override;
 
+	void register_importer(std::unique_ptr<resource_importer> importer) override;
+	resource_importer* get_importer(std::string name) override;
 private:
-	std::unordered_map<std::string, std::shared_ptr<resource>> resource_map_;
 	std::vector<std::unique_ptr<resource_importer>>	importers_;
 
 };

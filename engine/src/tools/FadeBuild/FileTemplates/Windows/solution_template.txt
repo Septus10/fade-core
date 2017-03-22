@@ -3,11 +3,22 @@
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 @{foreach (var item in Model.Modules){
-@:Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "@item.Name", "Intermediate\@(item.Name).vcxproj", "{@item.GUID.ToString().ToUpper()}"
+	if (item.DynamicallyLoaded)
+	{
+@:Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "@(item.Name + "_" + item.ActiveImplementation)", "Intermediate\@(item.Name + "_" + item.ActiveImplementation).vcxproj", "{@item.GUID.ToString().ToUpper()}"
+	}
+	else 
+	{
+@:Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "@(item.Name + "_" + item.ActiveImplementation)", "Intermediate\@(item.Name).vcxproj", "{@item.GUID.ToString().ToUpper()}"	
+	}
 	if (item.Dependencies.Count > 0)
 	{
 		foreach(var dep in item.Dependencies)
 		{
+			if (dep.InterfaceOnly)
+			{
+				continue;
+			}
 			foreach (var mod in Model.Modules)
 			{
 				if (mod.Name == dep.Name)

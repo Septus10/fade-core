@@ -12,42 +12,42 @@ namespace rendering
 /**
  * Default value for certain options
  */
-#define FADE_DEFAULT	0
+#define FADE_WINDOW_DEFAULT	0
 
 /**
  * Fade fullscreen flag
  */
-#define	FADE_FULLSCREEN	0x1
+#define	FADE_WINDOW_FULLSCREEN	0x1
 
 /**
  * Fade windowed flag
  */
-#define	FADE_WINDOWED	0x2
+#define	FADE_WINDOW_WINDOWED	0x2
 
 /**
  * Fade borderless (fullscreen windowed) flag
  */
-#define	FADE_BORDERLESS	0x4
+#define	FADE_WINDOW_BORDERLESS	0x4
 
 /**
  * Enable window decorations (side bars, close widget)
  */
-#define	FADE_DECORATED	0x8
+#define	FADE_WINDOW_DECORATED	0x8
 
 /**
  * Set window as main input focus on creation
  */
-#define	FADE_FOCUSED	0x10
+#define	FADE_WINDOW_FOCUSED	0x10
 
 /**
  * Enables the window to be always on top of all other windows
  */
-#define	FADE_FLOATING	0x20
+#define	FADE_WINDOW_FLOATING	0x20
 
 /**
  * Start window maximized (ignored if fullscreen)
  */
-#define	FADE_MAXIMIZED	0x40
+#define	FADE_WINDOW_MAXIMIZED	0x40
 
 /**
  * Fade window class, used to create windows and viewports and update these

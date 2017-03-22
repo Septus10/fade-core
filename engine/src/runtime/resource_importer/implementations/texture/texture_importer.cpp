@@ -5,31 +5,37 @@
 
 #include <definitions.hpp>
 #include <resource.hpp>
+#include <fstl/memory.hpp>
 
 #include <iostream>
+
+#include <resource_importer_hub/resource_importer_hub.hpp>
+#include <core/service_locator/service_locator.hpp>
+#include "resource_importer_hub_impl.hpp"
 
 using namespace fade;
 using namespace resources;
 
-FADE_MODULE_DEFINE(texture_importer)
 FADE_BOOTSTRAP_MODULE(module_texture_importer)
 FADE_BOOTSTRAP_ON_CONSTRUCT({
-	std::cout << "Constructing texture importer\n";
+	std::cout << "Loaded texture importer module\n";
+	texture_importer* imp = new texture_importer();
+	
+	resource_importer_hub* imp_hub = get_service_locator().get_service<resource_importer_hub>();
+	if (imp_hub)
+	{
+		std::cout << "registering texture importer\n";
+		imp_hub->register_importer(std::make_unique<texture_importer>(*imp));
+	}
 })
 
 texture_importer::texture_importer()
 {
-	extensions_ = {
-		".png",
-		".jpg",
-		".bmp",
-		".tga"
-	};
+	std::cout << "texture_importer()\n";
 }
 
 texture_importer::~texture_importer()
 {
-	
 }
 
 std::unique_ptr<resource> texture_importer::import_resource(std::string file_path)
@@ -40,6 +46,13 @@ std::unique_ptr<resource> texture_importer::import_resource(std::string file_pat
 bool texture_importer::imports_extension(std::string extension)
 {
 	// loop through extension list
+	std::vector<std::string> extensions_ = {
+		".png",
+		".jpg",
+		".bmp",
+		".tga"
+	};
+
 	for (usize i = 0; i < extensions_.size(); i++)
 	{
 		// if the extension exists, we return true

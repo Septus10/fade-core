@@ -39,6 +39,7 @@ namespace Fade
             Module()
             {
                 ImplementsMain = false;
+                DynamicallyLoaded = false;
             }
 
             public string Name { get; set; }
@@ -47,6 +48,7 @@ namespace Fade
             public List<ExternalDependency> ExternalDependencies { get; set; }
             public List<string> Implementations { get; set; }
             public bool ImplementsMain { get; set; }
+            public bool DynamicallyLoaded { get; set; }
             public string ActiveImplementation { get; set; }
             public bool InterfaceOnly { get; set; }
             public Guid GUID { get; set; }

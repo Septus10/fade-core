@@ -4,7 +4,7 @@
 	@{
 		foreach (var filter in Model.Filters)
 		{
-@:    <Filter Include="@filter">
+@:    <Filter Include='@filter.Replace("interfaces\\" + Model.ModuleName, "interfaces")'>
 @:      <UniqueIdentifier>@Guid.NewGuid().ToString().ToUpper()</UniqueIdentifier>
 @:    </Filter>
 		}
@@ -14,7 +14,7 @@
 		foreach (var file in Model.HeaderFiles)
 		{
 @:  <ClInclude Include="@(file.FileName)">
-@:    <Filter>@file.Directory</Filter>
+@:    <Filter>@file.Directory.Replace("interfaces\\" + Model.ModuleName, "interfaces")</Filter>
 @:  </ClInclude>
 		}
 	}  </ItemGroup>

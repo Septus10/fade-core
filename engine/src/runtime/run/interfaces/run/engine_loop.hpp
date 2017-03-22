@@ -5,13 +5,31 @@
 #include <application.hpp>
 #include <core/timer.hpp>
 
+#include <fstl/memory.hpp>
+#include <fstl/vector.hpp>
+
 namespace fade
 {
 
+#ifdef FADE_PLATFORM_WINDOWS
+#include <windows.h>
+
+typedef HMODULE module_handle;
+#elif FADE_PLATFORM_LINUX
+
+
+#elif FADE_PLATFORM_MAC
+
+
+#endif
+
+/**
+ * Fade engine main function
+ */
 int main();
 
 /**
- * Main engine loop
+ * Main engine loop class
  */
 class engine_loop
 {
@@ -61,8 +79,19 @@ public:
 	 */
 	bool should_stop() const;
 
+	/**
+	 * Reads module config file and loads those modules
+	 */
+	void load_modules();
+
+	/**
+	 * Unloads all modules
+	 */
+	void unload_modules();
+
 private:
-	std::unique_ptr<application> app_;
+	fstl::vector<module_handle> module_list_;
+	fstl::unique_ptr<application> app_;
 	std::unique_ptr<timer> timer_;
 	bool run_;
 };
