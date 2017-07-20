@@ -22,6 +22,7 @@ void service_locator::unregister_service(service* service)
 		}
 	}
 }
+
 service_locator& get_service_locator()
 {
 	static service_locator g_service_locator;

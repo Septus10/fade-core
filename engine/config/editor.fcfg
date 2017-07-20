@@ -1,7 +1,11 @@
 {
-	"Application": "editor",
 	"Modules": 
 	[
+		{
+			"Name": "application",
+			"Type": "runtime",
+			"Implementation": "editor"
+		},
 		{
 			"Name": "core",
 			"Type": "runtime",
@@ -13,7 +17,7 @@
 			"Implementation": "default"	
 		},
 		{
-			"Name": "rendering",
+			"Name": "graphics",
 			"Type": "runtime",
 			"Implementation": "opengl"	
 		},
@@ -51,6 +55,11 @@
 			"Name": "resource_importer",
 			"Type": "runtime",
 			"Implementation" :"texture"
-		},	
+		},
+		{
+			"Name": "gameobject",
+			"Type": "runtime",
+			"Implementation" :"default"
+		}
 	]
 }

@@ -2,10 +2,10 @@
 
 #include <core/bootstrapping/bootstrapper.hpp>
 #include <core/bootstrapping/module_info.hpp>
+#include <core/definitions.hpp>
+#include <core/fstl/memory.hpp>
 
-#include <definitions.hpp>
-#include <resource.hpp>
-#include <fstl/memory.hpp>
+#include <resource_importer_hub/resource.hpp>
 
 #include <iostream>
 
@@ -18,20 +18,17 @@ using namespace resources;
 
 FADE_BOOTSTRAP_MODULE(module_texture_importer)
 FADE_BOOTSTRAP_ON_CONSTRUCT({
-	std::cout << "Loaded texture importer module\n";
 	texture_importer* imp = new texture_importer();
 	
 	resource_importer_hub* imp_hub = get_service_locator().get_service<resource_importer_hub>();
 	if (imp_hub)
 	{
-		std::cout << "registering texture importer\n";
 		imp_hub->register_importer(std::make_unique<texture_importer>(*imp));
 	}
 })
 
 texture_importer::texture_importer()
 {
-	std::cout << "texture_importer()\n";
 }
 
 texture_importer::~texture_importer()

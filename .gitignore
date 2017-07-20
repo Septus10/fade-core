@@ -46,7 +46,7 @@
 *.sln.docstates
 
 # Build results
-
+*.exp
 build/
 Engine/[Bb]in/
 Engine/[Bb]in/[Dd]ebug/

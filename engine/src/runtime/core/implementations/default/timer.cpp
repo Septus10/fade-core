@@ -1,73 +1,87 @@
-#include <timer_impl.hpp>
-
+#include <core/timer.hpp>
+#include <chrono>
 
 namespace fade {
 
-timer_impl::timer_impl() :
-	has_paused_(false),
-	stopped_(false)
-{}
+using hrc = std::chrono::high_resolution_clock;
+using ms = std::chrono::milliseconds;
 
-void timer_impl::start()
+class timer::impl
+{
+public:
+    hrc::time_point start_, pause_, resume_, stop_;
+    bool has_paused_;
+    bool stopped_;
+};
+
+timer::timer() :
+    FADE_INIT_PIMPL(timer)
+{
+    impl_->has_paused_ = false;
+    impl_->stopped_ = false;
+}
+
+timer::~timer()
+{
+}
+
+void timer::start()
 {
 	reset();
 }
 
-void timer_impl::reset()
+void timer::reset()
 {
-	start_ = pause_ = resume_ = hrc::now();
-	has_paused_ = false;
-	stopped_ = false;
+	impl_->start_ = impl_->pause_ = impl_->resume_ = hrc::now();
+	impl_->has_paused_ = false;
+	impl_->stopped_ = false;
 }
 
-void timer_impl::stop()
+void timer::stop()
 {
-	stop_ = hrc::now();
-	stopped_ = true;
+	impl_->stop_ = hrc::now();
+	impl_->stopped_ = true;
 }
 
-void timer_impl::pause()
+void timer::pause()
 {
-	pause_ = hrc::now();
-	has_paused_ = true;
-	resume_ = hrc::now();
+	impl_->pause_ = hrc::now();
+	impl_->has_paused_ = true;
+	impl_->resume_ = hrc::now();
 }
 
-void timer_impl::resume()
+void timer::resume()
 {
-	resume_ = hrc::now();
+	impl_->resume_ = hrc::now();
 }
 
-double timer_impl::elapsed() const
+double timer::elapsed() const
 {
 	std::chrono::duration<double, std::centi> duration;
-	if (has_paused_)
+	if (impl_->has_paused_)
 	{
-		if (stopped_)
+		if (impl_->stopped_)
 		{
-			duration = stop_ - resume_ + (pause_ - start_);
+			duration = impl_->stop_ - impl_->resume_ + (impl_->pause_ - impl_->start_);
 		}
 		else
 		{
-			duration = hrc::now() - resume_ + (pause_ - start_);
+			duration = hrc::now() - impl_->resume_ + (impl_->pause_ - impl_->start_);
 		}
+
+        return duration.count();
 	}		
 
-	if (stopped_)
+	if (impl_->stopped_)
 	{
-		duration = stop_ - start_;
+		duration = impl_->stop_ - impl_->start_;
 	}
 	else
 	{
-		duration = hrc::now() - start_;
+		duration = hrc::now() - impl_->start_;
 	}
 
 	return duration.count();
-}
-
-std::unique_ptr<timer> fade::get_timer()
-{
-	return std::make_unique<timer_impl>();
 }
 
 }

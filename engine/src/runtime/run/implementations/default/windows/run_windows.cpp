@@ -1,19 +1,21 @@
-#ifdef FADE_PLATFORM_WINDOWS
 #include <run/engine_loop.hpp>
 
 #include <Windows.h>
+#include <stdio.h>
+#include <iostream>
 
-#ifdef _DEBUG
-int main(int argc, char** argv)
-#else
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-#endif
+extern int fade::main(const char* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevInstance, fade::u32 nCmdShow);
+
+int WINAPI WinMain(HINSTANCE hInInstance, HINSTANCE hPrevInstance, char* CmdLine, int nCmdShow)
 {
-	// parse arguments
-	
+#ifdef _DEBUG
+    FILE *conin, *conout;
+    AllocConsole();
+    freopen_s(&conin, "conin$", "r", stdin);
+    freopen_s(&conout, "conout$", "w", stdout);
+    freopen_s(&conout, "conout$", "w", stderr);
+#endif
 
 	// engine main
-	return fade::main();
+	return fade::main(CmdLine, hInInstance, hPrevInstance, nCmdShow);
 }
-
-#endif

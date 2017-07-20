@@ -1,6 +1,6 @@
 #include <core/memory/memory.hpp>
 #include <cassert>
-#include <fstl/iostream.hpp>
+#include <core/fstl/iostream.hpp>
 
 namespace fade {
 

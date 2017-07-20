@@ -1,0 +1,26 @@
+{
+	"Name": "vulkan",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "glfw",
+			"External":true,
+			"RequiredVersion":
+			{
+				"Min": "3.2.1",
+				"Max": "3.2.1"
+			}
+		},
+		{
+			"Name": "vulkan",
+			"External":true,
+			"RequiredVersion":
+			{
+				"Min": "1.0.42.1",
+				"Max": "1.0.42.1"
+			}
+		}
+	],
+}
+		

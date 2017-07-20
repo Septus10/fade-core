@@ -1,8 +1,8 @@
 #include <resource_importer_hub/resource_importer_hub.hpp>
+#include <resource_importer_hub/resource.hpp>
 #include <resource_importer_hub_impl.hpp>
 
 #include <resource_importer/resource_importer.hpp>
-#include <resource.hpp>
 
 using namespace fade;
 using namespace resources;

@@ -1,8 +1,7 @@
 #pragma once
 
 #include <core/bootstrapping/bootstrapper.hpp>
-
-#include <definitions.hpp>
+#include <core/definitions.hpp>
 
 #include <vector>
 #include <cassert>

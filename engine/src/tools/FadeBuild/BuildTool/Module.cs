@@ -26,12 +26,14 @@ namespace Fade
             public ExternalDependency()
             {
                 External = true;
+                UsesLibrary = true;
             }
 
             public string IncludeFolder { get; set; }
             public string LibraryFolder { get; set; }
             public string LibraryName { get; set; }
             public List<string> RequiredLibraries { get; set; }
+            public bool UsesLibrary { get; set; }
         }
 
         class Module

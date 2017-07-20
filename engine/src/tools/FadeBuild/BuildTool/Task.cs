@@ -95,19 +95,22 @@ namespace Fade
                     return false;
                 }
 
+                Cfg.Application = Proj.Configuration;
                 return true;
             }
 
             private bool parseVersion(string version, out int[] ints)
             {
-                ints = new int[3];
-
                 string[] versions = version.Split('.');
-                if (!Int32.TryParse(versions[0], out ints[0]) || !Int32.TryParse(versions[1], out ints[1]) || !Int32.TryParse(versions[2], out ints[2]))
+                ints = new int[versions.Length];
+                for (int i = 0; i < versions.Length; i++)
                 {
-                    LastError = "Error parsing version";
-                    return false;
-                }
+                    if (!Int32.TryParse(versions[i], out ints[i]))
+                    {
+                        LastError = "Error parsing version";
+                        return false;
+                    }
+                }                
                 return true;
             }
 
@@ -214,13 +217,8 @@ namespace Fade
             public bool ExecuteModules()
             {
                 //================================================================
-                // Get application module
+                // Deserialize all modules
                 //================================================================
-                if (!deserializeModule($"{ProjectFilePath}src\\application\\", "application", Cfg.Application))
-                {
-                    return false;
-                }
-
                 foreach (ModuleInfo module in Cfg.Modules)
                 {
                     if (!deserializeModule($"{ProjectFilePath}src\\{module.Type}\\{module.Name}\\", $"{module.Name}", module.Implementation))
@@ -254,14 +252,20 @@ namespace Fade
                             //================================================================
                             // Check version
                             //================================================================
-                            if (vers[0] > max[0] || vers[0] < min[0] ||
-                                vers[1] > max[1] || vers[1] < min[1] ||
-                                vers[2] > max[2] || vers[2] < min[2])
+                            if (vers.Length != min.Length || vers.Length != max.Length)
                             {
-                                LastError = $"Dependency version {temp.Version} exceeds our module's required version (Min {dep.RequiredVersion.Min} & Max {dep.RequiredVersion.Max})";
+                                LastError = "Module version is not the same format as specified required version";
                                 return false;
                             }
 
+                            for(int k = 0; k < vers.Length; k++)
+                            {
+                                if (vers[k] > max[k] || vers[k] < min[k])
+                                {
+                                    LastError = $"Dependency version {temp.Version} exceeds our module's required version (Min {dep.RequiredVersion.Min} & Max {dep.RequiredVersion.Max})";
+                                    return false;
+                                }
+                            }
                             continue;
                         }
 
@@ -277,15 +281,24 @@ namespace Fade
                                 string folderName = folder.Substring(folder.LastIndexOf('\\') + 1);
                                 if (folderName == dep.Name)
                                 {
-                                    string externalFile = FileToString($"{folder}\\{dep.Name}.fmodule");
+                                    // check whether we can actually find the dependency file
+                                    string depFile = $"{folder}\\{dep.Name}.fmodule";
+                                    if (!File.Exists(depFile))
+                                    {
+                                        LastError = $"Unable to find external dependency in folder: {folder}";
+                                        return false;
+                                    }
+
+                                    string externalFile = FileToString(depFile);                                    
                                     ExternalDependency exdep = JsonConvert.DeserializeObject<ExternalDependency>(externalFile);
                                     exdep.RequiredVersion = dep.RequiredVersion;
                                     exdep.External = dep.External;
                                     exdep.IncludeFolder = $"{folder}\\include";
                                     exdep.LibraryFolder = $"{folder}\\lib";
+                                    // external dependency doesn't have a library name
                                     if (exdep.LibraryName == null)
                                     {
-                                        exdep.LibraryName = dep.Name;
+                                        exdep.UsesLibrary = false;
                                     }
 
                                     if (exdep.RequiredLibraries == null)
@@ -299,7 +312,7 @@ namespace Fade
                         }
                         else // if not, we're missing a dependency
                         {
-                            LastError = $"Dependency \"{dep.Name}\" in \"{mod.Name}\" not found in module list";
+                            LastError = $"Dependency \"{dep.Name}\" in \"{mod.Name}\" not found in module list\n\tYou've either forgotten to add this module to the config file.\n\tOr you didn't mark it as external in the '{mod.Name}.fmodule' file";
                             return false;
                         }
                     }
@@ -308,8 +321,13 @@ namespace Fade
                 return true;
             }
 
-            private void GetSourceFiles(string Path, string Denom, ref List<SourceFile> HeaderFiles, ref List<SourceFile> SourceFiles, ref List<string> Filters)
+            private bool GetSourceFiles(string Path, string Denom, ref List<SourceFile> HeaderFiles, ref List<SourceFile> SourceFiles, ref List<string> Filters)
             {
+                if (!Directory.Exists(Path))
+                {
+                    LastError = $"Could not find part of the path: {Path}";
+                    return false;
+                }
                 var files = Directory.GetFiles(Path);
 
                 //================================================================
@@ -357,6 +375,8 @@ namespace Fade
                 {
                     GetSourceFiles(dir, Denom, ref HeaderFiles, ref SourceFiles, ref Filters);
                 }
+
+                return true;
                 
             }
 
@@ -420,21 +440,25 @@ namespace Fade
                         dependencies.Add(temp);
                     }
 
-                    GetSourceFiles(mod.Path + "\\interfaces", "\\interfaces",ref headerFiles, ref sourceFiles, ref filters);
-                    GetSourceFiles(mod.Path + "\\implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters);
-                    GetSourceFiles(mod.Path + "\\includes", "\\includes", ref headerFiles, ref sourceFiles, ref filters);
+                    if (!GetSourceFiles(mod.Path + "\\public", "\\public",ref headerFiles, ref sourceFiles, ref filters) ||
+                        !GetSourceFiles(mod.Path + "\\implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters))
+                    {
+                        return false;
+                    }
 
                     string projectResult = Engine.Razor.RunCompile(projectTemplate, "project", null, new { ProjectName = Cfg.Application, Module = mod, Dependencies = dependencies, HeaderFiles = headerFiles, SourceFiles = sourceFiles });
                     string projectPath;
                     if (mod.DynamicallyLoaded)
                     {
+
                         projectPath = $"{ProjectPath}\\intermediate\\{mod.Name}_{mod.ActiveImplementation}.vcxproj";
                     }
                     else
                     {
                         projectPath = $"{ProjectPath}\\intermediate\\{mod.Name}.vcxproj";
                     }
-    
+
+
                     string filterResult = Engine.Razor.RunCompile(filterTemplate, "filter", null, new { ModuleName = mod.Name, Filters = filters, HeaderFiles = headerFiles, SourceFiles = sourceFiles });
                     string filterPath;
                     if (mod.DynamicallyLoaded)

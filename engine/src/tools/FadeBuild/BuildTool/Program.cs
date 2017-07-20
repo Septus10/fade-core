@@ -22,12 +22,12 @@ namespace Fade
                     AppDomainSetup adSetup = new AppDomainSetup();
                     adSetup.ApplicationBase = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
                     var current = AppDomain.CurrentDomain;
-
+                
                     // You only need to add strongnames when your appdomain is not a full trust environment.
                     var strongNames = new StrongName[0];
                     var domain = AppDomain.CreateDomain("RazorDomain", null, current.SetupInformation, new PermissionSet(PermissionState.Unrestricted), strongNames);
                     var exitCode = domain.ExecuteAssembly(Assembly.GetExecutingAssembly().Location, args);
-
+                
                     // RazorEngine will cleanup. 
                     AppDomain.Unload(domain);
                     return;
@@ -131,6 +131,7 @@ namespace Fade
                 if (!res)
                 {
                     Console.WriteLine("Error getting build config: " + buildTask.LastError);
+                    Console.Read();
                     return false;
                 }
 
@@ -138,6 +139,7 @@ namespace Fade
                 if (!res)
                 {
                     Console.WriteLine("Error getting modules: " + buildTask.LastError);
+                    Console.Read();
                     return false;
                 }
 
@@ -145,15 +147,18 @@ namespace Fade
                 if (!res)
                 {
                     Console.WriteLine("Error generating project files: " + buildTask.LastError);
+                    Console.Read();
                     return false;
                 }
-                
+
                 // Might just leave this out and let users build their modules with visual studio
                 if(buildTask.Task == ETask.Build)
                 {
                     // Call msbuild to build the project
                 }
 
+                Console.WriteLine("Done generating files");
+                Console.Read();
                 return true;
             }
         }

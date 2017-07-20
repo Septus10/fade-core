@@ -1,12 +1,14 @@
 #include <run/engine_loop.hpp>
 #include <core/timer.hpp>
 
-#include <application.hpp>
+#include <application/application.hpp>
 
-#include <fstl/iostream.hpp>
-#include <fstl/fstream.hpp>
-#include <fstl/vector.hpp>
-#include <fstl/string.hpp>
+#include <core/fstl/iostream.hpp>
+#include <core/fstl/fstream.hpp>
+#include <core/fstl/vector.hpp>
+#include <core/fstl/string.hpp>
+
+#include <core/logging/logging.hpp>
 
 #include <core/bootstrapping/bootstrapper.hpp>
 #include <winbase.h>
@@ -16,8 +18,13 @@ namespace fade {
 engine_loop::engine_loop()
 {
 	run_ = true;
+    
+    // set up application
 	app_ = get_application();
-	timer_ = get_timer();
+
+    // start engine timer
+    timer_ = std::make_unique<timer>();
+    timer_->start();
 }
 
 engine_loop::~engine_loop()
@@ -27,6 +34,7 @@ engine_loop::~engine_loop()
 
 i32 engine_loop::pre_initialize()
 {
+
 	app_->pre_initialize();
 
 	load_modules();
@@ -44,7 +52,6 @@ i32 engine_loop::initialize()
 
 i32 engine_loop::post_initialize()
 {
-	timer_->start();
 	app_->post_initialize();
 	return 0;
 }
@@ -61,7 +68,10 @@ i32 engine_loop::deinitialize()
 
 void engine_loop::tick()
 {	
-	app_->tick(timer_->elapsed());
+	if (app_->tick(timer_->elapsed()) == FADE_REQUEST_STOP)
+	{
+		run_ = false;
+	}
 }
 
 void engine_loop::should_stop(bool should_stop)
