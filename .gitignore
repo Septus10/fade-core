@@ -25,8 +25,7 @@
 *.lai
 *.la
 *.a
-*.lib
-!engine/src/external/*.lib
+[Ee]ngine/src/runtime/**/*.lib
 
 # Executables
 *.exe
@@ -230,7 +229,6 @@ $RECYCLE.BIN/
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
-Engine/Useful links.docx
-Engine/Intermediate/
-Engine/Fade Engine.sln
-
+[Ee]ngine/Useful links.docx
+[Ee]ngine/Intermediate/
+[Ee]ngine/Fade Engine.sln
