@@ -62,7 +62,7 @@
   @{
 	if(Model.Module.ImplementsMain)
 	{
-@:	<OutDir>@(Model.Module.Path)bin\$(Platform)_$(Configuration)\</OutDir>
+@:	<OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
 	}
 	else
 	{
@@ -76,8 +76,8 @@
 	{
 @:	<IntDir>@(Model.Module.Path)intermediate\build\@(Model.Module.Name)\</IntDir>
 	}
-    <LibraryPath>@foreach(var dep in Model.Dependencies){<text>@(dep.Path)bin\$(Platform)_$(Configuration)\lib\;</text>}@foreach(var dep in Model.Module.ExternalDependencies){<text>@dep.LibraryFolder\windows\$(Configuration);</text>}$(LibraryPath)</LibraryPath>
-  }    <IncludePath>@(Model.Module.Path)\interfaces\;@(Model.Module.Path)\implementations\@(Model.Module.ActiveImplementation);@(Model.Module.Path)\includes\;@foreach(var dep in Model.Dependencies){<text>@(dep.Path)\interfaces\;@(dep.Path)\implementations\@dep.ActiveImplementation;@(dep.Path)\includes\;</text>}@foreach(var dep in Model.Module.ExternalDependencies){<text>@dep.IncludeFolder;</text>}$(IncludePath)</IncludePath>
+    <LibraryPath>@foreach(var dep in Model.Dependencies){<text>@(dep.Path)bin\$(Platform)_$(Configuration)\lib\;</text>}@foreach(var dep in Model.Module.ExternalDependencies){if(dep.UsesLibrary){<text>@dep.LibraryFolder\windows\$(Configuration);</text>}}$(LibraryPath)</LibraryPath>
+  }    <IncludePath>@(Model.Module.Path)\public\;@(Model.Module.Path)\implementations\@(Model.Module.ActiveImplementation);@(Model.Module.Path)\includes\;@foreach(var dep in Model.Dependencies){<text>@(dep.Path)\public\;@(dep.Path)\implementations\@dep.ActiveImplementation;@(dep.Path)\includes\;</text>}@foreach(var dep in Model.Module.ExternalDependencies){<text>@dep.IncludeFolder;</text>}$(IncludePath)</IncludePath>
 @if (Model.Module.ImplementsMain) {<text>    <TargetName>@Model.ProjectName</TargetName></text>} 	
   </PropertyGroup>
   <ItemDefinitionGroup>
@@ -99,7 +99,7 @@
       <SDLCheck>true</SDLCheck>
 	</ClCompile>
 	<Link>
-	  <AdditionalDependencies>@foreach (var dep in Model.Dependencies){ if (!dep.DynamicallyLoaded){<text>@(dep.Name).lib;</text>}}@foreach (var dep in Model.Module.ExternalDependencies){<text>@(dep.LibraryName).lib;</text>foreach (var lib in dep.RequiredLibraries){<text>@(lib);</text>}}%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies>@foreach (var dep in Model.Dependencies){ if (!dep.DynamicallyLoaded){<text>@(dep.Name).lib;</text>}}@foreach (var dep in Model.Module.ExternalDependencies){if(dep.UsesLibrary){<text>@(dep.LibraryName).lib;</text>foreach (var lib in dep.RequiredLibraries){<text>@(lib);</text>}}}%(AdditionalDependencies)</AdditionalDependencies>
 	</Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
