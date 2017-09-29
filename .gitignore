@@ -26,6 +26,7 @@
 *.la
 *.a
 *.lib
+!engine/src/external/*.lib
 
 # Executables
 *.exe
