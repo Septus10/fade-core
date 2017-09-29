@@ -7,7 +7,11 @@
 #include <core/definitions.hpp>
 #include <unordered_map>
 
-namespace fade { namespace graphics { namespace pipeline {
+namespace fade { namespace graphics { 
+
+class material;
+    
+namespace pipeline {
 
 struct shader_uniform;
 class FADE_API shader_program
@@ -21,6 +25,11 @@ public:
 
     void use();
     void stop();
+
+    void setup_uniforms(material* mat);
+
+    std::vector<struct uniform>             get_uniforms() const;
+    std::vector<struct vertex_attribute>    get_attributes() const;
 
 private:
     FADE_MAKE_PIMPL

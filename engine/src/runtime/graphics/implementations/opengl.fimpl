@@ -4,14 +4,6 @@
 	"Dependencies":
 	[
 		{
-			"Name": "application",
-			"RequiredVersion":
-			{
-				"Min": "0.0.1",
-				"Max": "0.0.1"
-			}
-		},
-		{
 			"Name": "glew",
 			"External":true,
 			"RequiredVersion":

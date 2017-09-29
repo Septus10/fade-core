@@ -10,6 +10,15 @@
 				"Min": "0.0.1",
 				"Max": "0.0.1"
 			}
+		},
+		{
+			"Name": "glm",
+			"External": true,
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
 		}
 	],
 	"Implementations": 

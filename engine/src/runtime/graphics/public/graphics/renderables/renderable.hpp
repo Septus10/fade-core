@@ -6,18 +6,18 @@
 #include <vector>
 
 namespace fade { namespace graphics {
-    
+
 class FADE_API renderable
 {
 public:
     renderable();
-    renderable(const renderable& lhs);
+    renderable(const renderable& other);
     renderable(std::vector<struct vertex> vertices, std::vector<u32> indices);
-    ~renderable();
+    virtual ~renderable();
     
     void setup_vertex_buffer(std::vector<struct vertex> vertices, std::vector<u32> indices);
 
-    void draw();
+    virtual void draw();
 private:
     FADE_MAKE_PIMPL
 };

@@ -80,5 +80,17 @@ SHADER_DATA_TYPE convert_library_type(u32 library_type)
     return SHADER_DATA_TYPE::SDT_UNKNOWN;
 }
 
+uniform_value::uniform_value()
+{
+    type_ = SDT_UNKNOWN;
+    i_val_ = 0;
+}
+
+uniform_value::uniform_value(SHADER_DATA_TYPE type)
+{
+    type_ = type;
+    i_val_ = 0;
+}
+
 } } }
 

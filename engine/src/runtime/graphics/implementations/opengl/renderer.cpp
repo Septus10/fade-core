@@ -189,15 +189,17 @@ void renderer::render_frame(const std::vector<render_batch>& render_batches)
     for (auto batch: render_batches)
     {
         // get the material used by this batch
-        pipeline::shader_program* program = batch.shader_program_;
+        material* material = batch.material_;
+        pipeline::shader_program* program = material->get_shader_program();
 
         // initialize shader for this batch
         program->use();
+        program->setup_uniforms(material);
 
         // loop through all renderables and draw them
         for (auto& renderable: batch.renderables_)
         {
-            renderable.draw();
+            renderable->draw();
         }
 
         program->stop();

@@ -3,7 +3,7 @@
 #include <graphics/graphics_api.hpp>
 #include <string>
 #include <core/definitions.hpp>
-#include <glm.hpp>
+#include "../../../external/glm/include/glm.hpp"
 
 // credits for this go to Joey de Vries (https://github.com/JoeyDeVries/Cell)
 
@@ -39,6 +39,9 @@ struct uniform
 
 struct uniform_value
 {
+    uniform_value();
+    uniform_value(SHADER_DATA_TYPE type);
+
     SHADER_DATA_TYPE    type_;
     union
     {

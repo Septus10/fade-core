@@ -75,35 +75,6 @@ void editor_application::initialize()
     }
 
 	cur_time_ = 0;
-
-    // temp set up render batch for testing purposes
-    std::vector<graphics::vertex> vertices;
-
-    graphics::vertex vertex_one;
-    vertex_one.position[0] = -1.f;
-    vertex_one.position[1] = -1.f;
-    vertex_one.position[2] = 0.0f;
-    vertices.push_back(vertex_one);
-
-    graphics::vertex vertex_two;
-    vertex_two.position[0] = 1.f;
-    vertex_two.position[1] = -1.f;
-    vertex_two.position[2] = 0.f;
-    vertices.push_back(vertex_two);
-
-    graphics::vertex vertex_three;
-    vertex_three.position[0] = 0.f;
-    vertex_three.position[1] = 1.f;
-    vertex_three.position[2] = 0.f;
-    vertices.push_back(vertex_three);
-
-    graphics::renderable triangle;
-    triangle.setup_vertex_buffer(vertices, { 0, 1, 2 });
-
-    graphics::render_batch batch;
-    batch.renderables_.push_back(triangle);
-    batch.shader_program_ = new graphics::pipeline::shader_program("./shaders/default/");
-    batches_.push_back(batch);
 }
 
 void editor_application::post_initialize()
@@ -113,10 +84,6 @@ void editor_application::post_initialize()
 
 void editor_application::deinitialize()
 {
-    for (auto batch: batches_)
-    {
-        delete batch.shader_program_;
-    }
     batches_.clear();
 }
 

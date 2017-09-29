@@ -1,6 +1,5 @@
 #include <graphics/renderables/renderable.hpp>
 #include <graphics/types/vertex.hpp>
-#include <graphics/types/material.hpp>
 
 #define GLEW_STATIC
 
@@ -16,8 +15,6 @@ public:
     u32 EBO_;
     u32 VAO_;
     u32 num_vertices_;
-
-    material material_;
 };
 
 renderable::renderable() :

@@ -13,6 +13,22 @@
 			}
 		},
 		{
+			"Name": "scene_graph",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
+			"Name": "gameobject",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
 			"Name": "glm",
 			"External": true,
 			"RequiredVersion":

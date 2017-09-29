@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include <graphics/pipeline/shader_types.hpp>
+#include <graphics/types/material.hpp>
 
 namespace fs = std::experimental::filesystem;
 
@@ -126,7 +127,7 @@ bool shader_program::create(std::string directory_path)
         {
             return false;
         }
-    }    
+    }
 
     glLinkProgram(impl_->shader_program_);
     // check for linking errors
@@ -169,7 +170,7 @@ bool shader_program::create(std::string directory_path)
         attributes_[i].location_ = attrib_location;
     }
 
-    for (auto i: shaders)
+    for (auto i : shaders)
     {
         glDeleteShader(i);
     }
@@ -187,8 +188,65 @@ void shader_program::stop()
     glUseProgram(0);
 }
 
+void shader_program::setup_uniforms(material* mat)
+{
+    for (auto uniform: uniforms_)
+    {
+        switch(uniform.type_)
+        {
+        case SDT_BOOL:
+            glUniform1i(uniform.location_, mat->uniforms_[uniform.name_].b_val_);
+            break;
+        case SDT_INT:
+            glUniform1i(uniform.location_, mat->uniforms_[uniform.name_].i_val_);
+            break;
+        case SDT_FLOAT:
+            glUniform1f(uniform.location_, mat->uniforms_[uniform.name_].f_val_);
+            break;
+        case SDT_SAMPLER1D: 
+            glUniform1i(uniform.location_, mat->uniforms_[uniform.name_].i_val_);
+            break;
+        case SDT_SAMPLER2D: 
+            glUniform1i(uniform.location_, mat->uniforms_[uniform.name_].i_val_);
+            break;
+        case SDT_SAMPLER3D: 
+            glUniform1i(uniform.location_, mat->uniforms_[uniform.name_].i_val_);
+            break;
+        case SDT_SAMPLERCUBE: 
+            glUniform1i(uniform.location_, mat->uniforms_[uniform.name_].i_val_);
+            break;
+        case SDT_VEC2: 
+            glUniform2fv(uniform.location_, 2, &mat->uniforms_[uniform.name_].v2_val_.x);
+            break;
+        case SDT_VEC3:
+            glUniform3fv(uniform.location_, 3, &mat->uniforms_[uniform.name_].v3_val_.x);
+            break;
+        case SDT_VEC4:
+            glUniform4fv(uniform.location_, 4, &mat->uniforms_[uniform.name_].v4_val_.x);
+            break;
+        case SDT_MAT2:
+            glUniformMatrix2fv(uniform.location_, 4, false, &mat->uniforms_[uniform.name_].m2_val_[0][0]);
+            break;
+        case SDT_MAT3: 
+            glUniformMatrix2fv(uniform.location_, 9, false, &mat->uniforms_[uniform.name_].m3_val_[0][0]);
+            break;
+        case SDT_MAT4: 
+            glUniformMatrix2fv(uniform.location_, 12, false, &mat->uniforms_[uniform.name_].m4_val_[0][0]);
+            break;
+        case SDT_UNKNOWN: 
+            break;
+        }
+    }
 }
 
+std::vector<uniform> shader_program::get_uniforms() const
+{
+    return uniforms_;
 }
 
+std::vector<vertex_attribute> shader_program::get_attributes() const
+{
+    return attributes_;
 }
+
+} } }
