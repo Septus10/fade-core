@@ -1,12 +1,12 @@
 {
 	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
-	"Name": "core",
+	"Name": "Core",
 	"Version": "0.0.1",
 	"Dependencies":
 	[
 	],
 	"Implementations": 
 	[
-		"default"
+		"Default"
 	]
 }

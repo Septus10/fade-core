@@ -1,31 +1,31 @@
 #pragma once
 
-namespace fade { namespace bootstrap { namespace detail {
+namespace Fade { namespace Bootstrap { namespace Detail {
 	
 	template <typename T>
-	module_events& register_module()
+	SModuleEvents& RegisterModule()
 	{
-		return register_module(T::name_hash);
+		return RegisterModule(T::name_hash);
 	}
 
 	template <typename ... Args>
-	bool register_dependencies<Args...>::impl(module_events&)
+	bool RegisterDependencies<Args...>::Impl(SModuleEvents&)
 	{
 		return false;
 	}
 
 	template <typename T>
-	bool register_dependencies<T>::impl(module_events& module)
+	bool RegisterDependencies<T>::Impl(SModuleEvents& a_Module)
 	{
-		module.dependencies.insert(T::name_hash);
+		a_Module.dependencies.insert(T::name_hash);
 		return true;
 	}
 
 	template <typename T, typename... Args>
-	bool register_dependencies<T, Args...>::impl(module_events& module)
+	bool RegisterDependencies<T, Args...>::Impl(SModuleEvents& a_Module)
 	{
-		module.dependencies.insert(T::name_hash);
-		return register_dependencies<Args...>::impl(module);
+		a_Module.dependencies.insert(T::name_hash);
+		return RegisterDependencies<Args...>::Impl(a_Module);
 	}
 
 } } }

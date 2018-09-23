@@ -1,20 +1,12 @@
 {
 	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
-	"Name": "gui",
+	"Name": "GUI",
 	"Version": "0.0.1",
 	"Dependencies":
 	[
 		{
-			"Name": "core",
+			"Name": "Core",
 			"RequiredVersion": 
-			{
-				"Min": "0.0.1",
-				"Max": "0.0.1"
-			}
-		},
-		{
-			"Name": "graphics",
-			"RequiredVersion":
 			{
 				"Min": "0.0.1",
 				"Max": "0.0.1"
@@ -23,6 +15,6 @@
 	],
 	"Implementations": 
 	[
-		"default"
-	],
+		"Default"
+	]
 }

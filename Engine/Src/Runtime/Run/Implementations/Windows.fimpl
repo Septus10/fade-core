@@ -1,0 +1,1 @@
+{	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",	"Name": "Windows",	"Version": "0.0.1",	"ImplementationDependencies":	[		{			"Name": "PlatformCore",			"Implementation": "Windows",			"RequiredVersion":			{				"Min": "0.0.1",				"Max": "0.0.1"			}		}	],	}

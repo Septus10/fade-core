@@ -1,32 +1,38 @@
 #pragma once
 
-#include <core/core_api.hpp>
-#include <core/pimpl.hpp>
+#include <Core/CoreApi.hpp>
+#include <Core/Pimpl.hpp>
 
-#include <memory>
+#include <chrono>
 
-namespace fade {
 
-class FADE_API timer
+namespace Fade {
+
+class FADE_CORE_API CTimer
 {
 public:
-    timer();
-    ~timer();
+	CTimer();
+    ~CTimer();
 
-	void start();
+	void Start();
 
-	void reset();
+	void Reset();
 	
-	void stop();
+	void Stop();
 
-	void pause();
+	void Pause();
 
-	void resume();
+	void Resume();
 
-	double elapsed() const;
+	double Elapsed() const;
 
 private:
-    FADE_MAKE_PIMPL;
+	using hrc	= std::chrono::high_resolution_clock;
+	using ms	= std::chrono::milliseconds;
+
+	hrc::time_point m_Start, m_Pause, m_Resume, m_Stop;
+	bool m_HasPaused;
+	bool m_IsStopped;
 };
 
 

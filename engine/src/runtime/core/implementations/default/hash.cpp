@@ -39,7 +39,7 @@
 * SUCH DAMAGE.
 */
 
-namespace fade
+namespace Fade
 {
 
 class SHA256
@@ -197,7 +197,7 @@ void SHA256::final(unsigned char *digest)
     }
 }
 
-std::string hash::sha256(std::vector<u8>& data)
+std::string CHash::sha256(std::vector<u8>& data)
 {
     u8 digest[SHA256::DIGEST_SIZE] = {};
     SHA256 ctx;
@@ -215,7 +215,7 @@ std::string hash::sha256(std::vector<u8>& data)
     return str.str();
 }
 
-std::string hash::sha256(std::string& data)
+std::string CHash::sha256(std::string& data)
 {
     std::vector<u8> byte_vector(data.begin(), data.end());
     return sha256(byte_vector);

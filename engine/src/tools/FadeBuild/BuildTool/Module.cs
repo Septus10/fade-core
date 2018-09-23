@@ -21,6 +21,11 @@ namespace Fade
             public RequiredVersion RequiredVersion { get; set; }
         }
 
+        class ImplementationDependency : Dependency
+        {
+            public string Implementation { get; set; }
+        }
+
         class ExternalDependency : Dependency
         {
             public ExternalDependency()
@@ -47,6 +52,7 @@ namespace Fade
             public string Name { get; set; }
             public string Version { get; set; }
             public List<Dependency> Dependencies { get; set; }
+            public List<ImplementationDependency> ImplementationDependencies { get; set; }
             public List<ExternalDependency> ExternalDependencies { get; set; }
             public List<string> Implementations { get; set; }
             public bool ImplementsMain { get; set; }
@@ -62,6 +68,7 @@ namespace Fade
             public string Name { get; set; }
             public string Version { get; set; }
             public List<Dependency> Dependencies { get; set; }
+            public List<ImplementationDependency> ImplementationDependencies { get; set; }
         }
     }
 }

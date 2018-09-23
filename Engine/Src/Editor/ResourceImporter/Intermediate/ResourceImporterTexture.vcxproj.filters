@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include='Public'>
+      <UniqueIdentifier>63E43350-551D-494B-9021-D7CF38BBF0F9</UniqueIdentifier>
+    </Filter>
+    <Filter Include='Public'>
+      <UniqueIdentifier>E46C0185-ED0C-4401-B2EE-013F26F92E0E</UniqueIdentifier>
+    </Filter>
+    <Filter Include='Texture'>
+      <UniqueIdentifier>80E1D73B-4D22-46DE-A5D2-A590A7969589</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporter.hpp">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporterApi.hpp">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.hpp">
+      <Filter>Texture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.cpp">
+    <Filter>Texture</Filter>
+  </ClCompile>
+  </ItemGroup>
+</Project>

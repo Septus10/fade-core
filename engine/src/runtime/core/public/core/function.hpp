@@ -1,9 +1,9 @@
 #pragma once
 
 #include <functional>
-#include <core/core_api.hpp>
+#include <core/CoreApi.hpp>
 
-namespace fade
+namespace Fade
 {
 
 #ifdef NEW

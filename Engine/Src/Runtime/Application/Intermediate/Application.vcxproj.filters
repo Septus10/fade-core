@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include='Public'>
+      <UniqueIdentifier>E72F3008-3D8D-4210-8998-D933AC32CD04</UniqueIdentifier>
+    </Filter>
+    <Filter Include='Public'>
+      <UniqueIdentifier>16AC81FC-D288-492F-B055-EB8C1FD31808</UniqueIdentifier>
+    </Filter>
+    <Filter Include='Editor'>
+      <UniqueIdentifier>7CB87F2C-653A-4B7E-9A0B-65BFE6080DC3</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\Application.hpp">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\ApplicationApi.hpp">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Editor.hpp">
+      <Filter>Editor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Editor.cpp">
+    <Filter>Editor</Filter>
+  </ClCompile>
+  </ItemGroup>
+</Project>

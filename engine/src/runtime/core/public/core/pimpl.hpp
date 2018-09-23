@@ -1,51 +1,52 @@
 #pragma once
 
 #include <memory>
-#include <core/core_api.hpp>
+#include <Core/CoreApi.hpp>
+#include <Core/Containers/UniquePointer.hpp>
 
 #define FADE_MAKE_PIMPL                 \
 private:								\
-    class impl;                         \
+    class CImpl;                        \
     __pragma(warning(push))             \
     __pragma(warning(disable : 4251))   \
-    pimpl<impl> impl_;                  \
+    TPimpl<CImpl> m_Impl;               \
     __pragma(warning(pop))
 
 #define FADE_INIT_PIMPL(x) \
-    impl_(std::make_unique<x::impl>())
+    m_Impl(std::make_unique<x::CImpl>())
 
 /* Brief:
 *  Creates pimpl object using a unique_ptr
 */
 template <typename T>
-class pimpl
+class TPimpl
 {
 private:
-	std::unique_ptr<T> ptr_;
+	Fade::TUniquePtr<T> m_Ptr;
 
 public:
 	template <typename... Args>
-	pimpl(Args&&... args) :
-		ptr_(std::forward<Args>(args)...)
+	TPimpl(Args&&... args) :
+		m_Ptr(std::forward<Args>(args)...)
 	{ }
 
 	// copy ctor & copy assignment
-	pimpl(const pimpl& rhs) = default;
-	pimpl& operator=(const pimpl& rhs) = default;
+	TPimpl(const TPimpl& rhs) = default;
+	TPimpl& operator=(const TPimpl& rhs) = default;
 
 	// move ctor & move assignment
-	pimpl(pimpl&& rhs) = default;
-	pimpl& operator=(pimpl&& rhs) = default;
+	TPimpl(TPimpl&& rhs) = default;
+	TPimpl& operator=(TPimpl&& rhs) = default;
 
 	// pointer operator
-	T& operator*() { return *ptr_; }
-	const T& operator*() const { return *ptr_; }
+	T& operator*() { return *m_Ptr; }
+	const T& operator*() const { return *m_Ptr; }
 
 	// arrow operator
-	T* operator->() { return ptr_.get(); }
-	const T* operator->() const { return ptr_.get(); }
+	T* operator->() { return m_Ptr.get(); }
+	const T* operator->() const { return m_Ptr.get(); }
 
 	// get() function
-	T* get() { return ptr_.get(); }
-	const T* get() const { return ptr_.get(); }
+	T* get() { return m_Ptr.get(); }
+	const T* get() const { return m_Ptr.get(); }
 };

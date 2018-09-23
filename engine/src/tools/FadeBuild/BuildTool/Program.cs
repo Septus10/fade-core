@@ -15,6 +15,7 @@ namespace Fade
             public static void Main(string[] args)
             {
                 // Create new appdomain
+#if! DEBUG
                 if (AppDomain.CurrentDomain.IsDefaultAppDomain())
                 {
                     // RazorEngine cannot clean up from the default appdomain...
@@ -32,6 +33,7 @@ namespace Fade
                     AppDomain.Unload(domain);
                     return;
                 }
+#endif
 
                 BuildTask buildTask;
                 if (!CheckCommandLine(args, out buildTask))
@@ -157,7 +159,7 @@ namespace Fade
                     // Call msbuild to build the project
                 }
 
-                Console.WriteLine("Done generating files");
+                Console.WriteLine("Done generating files\nPress any key to continue...");
                 Console.Read();
                 return true;
             }

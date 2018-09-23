@@ -1,84 +1,71 @@
-#include <core/timer.hpp>
-#include <chrono>
+#include <Core/Timer.hpp>
 
-namespace fade {
+namespace Fade {
 
-using hrc = std::chrono::high_resolution_clock;
-using ms = std::chrono::milliseconds;
-
-class timer::impl
+CTimer::CTimer()
 {
-public:
-    hrc::time_point start_, pause_, resume_, stop_;
-    bool has_paused_;
-    bool stopped_;
-};
-
-timer::timer() :
-    FADE_INIT_PIMPL(timer)
-{
-    impl_->has_paused_ = false;
-    impl_->stopped_ = false;
+    m_HasPaused = false;
+    m_IsStopped = false;
 }
 
-timer::~timer()
+CTimer::~CTimer()
 {
 }
 
-void timer::start()
+void CTimer::Start()
 {
-	reset();
+	Reset();
 }
 
-void timer::reset()
+void CTimer::Reset()
 {
-	impl_->start_ = impl_->pause_ = impl_->resume_ = hrc::now();
-	impl_->has_paused_ = false;
-	impl_->stopped_ = false;
+	m_Start = m_Pause = m_Resume = hrc::now();
+	m_HasPaused = false;
+	m_IsStopped = false;
 }
 
-void timer::stop()
+void CTimer::Stop()
 {
-	impl_->stop_ = hrc::now();
-	impl_->stopped_ = true;
+	m_Stop = hrc::now();
+	m_IsStopped = true;
 }
 
-void timer::pause()
+void CTimer::Pause()
 {
-	impl_->pause_ = hrc::now();
-	impl_->has_paused_ = true;
-	impl_->resume_ = hrc::now();
+	m_Pause = hrc::now();
+	m_HasPaused = true;
+	m_Resume = hrc::now();
 }
 
-void timer::resume()
+void CTimer::Resume()
 {
-	impl_->resume_ = hrc::now();
+	m_Resume = hrc::now();
 }
 
-double timer::elapsed() const
+double CTimer::Elapsed() const
 {
 	std::chrono::duration<double, std::centi> duration;
-	if (impl_->has_paused_)
+	if (m_HasPaused)
 	{
-		if (impl_->stopped_)
+		if (m_IsStopped)
 		{
-			duration = impl_->stop_ - impl_->resume_ + (impl_->pause_ - impl_->start_);
+			duration = m_Stop - m_Resume + (m_Pause - m_Start);
 		}
 		else
 		{
-			duration = hrc::now() - impl_->resume_ + (impl_->pause_ - impl_->start_);
+			duration = hrc::now() - m_Resume + (m_Pause - m_Start);
 		}
 
         return duration.count();
 	}		
 
-	if (impl_->stopped_)
+	if (m_IsStopped)
 	{
-		duration = impl_->stop_ - impl_->start_;
+		duration = m_Stop - m_Start;
 	}
 	else
 	{
-		duration = hrc::now() - impl_->start_;
+		duration = hrc::now() - m_Start;
 	}
 
 	return duration.count();

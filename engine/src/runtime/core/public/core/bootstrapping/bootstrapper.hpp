@@ -7,100 +7,100 @@
 #include <unordered_set>
 
 
-namespace fade { namespace bootstrap {
-	namespace detail
-	{
-		using callback = void(*)();
+namespace Fade { namespace Bootstrap { namespace Detail {
+		
+using callback = void(*)();
 
-		enum event_type
-		{
-			event_construct,
-			event_start,
-			event_end,
-			event_deconstruct,
+enum EEventType
+{
+	event_construct,
+	event_start,
+	event_end,
+	event_deconstruct,
 
-			event_total
-		};
+	event_total
+};
 
-		struct module_events
-		{
-			const u64 name_hash;
+struct SModuleEvents
+{
+	const u64 name_hash;
 
-			bool dependency_checked;
-			fade::usize dependency_count;
-			std::unordered_set<u64> dependencies;
+	bool dependency_checked;
+	Fade::usize dependency_count;
+	std::unordered_set<u64> dependencies;
 
-			std::array<callback, event_total> events;
-			static callback execute_event;
+	std::array<callback, event_total> events;
+	static callback execute_event;
 
-			explicit module_events(const u64 name_hash);
-		};
+	explicit SModuleEvents(const u64 name_hash);
+};
 
-		struct FADE_API on_construct
-		{
-			explicit on_construct(module_events& module, callback callback);
-		};
+struct FADE_CORE_API OnConstruct
+{
+	explicit OnConstruct(SModuleEvents& module, callback callback);
+};
 
-		struct FADE_API on_start
-		{
-			explicit on_start(module_events& module, callback callback);
-		};
+struct FADE_CORE_API OnStart
+{
+	explicit OnStart(SModuleEvents& module, callback callback);
+};
 
-		struct FADE_API on_execute
-		{
-			explicit on_execute(callback callback);
-		};
+struct FADE_CORE_API OnExecute
+{
+	explicit OnExecute(callback callback);
+};
 
-		struct FADE_API on_end
-		{
-			explicit on_end(module_events& module, callback callback);
-		};
+struct FADE_CORE_API OnEnd
+{
+	explicit OnEnd(SModuleEvents& module, callback callback);
+};
 
-		struct FADE_API on_deconstruct
-		{
-			explicit on_deconstruct(module_events& module, callback callback);
-		};
+struct FADE_CORE_API OnDeconstruct
+{
+	explicit OnDeconstruct(SModuleEvents& module, callback callback);
+};
 
-		template <typename T>
-		module_events& register_module();
-		FADE_API module_events& register_module(u64 name_hash);
+template <typename T>
+SModuleEvents& RegisterModule();
+FADE_CORE_API SModuleEvents& RegisterModule(u64 name_hash);
 
-		template<typename... Args>
-		struct register_dependencies
-		{
-			static bool impl(module_events& module);
-		};
+template<typename... Args>
+struct RegisterDependencies
+{
+	static bool Impl(SModuleEvents& module);
+};
 
-		template<typename T>
-		struct register_dependencies<T>
-		{
-			static bool impl(module_events& module);
-		};
+template<typename T>
+struct RegisterDependencies<T>
+{
+	static bool Impl(SModuleEvents& module);
+};
 
-		template<typename T, typename... Args>
-		struct register_dependencies<T, Args...>
-		{
-			static bool impl(module_events& module);
-		};
+template<typename T, typename... Args>
+struct RegisterDependencies<T, Args...>
+{
+	static bool Impl(SModuleEvents& module);
+};
 
-		void invoke_module_events(event_type type);
-	}
+void InvokeModuleEvents(EEventType type);
+	
+}
 
-	void FADE_API initialize_modules();
-	void FADE_API deinitialize_modules();
+void FADE_CORE_API InitializeModules();
+void FADE_CORE_API DeinitializeModules();
 
 } }
 
-#define FADE_BOOTSTRAP_MODULE(module_class)	::fade::bootstrap::detail::module_events& bootstrap_module = ::fade::bootstrap::detail::register_module<module_class>();
+#define FADE_BOOTSTRAP_MODULE(module_class)	::Fade::Bootstrap::Detail::SModuleEvents& bootstrapModule = ::Fade::Bootstrap::Detail::RegisterModule<module_class>();
 
-#define FADE_BOOTSTRAP_DEPENDENCIES(...) bool bootstrap_dependencies = ::fade::bootstrap::detail::register_dependencies<__VA_ARGS__>::impl(bootstrap_module);
+#define FADE_BOOTSTRAP_DEPENDENCIES(...) bool bootstrapDependencies = ::Fade::Bootstrap::Detail::RegisterDependencies<__VA_ARGS__>::Impl(bootstrapModule);
 
-#define FADE_BOOTSTRAP_ON_CONSTRUCT(body) fade::bootstrap::detail::on_construct construct(bootstrap_module, []()body);
+#define FADE_BOOTSTRAP_ON_CONSTRUCT(body) Fade::Bootstrap::Detail::OnConstruct construct(bootstrapModule, []()body);
 
-#define FADE_BOOTSTRAP_ON_START(body) fade::bootstrap::detail::on_start start(bootstrap_module, []()body);
+#define FADE_BOOTSTRAP_ON_START(body) Fade::Bootstrap::Detail::OnStart start(bootstrapModule, []()body);
 
-#define FADE_BOOTSTRAP_ON_END(body) fade::bootstrap::detail::on_end end(bootstrap_module, []()body);
+#define FADE_BOOTSTRAP_ON_END(body) Fade::Bootstrap::Detail::OnEnd end(bootstrapModule, []()body);
 
-#define FADE_BOOTSTRAP_ON_DECONSTRUCT(body) fade::bootstrap::detail::on_deconstruct deconstruct(bootstrap_module, []()body);
+#define FADE_BOOTSTRAP_ON_DECONSTRUCT(body) Fade::Bootstrap::Detail::OnDeconstruct deconstruct(bootstrapModule, []()body);
 
 #include "bootstrapper.inl"

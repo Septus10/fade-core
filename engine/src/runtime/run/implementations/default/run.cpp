@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <core/definitions.hpp>
-#include <run/engine_loop.hpp>
+#include <Core/definitions.hpp>
+#include <Run/EngineLoop.hpp>
 
 #ifdef FADE_PLATFORM_WINDOWS
 #include <Windows.h>
@@ -10,29 +10,29 @@
 #elif FADE_PLATFORM_MAC
 #endif
 
-namespace fade
+namespace Fade
 {
 
 #ifdef FADE_PLATFORM_WINDOWS
-int fade::main(const char* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevInstance, fade::u32 nCmdShow)
+int Fade::main(const char* CmdLine, HINSTANCE hInInstance, HINSTANCE hPrevInstance, Fade::u32 nCmdShow)
 #else
-int fade::main(const char* CmdLine)
+int Fade::main(const char* CmdLine)
 #endif
 {
-    fade::engine_loop g_engine_loop;
+    CEngineLoop engineLoop;
 
-    g_engine_loop.pre_initialize();
+	engineLoop.PreInitialize();
 
-    g_engine_loop.initialize();
+	engineLoop.Initialize();
 
-    g_engine_loop.post_initialize();
+	engineLoop.PostInitialize();
 
-    while (g_engine_loop.should_stop())
+    while (engineLoop.ShouldStop())
     {
-        g_engine_loop.tick();
+		engineLoop.Tick();
     }
 
-    g_engine_loop.deinitialize();
+	engineLoop.DeInitialize();
 
     return 0;
 }

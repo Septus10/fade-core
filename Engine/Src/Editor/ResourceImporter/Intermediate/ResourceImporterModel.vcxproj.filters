@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include='Public'>
+      <UniqueIdentifier>285AE6DE-6C93-4BB7-867E-7E08DB828DE6</UniqueIdentifier>
+    </Filter>
+    <Filter Include='Public'>
+      <UniqueIdentifier>30D58B2E-81B6-4319-A9C2-E204B57CFB13</UniqueIdentifier>
+    </Filter>
+    <Filter Include='Model'>
+      <UniqueIdentifier>A8DBD620-FAB6-49E8-958A-B27B584B2A4E</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporter.hpp">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporterApi.hpp">
+      <Filter>Public</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Model\ModelImporter.hpp">
+      <Filter>Model</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Model\ModelImporter.cpp">
+    <Filter>Model</Filter>
+  </ClCompile>
+  </ItemGroup>
+</Project>

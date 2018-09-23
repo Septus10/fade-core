@@ -1,10 +1,10 @@
 {
-	"Name": "run",
+	"Name": "Run",
 	"Version": "0.0.1",
 	"Dependencies":
 	[
 		{
-			"Name": "core",
+			"Name": "Core",
 			"RequiredVersion": 
 			{
 				"Min": "0.0.1",
@@ -12,7 +12,15 @@
 			}
 		},
 		{
-			"Name": "application",
+			"Name": "PlatformCore",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
+			"Name": "Application",
 			"RequiredVersion":
 			{
 				"Min": "0.0.1",
@@ -22,7 +30,8 @@
 	],
 	"Implementations": 
 	[
-		"default"
+		"Default",
+		"Windows"
 	],
 	"ImplementsMain": true
 }

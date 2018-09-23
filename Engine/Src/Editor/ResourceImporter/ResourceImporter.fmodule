@@ -1,0 +1,29 @@
+{
+	"Name": "ResourceImporter",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "Core",
+			"RequiredVersion": 
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
+			"Name": "ResourceImporterHub",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		}
+	],
+	"Implementations": 
+	[
+		"Model",
+		"Texture"
+	],
+	"DynamicallyLoaded": true
+}

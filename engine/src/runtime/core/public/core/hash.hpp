@@ -1,16 +1,16 @@
 #pragma once
 
-#include <core/definitions.hpp>
-#include "core_api.hpp"
+#include <Core/Definitions.hpp>
+#include <Core/CoreApi.hpp>
 #include <array>
 #include <vector>
 
-#define FADE_HASH_FNV1A(content) __pragma(warning(push)) __pragma(warning(disable: 4307)) ::fade::hash::fnv1a(content) __pragma(warning(pop))
+#define FADE_HASH_FNV1A(content) __pragma(warning(push)) __pragma(warning(disable: 4307)) ::Fade::CHash::fnv1a(content) __pragma(warning(pop))
 
-namespace fade
+namespace Fade
 {
 
-class hash final
+class CHash
 {
 private:
     static constexpr u64 fnv1a_rec(c8* str, u64 hash)
@@ -29,9 +29,9 @@ public:
             : fnv1a_rec(str, 14695981039346656037ULL);
     }
 
-    static FADE_API std::string sha256(std::vector<u8>& data);
+    static FADE_CORE_API std::string sha256(std::vector<u8>& data);
 
-    static FADE_API std::string sha256(std::string& data);
+    static FADE_CORE_API std::string sha256(std::string& data);
 };
 
 }

@@ -2,64 +2,39 @@
 	"Modules": 
 	[
 		{
-			"Name": "application",
-			"Type": "runtime",
-			"Implementation": "editor"
+			"Name": "Application",
+			"Type": "Runtime",
+			"Implementation": "Editor"
 		},
 		{
-			"Name": "core",
-			"Type": "runtime",
-			"Implementation": "default"	
+			"Name": "Core",
+			"Type": "Runtime",
+			"Implementation": "Default"	
 		},
 		{
-			"Name": "run",
-			"Type": "runtime",
-			"Implementation": "default"	
+			"Name": "PlatformCore",
+			"Type": "Runtime",
+			"Implementation": "Windows"
 		},
 		{
-			"Name": "graphics",
-			"Type": "runtime",
-			"Implementation": "opengl"	
+			"Name": "Run",
+			"Type": "Runtime",
+			"Implementation": "Windows"	
 		},
 		{
-			"Name": "console",
-			"Type": "runtime",
-			"Implementation": "default"	
+			"Name": "ResourceImporterHub",
+			"Type": "Editor",
+			"Implementation": "Default"
 		},
 		{
-			"Name": "gameplay",
-			"Type": "runtime",
-			"Implementation": "default"	
+			"Name": "ResourceImporter",
+			"Type": "Editor",
+			"Implementation" :"Model"
 		},
 		{
-			"Name": "scene_graph",
-			"Type": "runtime",
-			"Implementation": "default"	
-		},
-		{
-			"Name": "gui",
-			"Type": "runtime",
-			"Implementation": "default"	
-		},
-		{
-			"Name": "resource_importer_hub",
-			"Type": "runtime",
-			"Implementation": "default"
-		},
-		{
-			"Name": "resource_importer",
-			"Type": "runtime",
-			"Implementation" :"model"
-		},
-		{
-			"Name": "resource_importer",
-			"Type": "runtime",
-			"Implementation" :"texture"
-		},
-		{
-			"Name": "gameobject",
-			"Type": "runtime",
-			"Implementation" :"default"
+			"Name": "ResourceImporter",
+			"Type": "Editor",
+			"Implementation" :"Texture"
 		}
 	]
 }

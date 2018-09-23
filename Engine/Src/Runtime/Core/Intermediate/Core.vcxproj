@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{236624EB-472C-42FC-8DF9-3A7F4632B4EF}</ProjectGuid>
+    <RootNamespace>Core</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>
+    </ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\</OutDir>
+    <IntDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\intermediate\build\Core\</IntDir>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\includes\;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>FADE_EXPORT;FADE_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(OutDir)*.dll" "$(SolutionDir)Bin\$(Platform)_$(Configuration)\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Public\Core\Containers\ContainerBase.hpp" />
+    <ClInclude Include="..\Public\Core\Utility\TemplateUtil.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Core.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\CoreApi.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Definitions.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Function.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Hash.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Pimpl.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Timer.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.inl" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\module_info.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\DefaultAllocator.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\FStream.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\Function.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\IOStream.hpp" />
+    <ClInclude Include="..\Public\Core\Containers\UniquePointer.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\String.hpp" />
+    <ClInclude Include="..\Public\Core\Containers\Array.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Memory\IAllocator.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\Service.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\ServiceLocator.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Core.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Hash.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Timer.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Bootstrapping\Bootstrapper.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\ServiceLocator\ServiceLocator.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

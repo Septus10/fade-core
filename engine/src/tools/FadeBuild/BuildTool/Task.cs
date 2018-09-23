@@ -78,7 +78,7 @@ namespace Fade
                 //================================================================
                 // Get config file contents
                 //================================================================
-                string configPath = $"{ProjectFilePath}config\\{Proj.Configuration}.fcfg";
+                string configPath = $"{ProjectFilePath}Config\\{Proj.Configuration}.fcfg";
                 string json = FileToString(configPath);
                 if (json == "")
                 {
@@ -149,6 +149,24 @@ namespace Fade
                 }
 
                 //================================================================
+                // Some mandatory null checks
+                //================================================================                
+                if (module.Dependencies == null)
+                {
+                    module.Dependencies = new List<Dependency>();
+                }
+
+                if (module.ImplementationDependencies == null)
+                {
+                    module.ImplementationDependencies = new List<ImplementationDependency>();
+                }
+
+                if (module.ExternalDependencies == null)
+                {
+                    module.ExternalDependencies = new List<ExternalDependency>();
+                }
+
+                //================================================================
                 // Check if the implementation we've chosen exists
                 //================================================================
                 bool implementationFound = false;
@@ -170,28 +188,26 @@ namespace Fade
                 //================================================================
                 // Check if there is are implementation specific dependencies
                 //================================================================
-                string implementationFile = $"{path}\\implementations\\{module.ActiveImplementation}.fimpl";
+                string implementationFile = $"{path}\\Implementations\\{module.ActiveImplementation}.fimpl";
                 string implementationJson = FileToString(implementationFile);
                 if (implementationJson != "")
                 {
                     Implementation impl = JsonConvert.DeserializeObject<Implementation>(implementationJson);
-                    foreach (var dep in impl.Dependencies)
+                    if (impl.Dependencies != null)
                     {
-                        module.Dependencies.Add(dep);
+                        foreach (var dep in impl.Dependencies)
+                        {
+                            module.Dependencies.Add(dep);
+                        }
                     }
-                }
 
-                //================================================================
-                // Some mandatory null checks
-                //================================================================                
-                if (module.Dependencies == null)
-                {
-                    module.Dependencies = new List<Dependency>();
-                }
-
-                if (module.ExternalDependencies == null)
-                {
-                    module.ExternalDependencies = new List<ExternalDependency>();
+                    if (impl.ImplementationDependencies != null)
+                    {
+                        foreach (var dep in impl.ImplementationDependencies)
+                        {
+                            module.ImplementationDependencies.Add(dep);
+                        }
+                    }                    
                 }
 
                 //================================================================
@@ -221,7 +237,7 @@ namespace Fade
                 //================================================================
                 foreach (ModuleInfo module in Cfg.Modules)
                 {
-                    if (!deserializeModule($"{ProjectFilePath}src\\{module.Type}\\{module.Name}\\", $"{module.Name}", module.Implementation))
+                    if (!deserializeModule($"{ProjectFilePath}Src\\{module.Type}\\{module.Name}\\", $"{module.Name}", module.Implementation))
                     {
                         return false;
                     }
@@ -274,7 +290,7 @@ namespace Fade
                         //================================================================
                         if (dep.External) // if it's external, we load the library
                         {
-                            string externalFolder = $"{ProjectFilePath}src\\external\\";
+                            string externalFolder = $"{ProjectFilePath}Src\\External\\";
                             var folders = Directory.GetDirectories(externalFolder);
                             foreach (var folder in folders)
                             {
@@ -329,6 +345,16 @@ namespace Fade
                     return false;
                 }
                 var files = Directory.GetFiles(Path);
+                int start = Path.IndexOf(Denom) + 1;
+                if (start == -1)
+                {
+                    start = 0;
+                }
+                string newPath = Path.Substring(start);
+                if (!Filters.Contains(newPath))
+                {
+                    Filters.Add(newPath);
+                }
 
                 //================================================================
                 // Iterate through current directory
@@ -336,22 +362,13 @@ namespace Fade
                 foreach (var file in files)
                 {
                     SourceFile temp = new SourceFile();
-                    int start = Path.IndexOf(Denom) + 1;
-                    if (start == -1)
-                    {
-                        start = 0;
-                    }
-                    string newPath = Path.Substring(start);
-                    if (!Filters.Contains(newPath))
-                    {
-                        Filters.Add(newPath);
-                    }
+                   
 
                     temp.Directory = newPath;
                     temp.FileName = file;
 
                     string ext = file.Substring(file.LastIndexOf('.'));
-                    if (ext == ".h" || ext == ".hpp")
+                    if (ext == ".h" || ext == ".hpp" || ext == ".inl")
                     {
                         //================================
                         // Add header file
@@ -440,8 +457,8 @@ namespace Fade
                         dependencies.Add(temp);
                     }
 
-                    if (!GetSourceFiles(mod.Path + "\\public", "\\public",ref headerFiles, ref sourceFiles, ref filters) ||
-                        !GetSourceFiles(mod.Path + "\\implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters))
+                    if (!GetSourceFiles(mod.Path + "\\Public", "\\Public",ref headerFiles, ref sourceFiles, ref filters) ||
+                        !GetSourceFiles(mod.Path + "\\Implementations\\" + mod.ActiveImplementation, "\\" + mod.ActiveImplementation, ref headerFiles, ref sourceFiles, ref filters))
                     {
                         return false;
                     }
@@ -451,11 +468,11 @@ namespace Fade
                     if (mod.DynamicallyLoaded)
                     {
 
-                        projectPath = $"{ProjectPath}\\intermediate\\{mod.Name}_{mod.ActiveImplementation}.vcxproj";
+                        projectPath = $"{mod.Path}Intermediate\\{mod.Name}{mod.ActiveImplementation}.vcxproj";
                     }
                     else
                     {
-                        projectPath = $"{ProjectPath}\\intermediate\\{mod.Name}.vcxproj";
+                        projectPath = $"{mod.Path}Intermediate\\{mod.Name}.vcxproj";
                     }
 
 
@@ -463,11 +480,11 @@ namespace Fade
                     string filterPath;
                     if (mod.DynamicallyLoaded)
                     {
-                        filterPath = $"{ProjectPath}\\intermediate\\{mod.Name}_{mod.ActiveImplementation}.vcxproj.filters";
+                        filterPath = $"{mod.Path}Intermediate\\{mod.Name}{mod.ActiveImplementation}.vcxproj.filters";
                     }
                     else
                     {
-                        filterPath = $"{ProjectPath}\\intermediate\\{mod.Name}.vcxproj.filters";
+                        filterPath = $"{mod.Path}Intermediate\\{mod.Name}.vcxproj.filters";
                     }
 
                     if (File.Exists(projectPath))
@@ -475,12 +492,23 @@ namespace Fade
                         File.Delete(projectPath);
                     }
 
+                    string projectDirectoryPath = projectPath.Substring(0, projectPath.LastIndexOf('\\'));
+                    if (!Directory.Exists(projectDirectoryPath))
+                    {
+                        Directory.CreateDirectory(projectDirectoryPath);
+                    }
+                    File.WriteAllText(projectPath, projectResult);
+
                     if (File.Exists(filterPath))
                     {
                         File.Delete(filterPath);
                     }
 
-                    File.WriteAllText(projectPath, projectResult);
+                    string filterDirectoryPath = filterPath.Substring(0, filterPath.LastIndexOf('\\'));
+                    if (!Directory.Exists(filterDirectoryPath))
+                    {
+                        Directory.CreateDirectory(filterDirectoryPath);
+                    }
                     File.WriteAllText(filterPath, filterResult);
                 }
 

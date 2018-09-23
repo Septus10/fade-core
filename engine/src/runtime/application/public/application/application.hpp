@@ -1,50 +1,54 @@
 #pragma once
 
-#include <application/application_api.hpp>
-#include <core/definitions.hpp>
+#include <Application/ApplicationApi.hpp>
+#include <Core/Containers/SmartPointers.hpp>
+#include <Core/Definitions.hpp>
 
-namespace fade
+namespace Fade
 {
 
-#define FADE_REQUEST_STOP	0
-#define FADE_CONTINUE		1
+enum class ETickResult : u8
+{
+	STOP		= 0x01,
+	CONTINUE	= 0x02,
+};
 
 /**
  * Engine application
  */
-class FADE_API application abstract
+class FADE_APPLICATION_API CApplication
 {
 public:
 	/**
 	 * Virtual DTor
 	 */
-	virtual ~application() = default;
+	virtual ~CApplication() = default;
 
 	/**
 	 * Engine application main tick function
-	 * @param delta_time delta time for main tick function
+	 * @param a_DeltaTime delta time for main tick function
 	 */
-	virtual int tick(double delta_time) = 0;
+	virtual ETickResult Tick(double a_DeltaTime) = 0;
 
 	/**
 	 * Engine application fixed tick function
-	 * @param fixed_delta_time delta time for the fixed tick function
+	 * @param a_FixedDeltaTime delta time for the fixed tick function
 	 */
-	virtual void fixed_tick(double fixed_delta_time) = 0;
+	virtual void FixedTick(double a_FixedDeltaTime) = 0;
 
-	virtual void pre_initialize() = 0;
+	virtual void PreInitialize() = 0;
 
-	virtual void initialize() = 0;
+	virtual void Initialize() = 0;
 
-	virtual void post_initialize() = 0;
+	virtual void PostInitialize() = 0;
 
-	virtual void deinitialize() = 0;
+	virtual void DeInitialize() = 0;
 };
 
 
 /**
  * Application factory function
  */
-std::unique_ptr<application> FADE_API get_application();
+Fade::CUniquePtr<CApplication> FADE_APPLICATION_API GetApplication();
 
 }
