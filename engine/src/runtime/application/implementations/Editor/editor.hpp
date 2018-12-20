@@ -3,16 +3,15 @@
 #include <Application/Application.hpp>
 #include <Application/ApplicationApi.hpp>
 
-#include <PlatformCore/Window/WindowManager.hpp>
-
-#include <Core/fstl/Memory.hpp>
+#include <Core/Containers/UniquePointer.hpp>
+#include <PlatformCore/Window/Window.hpp>
 #include <vector>
 
 namespace Fade
 {
 
 class CWindow;	
-class CEditor : public CApplication
+class FADE_APPLICATION_API CEditor : public CApplication
 {
 public:
 	CEditor() = default;
@@ -23,19 +22,21 @@ public:
 
 	void FixedTick(double a_FixedDeltaTime) override;
 
-	void PreInitialize() override;
+	bool PreInitialize() override;
 
-	void Initialize() override;
+	bool Initialize() override;
 
-	void PostInitialize() override;
+	bool PostInitialize() override;
 
-	void DeInitialize() override;
+	bool DeInitialize() override;
+
+	const PlatformCore::CWindow* GetMainWindowPtr() const override { return m_MainWindow.Get(); }
 
 private:
-	float cur_time_;
-	bool* should_stop_;
+	float m_CurTime;
+	bool* m_ShouldStop;
 
-	Fade::PlatformCore::CWindowManager m_WindowManager;
+	Fade::TUniquePtr<Fade::PlatformCore::CWindow> m_MainWindow;
 };
 
 }

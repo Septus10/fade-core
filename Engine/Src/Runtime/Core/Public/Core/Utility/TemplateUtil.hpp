@@ -2,6 +2,30 @@
 
 namespace Fade {
 
+template <typename Type>
+struct TRemoveReference
+{	// remove reference
+	using TType = Type;
+};
+
+template <typename Type>
+struct TRemoveReference<Type&>
+{
+	using TType = Type;
+};
+
+template <typename Type>
+struct TRemoveReference<Type&&>
+{
+	using TType = Type;
+};
+
+template <class Type> 
+inline constexpr typename TRemoveReference<Type>::TType&& Move(Type&& a_Arg) noexcept
+{
+	return (static_cast<typename TRemoveReference<Type>::TType&&>(a_Arg));
+}
+
 template <class ValueType, ValueType Value>
 struct TStaticConstant
 {

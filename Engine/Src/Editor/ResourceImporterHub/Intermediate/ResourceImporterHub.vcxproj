@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{C1B333D1-34BF-408F-8F95-7881828ED8DC}</ProjectGuid>
+    <ProjectGuid>{4C4C861E-3E43-4A2E-8310-DD06B5CA020A}</ProjectGuid>
     <RootNamespace>ResourceImporterHub</RootNamespace>	
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName></ProjectName>
@@ -46,10 +46,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-	<OutDir>G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\bin\$(Platform)_$(Configuration)\lib\</OutDir>
-	<IntDir>G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\intermediate\build\ResourceImporterHub\</IntDir>
-    <LibraryPath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\public\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\includes\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\public\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\implementations\Model;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\includes\;$(IncludePath)</IncludePath>
+	<OutDir>L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\bin\$(Platform)_$(Configuration)\lib\</OutDir>
+	<IntDir>L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\intermediate\build\ResourceImporterHub\</IntDir>
+    <LibraryPath>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\public\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\includes\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\public\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\implementations\Model;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -84,12 +84,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\Public\ResourceImporterHub\Resource.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\Public\ResourceImporterHub\ResourceImporterHub.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\Public\ResourceImporterHub\ResourceImporterHubApi.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\Public\ResourceImporterHub\Resource.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\Public\ResourceImporterHub\ResourceImporterHub.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\Public\ResourceImporterHub\ResourceImporterHubApi.hpp" />
   </ItemGroup>
   <ItemGroup>
-  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\Implementations\Default\ResourceImporterHub.cpp" />
+  <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\Implementations\Default\ResourceImporterHub.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,7 +11,7 @@ CResourceImporterHub::~CResourceImporterHub()
 {
 	for (auto& imp : m_Importers)
 	{
-		delete imp;
+		delete imp.Release();
 	}
 }
 
@@ -21,7 +21,7 @@ bool CResourceImporterHub::ImportResource(std::string file_path)
 	std::string ext = file_path.substr(file_path.find_last_of('.'));
 
 	// look through the importers and see if we can import the file
-	std::unique_ptr<CResource> res = nullptr;
+	TUniquePtr<CResource> res = nullptr;
 	for (auto& imp: m_Importers)
 	{
 		if (imp->ImportsExtension(ext))

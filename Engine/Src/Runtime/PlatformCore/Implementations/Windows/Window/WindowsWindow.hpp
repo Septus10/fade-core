@@ -35,6 +35,8 @@ public:
 
 	virtual void Maximize() override;
 
+	virtual void* GetWindowHandle() const override { return m_WindowHandle; }
+
 	virtual HRESULT __stdcall QueryInterface(REFIID iid, void ** ppvObject) override;
 	virtual ULONG __stdcall AddRef(void) override;
 	virtual ULONG __stdcall Release(void) override;

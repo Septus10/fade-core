@@ -2,29 +2,29 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include='Public'>
-      <UniqueIdentifier>63E43350-551D-494B-9021-D7CF38BBF0F9</UniqueIdentifier>
+      <UniqueIdentifier>9184EB2B-B938-4C59-BE81-BC2F0C1984DF</UniqueIdentifier>
     </Filter>
     <Filter Include='Public'>
-      <UniqueIdentifier>E46C0185-ED0C-4401-B2EE-013F26F92E0E</UniqueIdentifier>
+      <UniqueIdentifier>AC30CE80-D9D3-467B-A9C1-A6046BB5941C</UniqueIdentifier>
     </Filter>
     <Filter Include='Texture'>
-      <UniqueIdentifier>80E1D73B-4D22-46DE-A5D2-A590A7969589</UniqueIdentifier>
+      <UniqueIdentifier>BC46766C-747C-4965-9717-C7D1DB50F511</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporter.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporter.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporterApi.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporterApi.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.hpp">
       <Filter>Texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.cpp">
-    <Filter>Texture</Filter>
-  </ClCompile>
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,24 +1,9 @@
 #pragma once
 
-#include <Core/ServiceLocator/ServiceLocator.hpp>
-
-#include <iostream>
+#include <Core/CoreApi.hpp>
 
 namespace Fade
 {
-	
-class FADE_CORE_API CService
-{
-public:
-	CService()
-	{
-		GetServiceLocator().RegisterService(this);
-	}
 
-	virtual ~CService()
-	{
-		GetServiceLocator().UnregisterService(this);
-	}
-};
 
 }

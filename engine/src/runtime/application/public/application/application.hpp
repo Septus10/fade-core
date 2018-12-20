@@ -1,8 +1,10 @@
 #pragma once
 
 #include <Application/ApplicationApi.hpp>
-#include <Core/Containers/SmartPointers.hpp>
 #include <Core/Definitions.hpp>
+#include <Core/Containers/UniquePointer.hpp>
+#include <Core/Containers/NTree.hpp>
+#include <PlatformCore/Window/Window.hpp>
 
 namespace Fade
 {
@@ -36,19 +38,27 @@ public:
 	 */
 	virtual void FixedTick(double a_FixedDeltaTime) = 0;
 
-	virtual void PreInitialize() = 0;
+	virtual bool PreInitialize() = 0;
 
-	virtual void Initialize() = 0;
+	virtual bool Initialize() = 0;
 
-	virtual void PostInitialize() = 0;
+	virtual bool PostInitialize() = 0;
 
-	virtual void DeInitialize() = 0;
+	virtual bool DeInitialize() = 0;
+
+	virtual const PlatformCore::CWindow* GetMainWindowPtr() const { return nullptr; }
+
+	//u32 CreateWindow(i32 a_ParentIndex = -1);
+	//
+	//bool DestroyWindow(u32 a_WindowIndex);
+
+protected:
 };
 
 
 /**
  * Application factory function
  */
-Fade::CUniquePtr<CApplication> FADE_APPLICATION_API GetApplication();
+Fade::TUniquePtr<CApplication> FADE_APPLICATION_API GetApplication();
 
 }

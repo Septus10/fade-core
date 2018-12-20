@@ -3,7 +3,7 @@
 #include <Core/bootstrapping/bootstrapper.hpp>
 #include <Core/bootstrapping/module_info.hpp>
 #include <Core/ServiceLocator/ServiceLocator.hpp>
-#include <Core/fstl/memory.hpp>
+#include <Core/Containers/UniquePointer.hpp>
 #include <Core/definitions.hpp>
 
 #include <ResourceImporterHub/Resource.hpp>
@@ -17,13 +17,13 @@ using namespace Resources;
 FADE_BOOTSTRAP_MODULE(CModuleModelImporter)
 FADE_BOOTSTRAP_DEPENDENCIES(CModuleModelImporter)
 FADE_BOOTSTRAP_ON_CONSTRUCT({
-	auto* imp_hub = GetServiceLocator().GetService<CResourceImporterHub>();
-    if (!imp_hub)
-    {
-        std::cout << "resource_importer_hub was not found by the service locator\n";
-        return;
-    }
-	imp_hub->RegisterImporter<CModelImporter>();
+	//auto* imp_hub = GetServiceLocator().GetService<CResourceImporterHub>();
+    //if (!imp_hub)
+    //{
+    //    std::cout << "resource_importer_hub was not found by the service locator\n";
+    //    return;
+    //}
+	//imp_hub->RegisterImporter<CModelImporter>();
 })
 
 CModelImporter::CModelImporter()
@@ -35,7 +35,7 @@ CModelImporter::~CModelImporter()
 {
 }
 
-std::unique_ptr<CResource> CModelImporter::ImportResource(std::string file_path)
+Fade::TUniquePtr<CResource> CModelImporter::ImportResource(std::string file_path)
 {
 	return nullptr;
 }

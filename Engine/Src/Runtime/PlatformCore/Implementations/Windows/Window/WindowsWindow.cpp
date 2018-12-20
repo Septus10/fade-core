@@ -1,5 +1,6 @@
 #include "WindowsWindow.hpp"
 
+#include <iostream>
 #include <PlatformCore/PlatformCore.hpp>
 
 using namespace Fade;
@@ -10,7 +11,12 @@ CWindowsWindow::CWindowsWindow() :
 { }
 
 CWindowsWindow::~CWindowsWindow()
-{ }
+{
+	if (m_WindowHandle)
+	{
+		CWindowsWindow::Destroy();
+	}
+}
 
 const TCHAR CWindowsWindow::sm_AppWindowClass[] = TEXT("FadeWindow");
 
@@ -21,14 +27,22 @@ static i32 WindowsStandardBorderSize	= 4;
 
 bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 {
+	m_WindowSettings = a_Settings;
+	// If there's already a window created
+	if (m_WindowHandle)
+	{
+		// Destroy it
+		Destroy();
+	}
+
 	u32 WindowExStyle = 0;
 	u32 WindowStyle = 0;
 
-	if (!a_Settings.m_HasBorder)
+	if (!m_WindowSettings.m_HasBorder)
 	{
 		WindowExStyle = WS_EX_WINDOWEDGE;
 		WindowStyle = WS_POPUP | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-		if (a_Settings.m_InTaskbar)
+		if (m_WindowSettings.m_InTaskbar)
 		{
 			WindowExStyle |= WS_EX_APPWINDOW;
 		}
@@ -37,12 +51,12 @@ bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 			WindowExStyle |= WS_EX_TOOLWINDOW;
 		}
 
-		if (a_Settings.m_IsTopmostWindow)
+		if (m_WindowSettings.m_IsTopmostWindow)
 		{
 			WindowExStyle |= WS_EX_TOPMOST;
 		}
 
-		if (a_Settings.m_AcceptsInput)
+		if (m_WindowSettings.m_AcceptsInput)
 		{
 			WindowExStyle |= WS_EX_TRANSPARENT;
 		}
@@ -52,19 +66,19 @@ bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 		WindowExStyle = WS_EX_APPWINDOW;
 		WindowStyle = WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION;
 
-		if (a_Settings.m_IsRegular)
+		if (m_WindowSettings.m_IsRegular)
 		{
-			if (a_Settings.m_SupportsMaximize)
+			if (m_WindowSettings.m_SupportsMaximize)
 			{
 				WindowStyle |= WS_MAXIMIZEBOX;
 			}
 
-			if (a_Settings.m_SupportsMinimize)
+			if (m_WindowSettings.m_SupportsMinimize)
 			{
 				WindowStyle |= WS_MINIMIZEBOX;
 			}
 
-			if (a_Settings.m_HasSizingFrame)
+			if (m_WindowSettings.m_HasSizingFrame)
 			{
 				WindowStyle |= WS_THICKFRAME;
 			}
@@ -81,19 +95,19 @@ bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 		RECT BorderRect = { 0 };
 		::AdjustWindowRectEx(&BorderRect, WindowStyle, false, WindowExStyle);
 
-		a_Settings.m_PosX -= BorderRect.left;
-		a_Settings.m_PosY -= BorderRect.top;
-		a_Settings.m_Width -= BorderRect.right - BorderRect.left;
-		a_Settings.m_Width -= BorderRect.bottom - BorderRect.top;
+		m_WindowSettings.m_PosX -= BorderRect.left;
+		m_WindowSettings.m_PosY -= BorderRect.top;
+		m_WindowSettings.m_Width -= BorderRect.right - BorderRect.left;
+		m_WindowSettings.m_Width -= BorderRect.bottom - BorderRect.top;
 	}
 
 	m_WindowHandle = CreateWindowEx(
 		WindowExStyle,
 		sg_WindowClassName,
-		a_Settings.m_Title,
+		m_WindowSettings.m_Title,
 		WindowStyle,
-		a_Settings.m_PosX, a_Settings.m_PosY,
-		a_Settings.m_Width, a_Settings.m_Height,
+		m_WindowSettings.m_PosX, m_WindowSettings.m_PosY,
+		m_WindowSettings.m_Width, m_WindowSettings.m_Height,
 		a_Parent ? static_cast<HWND>(a_Parent->GetWindowHandle()) : nullptr,
 		nullptr, GetModuleHandle(NULL), nullptr);
 
@@ -173,6 +187,7 @@ ULONG Fade::PlatformCore::CWindowsWindow::Release(void)
 
 HRESULT Fade::PlatformCore::CWindowsWindow::DragEnter(IDataObject * pDataObj, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect)
 {
+	std::cout << "Window::DragEnter: " << pDataObj << "\n";
 	return E_NOTIMPL;
 }
 
@@ -183,6 +198,7 @@ HRESULT Fade::PlatformCore::CWindowsWindow::DragLeave()
 
 HRESULT Fade::PlatformCore::CWindowsWindow::DragOver(DWORD grfKeyState, POINTL pt, DWORD * pdwEffect)
 {
+	std::cout << "Window::DragOver: " << grfKeyState << "\n";
 	return E_NOTIMPL;
 }
 
@@ -191,7 +207,7 @@ HRESULT Fade::PlatformCore::CWindowsWindow::Drop(IDataObject * pDataObj, DWORD g
 	return E_NOTIMPL;
 }
 
-Fade::PlatformCore::CWindow* GetWindow()
+TUniquePtr<CWindow> GetWindow()
 {
-	return new CWindowsWindow();
+	return MakeUnique<CWindowsWindow>();
 }

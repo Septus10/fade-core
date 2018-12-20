@@ -14,7 +14,7 @@ public:
 	CModelImporter();
 	~CModelImporter() override;
 	
-	std::unique_ptr<CResource> ImportResource(std::string file_path) override;
+	TUniquePtr<CResource> ImportResource(std::string file_path) override;
 	bool ImportsExtension(std::string extension) override;
 };
 

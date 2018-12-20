@@ -1,119 +1,158 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Public">
-      <UniqueIdentifier>2ADF9370-163D-4704-A221-0CFAF2793934</UniqueIdentifier>
+      <UniqueIdentifier>F424BDD1-7765-4FBE-8790-A9269EE6D906</UniqueIdentifier>
     </Filter>
     <Filter Include="Public">
-      <UniqueIdentifier>0E970E84-1C49-4620-9CDC-CBC74456E78E</UniqueIdentifier>
+      <UniqueIdentifier>5F8B3F65-4996-4E7F-9F1F-7357177632DF</UniqueIdentifier>
     </Filter>
     <Filter Include="Public\Bootstrapping">
-      <UniqueIdentifier>A0AF8510-3F48-426C-9CAB-AEE9AF0D91A6</UniqueIdentifier>
+      <UniqueIdentifier>FA4B35A8-027A-4B3C-ADB7-6B73AF1454B6</UniqueIdentifier>
     </Filter>
     <Filter Include="Public\Containers">
-      <UniqueIdentifier>712C0A6F-1C20-4276-B66C-5BF83C18D51B</UniqueIdentifier>
+      <UniqueIdentifier>EB6DFCFC-E80E-4BB0-8B69-4B955E37103B</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Math">
+      <UniqueIdentifier>767C3875-CB5A-4CD3-BA33-FFB5CC79A398</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Math\detail">
+      <UniqueIdentifier>CC8C0C0B-53F0-4C6E-B11F-3A15F64BE7EB</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Math\gtc">
+      <UniqueIdentifier>9A4D918F-8B1C-4B06-892E-40283A3C31FB</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Math\gtx">
+      <UniqueIdentifier>B09701A8-EE96-4D60-AEC8-276172A5657A</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Math\simd">
+      <UniqueIdentifier>7B8694AC-03CF-45B0-A358-D70EB1A6C323</UniqueIdentifier>
     </Filter>
     <Filter Include="Public\Memory">
-      <UniqueIdentifier>C3CF6E6F-5F07-405D-9C95-459528422E38</UniqueIdentifier>
+      <UniqueIdentifier>4B4D6332-2DD9-42B3-B2A5-EF0398D6C81D</UniqueIdentifier>
     </Filter>
     <Filter Include="Public\ServiceLocator">
-      <UniqueIdentifier>84AE53BE-F856-4B49-BEE9-0B8DDFC2E1A6</UniqueIdentifier>
+      <UniqueIdentifier>5715D340-1BA6-405F-AF4C-E37F3A13B7D0</UniqueIdentifier>
     </Filter>
-    <Filter Include="Default">
-      <UniqueIdentifier>7567E92D-F380-4BCB-8E28-227BDA8FBF90</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default\Bootstrapping">
-      <UniqueIdentifier>230D4042-BBB0-40AF-B36E-9D63E601D115</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Default\ServiceLocator">
-      <UniqueIdentifier>964C648F-868B-4E10-B656-4BD6BEE0470D</UniqueIdentifier>
+    <Filter Include="Public\Types">
+      <UniqueIdentifier>C6040B53-BC5E-4D1A-9F90-480E1687A5A9</UniqueIdentifier>
     </Filter>
     <Filter Include="Public\Utility">
-      <UniqueIdentifier>{d7a7d97b-7533-4b12-8d5c-1cf3cf8063c3}</UniqueIdentifier>
+      <UniqueIdentifier>6A95466D-0ED8-4AAA-BA25-B36006EA8AB9</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>C002B091-EABF-49F7-8B73-BCEE9CAF72FF</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\Bootstrapping">
+      <UniqueIdentifier>6287310C-6ED8-4094-B568-17EF84D3593A</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\Containers">
+      <UniqueIdentifier>0A72854C-4A49-48EC-A00C-52CE5B9FFD41</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\Input">
+      <UniqueIdentifier>83D6911F-61FA-4ED4-970A-5BDB2A005692</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\ServiceLocator">
+      <UniqueIdentifier>9AB0D386-282F-41B0-AFE7-0B5E076321B6</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\Types">
+      <UniqueIdentifier>DAFE04D8-BA73-4A72-8E51-3A2BD45ED6F9</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Public\Logging">
+      <UniqueIdentifier>{11a09c61-4892-4908-857b-6ea9586e5e20}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Core.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\core.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\CoreApi.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\CoreApi.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Definitions.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\definitions.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Function.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\function.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Hash.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\hash.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Pimpl.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\pimpl.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Timer.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\timer.hpp">
       <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.hpp">
       <Filter>Public\Bootstrapping</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.inl">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.inl">
       <Filter>Public\Bootstrapping</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\module_info.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\module_info.hpp">
       <Filter>Public\Bootstrapping</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\DefaultAllocator.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\Array.hpp">
       <Filter>Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\FStream.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\ContainerBase.hpp">
       <Filter>Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\Function.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\DefaultAllocator.hpp">
       <Filter>Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\IOStream.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\FStream.hpp">
       <Filter>Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\String.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\Function.hpp">
       <Filter>Public\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Memory\IAllocator.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\IOStream.hpp">
+      <Filter>Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\NTree.hpp">
+      <Filter>Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\String.hpp">
+      <Filter>Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\UniquePointer.hpp">
+      <Filter>Public\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Memory\IAllocator.hpp">
       <Filter>Public\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\Service.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\Service.hpp">
       <Filter>Public\ServiceLocator</Filter>
     </ClInclude>
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\ServiceLocator.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\ServiceLocator.hpp">
       <Filter>Public\ServiceLocator</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Core\Containers\Array.hpp">
-      <Filter>Public\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Core\Containers\ContainerBase.hpp">
-      <Filter>Public\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Core\Utility\TemplateUtil.hpp">
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Utility\TemplateUtil.hpp">
       <Filter>Public\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Core\Containers\UniquePointer.hpp">
-      <Filter>Public\Containers</Filter>
+    <ClInclude Include="..\Public\Core\Logging\Log.hpp">
+      <Filter>Public\Logging</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Core.cpp">
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\Core.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Hash.cpp">
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\hash.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Timer.cpp">
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\timer.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Bootstrapping\Bootstrapper.cpp">
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\Bootstrapping\bootstrapper.cpp">
       <Filter>Default\Bootstrapping</Filter>
     </ClCompile>
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\ServiceLocator\ServiceLocator.cpp">
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\ServiceLocator\Service.cpp">
+      <Filter>Default\ServiceLocator</Filter>
+    </ClCompile>
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\ServiceLocator\ServiceLocator.cpp">
       <Filter>Default\ServiceLocator</Filter>
     </ClCompile>
   </ItemGroup>

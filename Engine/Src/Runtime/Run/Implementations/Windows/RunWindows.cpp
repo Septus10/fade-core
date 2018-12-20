@@ -1,20 +1,41 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #include <Windows.h>
 
 #include <Application/Application.hpp>
 #include <PlatformCore/PlatformCore.hpp>
-#include <PlatformCore/Window/WindowManager.hpp>
-#include <Core/Containers/SmartPointers.hpp>
+#include <Core/Containers/UniquePointer.hpp>
+#include <PlatformCore/Window/Window.hpp>
+#include <iostream>
 
 bool g_ShouldQuit = false;
-Fade::CUniquePtr<Fade::CApplication> g_Application;
+Fade::TUniquePtr<Fade::CApplication> g_Application;
 
 LRESULT CALLBACK WindowProcedure(HWND a_Window, UINT a_Message, WPARAM a_wParam, LPARAM a_lParam)
 {
 	switch (a_Message)
 	{
+	case WM_CREATE:
+		DragAcceptFiles(a_Window, false);
+		break;
+	case WM_DROPFILES:
+	{
+		HDROP hDropInfo = (HDROP)a_wParam;
+		static const UINT buffSize = 512;
+		char buf[512];
+		DragQueryFile(hDropInfo, 0, buf, buffSize);
+		std::cout << "Drop file: " << buf << "\n";
+		break;
+	}
 	case WM_DESTROY:
 	case WM_CLOSE:
-		Fade::GetServiceLocator().GetService<Fade::PlatformCore::CWindowManager>()->OnWindowDestroyed(static_cast<void*>(a_Window));
+		if (g_Application->GetMainWindowPtr() != nullptr &&
+			g_Application->GetMainWindowPtr()->GetWindowHandle() == a_Window)
+		{
+			g_ShouldQuit = true;
+		}
+		break;
+	case WM_CHAR:
 		break;
 	default:
 		return DefWindowProc(a_Window, a_Message, a_wParam, a_lParam);
@@ -30,8 +51,32 @@ int WINAPI WinMain(
 	LPSTR a_CommandLine,
 	int a_CommandShow)
 {
+#ifdef _DEBUG
+	if (!AllocConsole())
+	{
+
+		DWORD ErrorID = ::GetLastError();
+		if (ErrorID == 0)
+		{
+			MessageBox(NULL, TEXT("Unable to allocate console"), TEXT("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+		}
+		else
+		{
+			MessageBox(nullptr, Fade::PlatformCore::GetLastErrorMessage(), TEXT("ERROR"), MB_OK | MB_ICONEXCLAMATION);
+		}
+
+		return 1;
+	}
+
+	freopen("conin$","r",stdin);
+	freopen("conout$","w",stdout);
+	freopen("conout$","w",stderr);
+	std::cout << "Console created.\n";
+#endif
+
 	// Create an application
 	g_Application = Fade::GetApplication();
+	std::cout << "Application created.\n";
 
 	// Register the window class
 	WNDCLASSEX WindowClass = { 0 };
@@ -46,6 +91,7 @@ int WINAPI WinMain(
 	WindowClass.lpszMenuName	= NULL;
 	WindowClass.lpszClassName	= Fade::PlatformCore::sg_WindowClassName;
 	WindowClass.hIconSm			= LoadIcon(a_InstanceHandle, MAKEINTRESOURCE(IDI_APPLICATION));
+	WindowClass.style			= CS_HREDRAW | CS_VREDRAW;
 
 	if (!RegisterClassEx(&WindowClass))
 	{
@@ -62,14 +108,19 @@ int WINAPI WinMain(
 		return 1;
 	}
 
-	g_Application->PreInitialize();
+	std::cout << "Window class created.\n";
 
-	g_Application->Initialize();
-
-	g_Application->PostInitialize();
+	if (!g_Application->PreInitialize() ||
+		!g_Application->Initialize()	||
+		!g_Application->PostInitialize())
+	{
+		std::cout << "Press any key to continue\n";
+		std::cin.get();
+		return 1;
+	}
 
 	MSG Message;
-	while (!(g_Application->Tick(0.f) == Fade::ETickResult::STOP))
+	while ((g_Application->Tick(0.f) != Fade::ETickResult::STOP) && !g_ShouldQuit)
 	{
 		while (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE) > 0)
 		{

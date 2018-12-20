@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{E0DF2B1F-92A7-41B7-A4BC-695D30F69F26}</ProjectGuid>
+    <ProjectGuid>{E31E5A79-80E2-4CAA-A6F2-C0EEF01C381F}</ProjectGuid>
     <RootNamespace>ResourceImporter_Texture</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName></ProjectName>
@@ -46,10 +46,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-	<OutDir>G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\bin\$(Platform)_$(Configuration)\lib\</OutDir>
-	<IntDir>G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\intermediate\build\ResourceImporter_Texture\</IntDir>
-    <LibraryPath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\public\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\implementations\Texture;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\includes\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\public\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\includes\;$(IncludePath)</IncludePath>
+	<OutDir>L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\bin\$(Platform)_$(Configuration)\lib\</OutDir>
+	<IntDir>L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\intermediate\build\ResourceImporter_Texture\</IntDir>
+    <LibraryPath>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\public\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\implementations\Texture;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\includes\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\public\;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporterHub\\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -84,12 +84,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporter.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporterApi.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporter.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Public\ResourceImporter\ResourceImporterApi.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.hpp" />
   </ItemGroup>
   <ItemGroup>
-  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.cpp" />
+  <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Editor\ResourceImporter\\Implementations\Texture\TextureImporter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

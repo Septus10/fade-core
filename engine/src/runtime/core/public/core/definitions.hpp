@@ -53,6 +53,8 @@ using c8  = char;
 using c16 = char16_t;
 using c32 = char32_t;
 
+using cstr = const char*;
+
 //===========================
 // Fade types
 //===========================

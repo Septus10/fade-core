@@ -3,8 +3,9 @@
 #include <ResourceImporterHub/ResourceImporterHubApi.hpp>
 
 #include <memory>
+#include <Core/Containers/Array.hpp>
 #include <Core/Pimpl.hpp>
-#include <Core/ServiceLocator/Service.hpp>
+#include <Core/ServiceLocator/ServiceLocator.hpp>
 
 namespace Fade { namespace Resources {
 
@@ -38,16 +39,16 @@ public:
 	{
 		for (auto& imp: m_Importers)
 		{
-			if (dynamic_cast<ImporterClass*>(imp))
+			if (dynamic_cast<ImporterClass*>(imp.Get()))
 			{
-				return imp;
+				return imp.Get();
 			}
 		}
 		return nullptr;
 	}
 
 private:
-	fstl::Vector<CResourceImporter*> m_Importers;
+	Fade::TArray<TUniquePtr<CResourceImporter>> m_Importers;
 };
 
 } }

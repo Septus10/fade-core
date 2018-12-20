@@ -2,8 +2,7 @@
 
 #include <Core/bootstrapping/bootstrapper.hpp>
 #include <Core/bootstrapping/module_info.hpp>
-#include <Core/definitions.hpp>
-#include <Core/fstl/memory.hpp>
+#include <Core/Definitions.hpp>
 #include <Core/ServiceLocator/ServiceLocator.hpp>
 
 
@@ -17,11 +16,11 @@ using namespace Resources;
 
 FADE_BOOTSTRAP_MODULE(CModuleTextureImporter)
 FADE_BOOTSTRAP_ON_CONSTRUCT({
-	auto* imp_hub = GetServiceLocator().GetService<CResourceImporterHub>();
-	if (imp_hub)
-	{
-		imp_hub->RegisterImporter<CTextureImporter>();
-	}
+	//auto* imp_hub = GetServiceLocator().GetService<CResourceImporterHub>();
+	//if (imp_hub)
+	//{
+	//	imp_hub->RegisterImporter<CTextureImporter>();
+	//}
 })
 
 CTextureImporter::CTextureImporter()
@@ -32,9 +31,9 @@ CTextureImporter::~CTextureImporter()
 {
 }
 
-fstl::UniquePtr<CResource> CTextureImporter::ImportResource(std::string file_path)
+Fade::TUniquePtr<CResource> CTextureImporter::ImportResource(std::string file_path)
 {
-	return fstl::MakeUnique<CResource>();
+	return Fade::MakeUnique<CResource>();
 }
 
 bool CTextureImporter::ImportsExtension(std::string extension)

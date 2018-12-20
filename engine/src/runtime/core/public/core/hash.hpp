@@ -13,7 +13,7 @@ namespace Fade
 class CHash
 {
 private:
-    static constexpr u64 fnv1a_rec(c8* str, u64 hash)
+    static constexpr u64 fnv1a_rec(const c8* str, u64 hash)
     {
         return *str == '\0'
             ? hash
@@ -22,7 +22,7 @@ private:
 
 public:
     // Computes the FNV-1a hash
-    static constexpr u64 fnv1a(c8* str)
+    static constexpr u64 fnv1a(const c8* str)
     {
         return str == nullptr || *str == '\0'
             ? 0

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{23B90DC3-9650-496B-84A7-00ECB9318B86}</ProjectGuid>
+    <ProjectGuid>{2E4CD471-7EB4-46CE-BCE1-D4DAB8E17E16}</ProjectGuid>
     <RootNamespace>Run</RootNamespace>	
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName></ProjectName>
@@ -47,9 +47,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
 	<OutDir>$(SolutionDir)bin\$(Platform)_$(Configuration)\</OutDir>
-	<IntDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\Run\intermediate\build\Run\</IntDir>
-    <LibraryPath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\bin\$(Platform)_$(Configuration)\lib\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Run\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Run\\implementations\Windows;G:\Git\Fade-Engine2\Engine\Src\Runtime\Run\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\implementations\Windows;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\implementations\Editor;G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\includes\;$(IncludePath)</IncludePath>
+	<IntDir>L:\Git\Fade-Engine\Engine\Src\Runtime\Run\intermediate\build\Run\</IntDir>
+    <LibraryPath>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\bin\$(Platform)_$(Configuration)\lib\;L:\Git\Fade-Engine\Engine\Src\Runtime\Application\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>L:\Git\Fade-Engine\Engine\Src\Runtime\Run\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Run\\implementations\Windows;L:\Git\Fade-Engine\Engine\Src\Runtime\Run\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\implementations\Windows;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\implementations\Editor;L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\includes\;$(IncludePath)</IncludePath>
     <TargetName>Editor</TargetName>  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -81,10 +81,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Run\\Public\Run\EngineLoop.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Run\\Public\Run\EngineLoop.hpp" />
   </ItemGroup>
   <ItemGroup>
-  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Run\\Implementations\Windows\RunWindows.cpp" />
+  <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Run\\Implementations\Windows\RunWindows.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

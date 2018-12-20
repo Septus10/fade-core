@@ -4,5 +4,14 @@
 	"Version": "0.0.1",
 	"Dependencies":
 	[
+		{
+			"Name": "glew",
+			"External":true,
+			"RequiredVersion":
+			{
+				"Min": "2.0.0",
+				"Max": "2.0.0"
+			}
+		}
 	],
 }

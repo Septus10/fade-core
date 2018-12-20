@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{236624EB-472C-42FC-8DF9-3A7F4632B4EF}</ProjectGuid>
+    <ProjectGuid>{D631E665-4F8F-46F5-820D-7E08ADDBE4F4}</ProjectGuid>
     <RootNamespace>Core</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>
@@ -47,10 +47,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\</OutDir>
-    <IntDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\intermediate\build\Core\</IntDir>
+    <OutDir>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\</OutDir>
+    <IntDir>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\intermediate\build\Core\</IntDir>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <IncludePath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\includes\;$(IncludePath)</IncludePath>
+    <IncludePath>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -85,35 +85,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Public\Core\Containers\ContainerBase.hpp" />
-    <ClInclude Include="..\Public\Core\Utility\TemplateUtil.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Core.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\CoreApi.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Definitions.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Function.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Hash.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Pimpl.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Timer.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.inl" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\module_info.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\DefaultAllocator.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\FStream.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\Function.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\IOStream.hpp" />
-    <ClInclude Include="..\Public\Core\Containers\UniquePointer.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Containers\String.hpp" />
-    <ClInclude Include="..\Public\Core\Containers\Array.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\Memory\IAllocator.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\Service.hpp" />
-    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\ServiceLocator.hpp" />
+    <ClInclude Include="..\Public\Core\Logging\Log.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\core.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\CoreApi.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\definitions.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\function.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\hash.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\pimpl.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\timer.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\bootstrapper.inl" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Bootstrapping\module_info.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\Array.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\ContainerBase.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\DefaultAllocator.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\FStream.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\Function.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\IOStream.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\NTree.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\String.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Containers\UniquePointer.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Memory\IAllocator.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\Service.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\ServiceLocator\ServiceLocator.hpp" />
+    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Public\Core\Utility\TemplateUtil.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Core.cpp" />
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Hash.cpp" />
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Timer.cpp" />
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\Bootstrapping\Bootstrapper.cpp" />
-    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\Implementations\Default\ServiceLocator\ServiceLocator.cpp" />
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\Core.cpp" />
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\hash.cpp" />
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\timer.cpp" />
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\Bootstrapping\bootstrapper.cpp" />
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\ServiceLocator\Service.cpp" />
+    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\Implementations\Default\ServiceLocator\ServiceLocator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

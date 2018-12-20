@@ -1,9 +1,7 @@
 #pragma once
 
 #include <ResourceImporter/ResourceImporterApi.hpp>
-
-#include <vector>
-#include <memory>
+#include <Core/Containers/UniquePointer.hpp>
 
 namespace Fade { namespace Resources {
 
@@ -27,7 +25,7 @@ public:
 	 * @param file_path File path to the resource
 	 * @returns the resource if the import went well, otherwise it returns a nullptr
 	 */
-	virtual std::unique_ptr<CResource> ImportResource(std::string file_path) = 0;
+	virtual Fade::TUniquePtr<CResource> ImportResource(std::string file_path) = 0;
 };
 
 } }

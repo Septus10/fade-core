@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{CE7C80B3-EF01-4300-908D-54E23405E458}</ProjectGuid>
+    <ProjectGuid>{5CC90205-9C89-42C1-96F5-4807829B380B}</ProjectGuid>
     <RootNamespace>PlatformCore</RootNamespace>	
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName></ProjectName>
@@ -46,10 +46,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-	<OutDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\bin\$(Platform)_$(Configuration)\lib\</OutDir>
-	<IntDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\intermediate\build\PlatformCore\</IntDir>
-    <LibraryPath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
-    <IncludePath>G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\implementations\Windows;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\includes\;$(IncludePath)</IncludePath>
+	<OutDir>L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\bin\$(Platform)_$(Configuration)\lib\</OutDir>
+	<IntDir>L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\intermediate\build\PlatformCore\</IntDir>
+    <LibraryPath>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\implementations\Windows;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -84,17 +84,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\PlatformCore.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\PlatformCoreApi.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\Window\Window.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\Window\WindowManager.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\Window\WindowSettings.hpp" />
-  <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Implementations\Windows\Window\WindowsWindow.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\PlatformCore.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\PlatformCoreApi.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\Window\Window.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\Window\WindowSettings.hpp" />
+  <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\Implementations\Windows\Window\WindowsWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
-  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Public\PlatformCore\Window\WindowManager.cpp" />
-  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Implementations\Windows\Window\PlatformCore.cpp" />
-  <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\Implementations\Windows\Window\WindowsWindow.cpp" />
+  <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\Implementations\Windows\Window\PlatformCore.cpp" />
+  <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\Implementations\Windows\Window\WindowsWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,9 @@
 #pragma once
 
 #include <Core/CoreApi.hpp>
-#include <Core/Containers/ContainerBase.hpp>
-#include <Core/Containers/DefaultAllocator.hpp>
 
 #include <Core/Utility/TemplateUtil.hpp>
+#include <cassert>
 
 namespace Fade {
 
@@ -108,13 +107,14 @@ struct FADE_CORE_API TDefaultDelete<ValueType[]>
 };
 
 template <typename ValueType, typename Deleter = TDefaultDelete<ValueType>>
-class FADE_CORE_API TUniquePtr
+class TUniquePtr
 {
 public:
 	using Ptr = ValueType*;
 	using ConstPtr = const Ptr;
 	using Ref = ValueType&;
 	using ConstRef = const Ref;
+	using ThisType = TUniquePtr<ValueType, Deleter>;
 
 private:
 	Ptr			m_Data;
@@ -133,7 +133,13 @@ public:
 	/*
 	 * CTor with pointer parameter
 	 */
-	explicit TUniquePtr(ValueType* a_Pointer) : m_Data(a_Pointer)
+	explicit TUniquePtr(const Ptr a_Pointer) : m_Data(a_Pointer)
+	{ }
+
+	/*
+	 * CTor with nullptr param
+	 */
+	constexpr TUniquePtr(decltype(nullptr)) : m_Data(nullptr)
 	{ }
 
 	/*
@@ -144,10 +150,19 @@ public:
 	/*
 	 * Move CTor get the pointer from the other unique pointer and invalidate theirs
 	 */
-	TUniquePtr(const TUniquePtr&& a_Other)
+	TUniquePtr(TUniquePtr&& a_Other) noexcept
 	{
 		Reset(a_Other.Release());
 	}
+
+	/*
+	 * CTor from different type
+	 */
+	template <class OtherType, class OtherDeleter,
+		typename = typename TEnableIf<TIsConvertible<OtherType*, ValueType*>::sm_Value>::TType 
+	> TUniquePtr(TUniquePtr<OtherType, OtherDeleter>&& a_Other) noexcept :
+		TUniquePtr(a_Other.Release())
+	{ }
 
 	~TUniquePtr()
 	{
@@ -167,18 +182,38 @@ public:
 		return m_Data;
 	}
 
-	bool operator==(Ptr a_Other)
+	bool operator==(ConstPtr a_Other)
 	{
 		return m_Data == a_Other;
 	}
 
-	TUniquePtr& operator=(const TUniquePtr& a_Other) = delete;
-	TUniquePtr& operator=(const TUniquePtr&& a_Other)
+	template <class OtherType, class OtherDeleter,
+		typename = typename TEnableIf<TIsConvertible<OtherType*, ValueType*>::sm_Value>::TType 
+	> ThisType& operator=(TUniquePtr<OtherType, OtherDeleter>&& a_Other) noexcept
 	{
 		Reset(a_Other.Release());
 		return *this;
 	}
+	
+	ThisType& operator=(ThisType&& a_Other) noexcept
+	{
+		if (this != &a_Other)
+		{
+			Reset(a_Other.Release());
+			//GetDeleter() = std::forward<Deleter>(a_Other.GetDeleter());
+		}
+		return *this;
+	}
 
+
+	ThisType& operator=(decltype(nullptr)) noexcept
+	{
+		Reset();
+		return *this;
+	}
+
+	ThisType& operator=(const ThisType& a_Other) = delete;
+	
 	//====================================================================================//
 	// Utility
 	//====================================================================================//
@@ -189,19 +224,29 @@ public:
 
 	Ptr Release() noexcept
 	{
-		Ptr Temp = Get();
+		const Ptr Temp = Get();
 		m_Data = Ptr();
 		return Temp;
 	}
 
-	void Reset(Ptr a_NewPointer)
+	void Reset(ConstPtr a_NewPointer = nullptr)
 	{
-		Ptr Temp = Get();
+		const Ptr Temp = Get();
 		m_Data = a_NewPointer;
 		if (Temp != Ptr())
 		{
 			m_Deleter(Temp);
 		}
+	}
+
+	bool IsValid() const noexcept
+	{
+		return m_Data != nullptr;
+	}
+
+	Deleter* GetDeleter() const noexcept
+	{
+		return m_Deleter;
 	}
 };
 

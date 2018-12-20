@@ -1,7 +1,8 @@
 #pragma once
 
 #include <Core/Definitions.hpp>
-#include <Core/fstl/Memory.hpp>
+#include <Core/Containers/UniquePointer.hpp>
+#include <Core/Containers/Array.hpp>
 #include <PlatformCore/PlatformCoreApi.hpp>
 #include <PlatformCore/Window/WindowSettings.hpp>
 
@@ -12,8 +13,8 @@ static const char* sg_WindowClassName = "FadeWindow";
 class FADE_PLATFORMCORE_API CWindow
 {
 public:
-	CWindow();
-	virtual ~CWindow();
+	CWindow() = default;
+	virtual ~CWindow() = default;
 
 	virtual bool Create(SWindowSettings& a_Settings, CWindow* a_Parent = nullptr) = 0;
 
@@ -57,10 +58,13 @@ public:
 
 	virtual void* GetWindowHandle() const { return nullptr; }
 
+	u32 GetWidth() const { return m_WindowSettings.m_Width; }
+	u32 GetHeight() const { return m_WindowSettings.m_Height; }
+
 protected:
-	SWindowSettings m_WindowSettings;
+	SWindowSettings					m_WindowSettings;
 };
 
 } }
 
-FADE_PLATFORMCORE_API Fade::PlatformCore::CWindow* GetWindow();
+FADE_PLATFORMCORE_API Fade::TUniquePtr<Fade::PlatformCore::CWindow> GetWindow();
