@@ -226,6 +226,10 @@ $RECYCLE.BIN/
 # Visual Studio temp something
 .vs/
 
+# Visual studio projecct files
+*.vcxproj
+*.vcxproj.filters
+
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
