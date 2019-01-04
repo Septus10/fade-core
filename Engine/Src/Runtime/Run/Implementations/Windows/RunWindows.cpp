@@ -5,6 +5,7 @@
 #include <Application/Application.hpp>
 #include <PlatformCore/PlatformCore.hpp>
 #include <Core/Containers/UniquePointer.hpp>
+#include <Core/Timer.hpp>
 #include <PlatformCore/Window/Window.hpp>
 #include <iostream>
 
@@ -119,9 +120,26 @@ int WINAPI WinMain(
 		return 1;
 	}
 
+	const Fade::u32 DesiredFPS = 120;
+	const Fade::f64 FrameTime = 1.0 / (double)DesiredFPS;
+	Fade::f64 CurrentTime = FrameTime;
+
 	MSG Message;
-	while ((g_Application->Tick(0.f) != Fade::ETickResult::STOP) && !g_ShouldQuit)
-	{
+	Fade::CTimer TickTimer;
+	TickTimer.Start();
+	bool InitialTick = true;
+	while (!g_ShouldQuit)
+	{		
+		CurrentTime = TickTimer.Elapsed();
+		if (CurrentTime >= FrameTime || InitialTick)
+		{
+			TickTimer.Reset();
+			InitialTick = false;
+			if (g_Application->Tick(CurrentTime) != Fade::ETickResult::CONTINUE)
+			{
+				g_ShouldQuit = true;
+			}
+		}		
 		while (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE) > 0)
 		{
 			TranslateMessage(&Message);

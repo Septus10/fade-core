@@ -4,6 +4,6 @@
 	"ExternalLibrary": "true",
 	"LibraryName": "glew32s",
 	"RequiredLibraries": [
-		"opengl32",
+		"opengl32.lib",
 	]
 }

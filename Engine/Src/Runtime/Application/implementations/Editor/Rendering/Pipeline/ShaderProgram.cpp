@@ -1,4 +1,4 @@
-#include "ShaderProgram.hpp"
+﻿#include "ShaderProgram.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -107,27 +107,258 @@ int CShaderProgram::LoadShaderProgram(std::string a_FolderPath)
 
 	// Get uniforms
 	i32 UniformCount;
-	glGetProgramiv(m_ProgramID, GL_ACTIVE_ATTRIBUTES, &UniformCount);
-	std::cout << "Active Attributes: " << UniformCount << "\n";
+	glGetProgramiv(m_ProgramID, GL_ACTIVE_UNIFORMS, &UniformCount);
+	std::cout << "Active Uniforms: " << UniformCount << "\n";
+
+	GLint MaxUniformNameLength = 0;
+	glGetProgramiv(m_ProgramID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &MaxUniformNameLength);
+	std::vector<GLchar> NameData(MaxUniformNameLength);
 
 	for (i32 i = 0; i < UniformCount; i++)
 	{
-		GLint size; // size of the variable
-		GLenum type; // type of the variable (float, vec3 or mat4, etc)
+		GLint	Size;			// size of the variable
+		GLenum	Type;			// type of the variable (float, vec3 or mat4, etc)
+		GLsizei ActualLength;	// name length
 
-		const GLsizei bufSize = 16; // maximum name length
-		GLchar name[bufSize]; // variable name in GLSL
-		GLsizei length; // name length
+		glGetActiveUniform(m_ProgramID, (GLuint)i, MaxUniformNameLength, &ActualLength, &Size, &Type, &NameData[0]);
+		std::string Name((char*)&NameData[0], ActualLength);
 
-		glGetActiveAttrib(m_ProgramID, (GLuint)i, bufSize, &length, &size, &type, name);
+		std::cout << "Attribute:\t" << i << "\nType:\t\t" << Type << "\nName:\t\t" << Name << "\n";
+	
+		i32 Location = glGetUniformLocation(m_ProgramID, Name.c_str());
+		if (Location == -1)
+		{
+			std::cout << "\nError couldn't get uniform with name: " << Name << "\n";
+			continue;
+		}
 
-		std::cout << "Attribute " << i << " Type: " << type << " Name: " << name << "\n";
+		m_UniformLocations[Name] = Location;
 	}
+
+	return true;
 }
 
 void CShaderProgram::Use()
 {
 	glUseProgram(m_ProgramID);
+}
+
+void CShaderProgram::SetBoolValue(std::string a_Name, b32 a_Value)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform1i(Location, a_Value);
+	}
+}
+
+void CShaderProgram::SetIntValue(std::string a_Name, i32 a_Value)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform1i(Location, a_Value);
+	}
+}
+
+void CShaderProgram::SetUintValue(std::string a_Name, u32 a_Value)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform1ui(Location, a_Value);
+	}
+}
+
+void CShaderProgram::SetFloatValue(std::string a_Name, f32 a_Value)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform1f(Location, a_Value);
+	}
+}
+
+void CShaderProgram::SetDoubleValue(std::string a_Name, f64 a_Value)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform1d(Location, a_Value);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::bvec2 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform2iv(Location, 1, reinterpret_cast<const i32*>(&a_Vec[0]));
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::bvec3 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform3iv(Location, 1, reinterpret_cast<const i32*>(&a_Vec[0]));
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::bvec4 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform4iv(Location, 1, reinterpret_cast<const i32*>(&a_Vec[0]));
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::ivec2 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform2iv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::ivec3 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform3iv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::ivec4 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform4iv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::uvec2 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform2uiv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::uvec3 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform3uiv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::uvec4 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform4uiv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::fvec2 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform2fv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::fvec3 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform3fv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::fvec4 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform4fv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::dvec2 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform2dv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::dvec3 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform3dv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetVec(std::string a_Name, glm::dvec4 a_Vec)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniform4dv(Location, 1, &a_Vec[0]);
+	}
+}
+
+void CShaderProgram::SetMat(std::string a_Name, glm::mat2 a_Mat)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniformMatrix2fv(Location, 1, GL_FALSE, &a_Mat[0][0]);
+	}
+}
+
+void CShaderProgram::SetMat(std::string a_Name, glm::mat3 a_Mat)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniformMatrix3fv(Location, 1, GL_FALSE, &a_Mat[0][0]);
+	}
+}
+
+void CShaderProgram::SetMat(std::string a_Name, glm::mat4 a_Mat)
+{
+	i32 Location;
+	if (GetUniformLocation(a_Name, Location))
+	{
+		glUniformMatrix4fv(Location, 1, GL_FALSE, &a_Mat[0][0]);
+	}
+}
+
+bool CShaderProgram::GetUniformLocation(std::string a_Name, i32 & oa_Location)
+{
+	if (m_UniformLocations.find(a_Name) != m_UniformLocations.end())
+	{
+		oa_Location = m_UniformLocations[a_Name];
+		return true;
+	}
+	oa_Location = -1;
+	return false;
 }
 
 int CShaderProgram::LoadShader(std::string a_FilePath, EShaderType a_ShaderType)

@@ -35,6 +35,11 @@ using f32 = float;
 using f64 = double;
 
 /**
+ * Boolean types
+ */
+using b32 = bool;
+
+/**
  * Pointer types
  */
 using iptr = std::intptr_t;

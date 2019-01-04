@@ -44,7 +44,7 @@ void CTimer::Resume()
 
 double CTimer::Elapsed() const
 {
-	std::chrono::duration<double, std::centi> duration;
+	std::chrono::duration<double> duration;
 	if (m_HasPaused)
 	{
 		if (m_IsStopped)
