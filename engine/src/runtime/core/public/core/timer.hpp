@@ -27,10 +27,8 @@ public:
 	double Elapsed() const;
 
 private:
-	using hrc	= std::chrono::high_resolution_clock;
-	using ms	= std::chrono::milliseconds;
-
-	hrc::time_point m_Start, m_Pause, m_Resume, m_Stop;
+	FADE_MAKE_PIMPL;
+	
 	bool m_HasPaused;
 	bool m_IsStopped;
 };

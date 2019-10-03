@@ -3,7 +3,9 @@
 #include <vector>
 
 #include <Core/CoreApi.hpp>
+#include <Core/definitions.hpp>
 #include <Core/Containers/DefaultAllocator.hpp>
+#include <Core/Utility/TemplateUtil.hpp>
 
 namespace Fade
 {
@@ -39,6 +41,14 @@ public:
 	void Add(ConstRef a_Element)
 	{
 		push_back(a_Element);
+	}
+
+	/*
+	 *
+	 */
+	bool IsValidIndex(Fade::u32 a_Index)
+	{
+		return a_Index < size() && a_Index > 0;
 	}
 };
 

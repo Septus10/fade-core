@@ -236,3 +236,5 @@ $RECYCLE.BIN/
 [Ee]ngine/Useful links.docx
 [Ee]ngine/Intermediate/
 [Ee]ngine/Fade Engine.sln
+*.vcxproj
+*.filters

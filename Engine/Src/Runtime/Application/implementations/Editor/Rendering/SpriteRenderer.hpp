@@ -1,6 +1,5 @@
 #pragma once
 
-#include <ECS/ECS.hpp>
 #include <Core/definitions.hpp>
 
 namespace Fade { namespace Rendering {

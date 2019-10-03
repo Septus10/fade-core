@@ -1,9 +1,15 @@
 #include <editor.hpp>
 
+#include <ECS/ECSUtil.hpp>
+
 #include <Core/Containers/UniquePointer.hpp>
 #include <PlatformCore/PlatformCore.hpp>
 #include <PlatformCore/Window/Window.hpp>
 #include <Rendering/Pipeline/ShaderProgram.hpp>
+
+#include <ECS/System.hpp>
+#include <ECS/Component.hpp>
+#include <ECS/ComponentStore.hpp>
 
 #define GLEW_STATIC 1
 
@@ -14,33 +20,87 @@
 #include <Windows.h>
 #include <iostream>
 
+#include <Gameplay/Components/Landscape2D.hpp>
+#include <Rendering/Texture.hpp>
+
 namespace Fade {
 
 HDC			DeviceContext;
 HGLRC		RenderingContext;
 
 unsigned int VBO, VAO, EBO;
-Rendering::Pipeline::CShaderProgram Program;
+Rendering::Pipeline::CShaderProgram Program, SpriteProgram;
 
 float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	0.5f, -0.5f, 0.0f,
-	0.0f,  0.5f, 0.0f
+	// positions          // texture coords
+	 0.5f,  0.5f, 0.0f,   1.0f, 1.0f,   // top right
+	 0.5f, -0.5f, 0.0f,   1.0f, 0.0f,   // bottom right
+	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f,   // bottom left
+	-0.5f,  0.5f, 0.0f,   0.0f, 1.0f    // top left 
+};
+
+unsigned int indices[] = {  
+	0, 1, 3, // first triangle
+	1, 2, 3  // second triangle
 };
 
 f32 g_XPosAdd = 0.f;
 float g_XPosTimer = 0.f;
+Rendering::CTexture texture;
+Rendering::CTexture sprite;
+Rendering::CTexture tilesheet;
+float g_AnimTime;
+float g_FrameTime = 0.25f;
+
+int g_Column = 0;
+
+CLandscapeChunk g_Chunk;
+
 
 ETickResult CEditor::Tick(double a_DeltaTime)
 {
-	g_XPosTimer += a_DeltaTime;
+	float fDeltaTime = float(a_DeltaTime);
+	g_XPosTimer += fDeltaTime;
 	g_XPosAdd = std::sin(g_XPosTimer);
 
-	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
 
-	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	/*Program.Use();
+	
+	Program.SetFloatValue(std::string("xPos"), g_XPosAdd);
+	
+
+	glBindTexture(GL_TEXTURE_2D, texture.GetTextureID());
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	SpriteProgram.Use();
+	
+	g_AnimTime += fDeltaTime;
+	if (g_AnimTime > g_FrameTime)
+	{
+		g_Column = (g_Column + 1) % 4;
+		g_AnimTime = 0.f;
+	}
+
+	const static float nx = 1.f / 9.f;
+	const static float ny = 1.f / 4.f;
+	
+	float Column = float(g_Column);
+	float Row = 0;
+
+	SpriteProgram.SetFloatValue("nx", nx);
+	SpriteProgram.SetFloatValue("ny", ny);
+	SpriteProgram.SetFloatValue("Column", Column);
+	SpriteProgram.SetFloatValue("Row", Row);
+	
+	glBindTexture(GL_TEXTURE_2D, sprite.GetTextureID());
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
+
+	FW::FileWatcher::Get().update();
+
+	g_Chunk.Draw(glm::mat4(0.f));
 
 	SwapBuffers(DeviceContext);
 
@@ -55,8 +115,19 @@ void CEditor::FixedTick(double a_FixedDeltaTime)
 bool CEditor::PreInitialize()
 {
 	m_MainWindow = GetWindow();
+	
+	auto& Components = Fade::ECS::Util::Registry<ECS::CComponentBase>::GetRegisteredObjects();
+	std::cout << "Registered components: " << Components.size() << "\n";
+	for (auto& Component : Components)
+	{
+		std::cout << "\t- " << Component << "\n";
+		auto* Comp = Fade::ECS::Util::Registry<ECS::CComponentBase>::CreateObject(Component);
+		std::cout << "\tID: " << Comp->GetID() << "\n";
+	}
+
 	return true;
 }
+
 
 bool CEditor::Initialize()
 {
@@ -155,7 +226,7 @@ bool CEditor::Initialize()
 		};
 
 		int pixelFormatID; UINT numFormats;
-		bool status = wglChoosePixelFormatARB(DeviceContext, pixelAttribs, NULL, 1, &pixelFormatID, &numFormats);
+		bool status = bool(wglChoosePixelFormatARB(DeviceContext, pixelAttribs, NULL, 1, &pixelFormatID, &numFormats));
 		if (status == false || numFormats == 0)
 		{
 			std::cout << "wglChoosePixelFormatARB() failed.\n";
@@ -209,31 +280,25 @@ bool CEditor::Initialize()
 	SetWindowText(MainWindowHandle, (LPCSTR)glGetString(GL_VERSION));
 	m_MainWindow->Show();
 
-	Program.LoadShaderProgram(".\\Shaders\\Default\\");
+	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-	glBindBuffer(GL_ARRAY_BUFFER, 0); 
-
-	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-	glBindVertexArray(0); 
+	g_Chunk.Create(4, 4);
+	g_Chunk.SetTileAtlas(Rendering::CTileAtlas(".\\Images\\TempTilemap.tga", glm::vec2(56), 4));
+	g_Chunk.SetTilemap(Rendering::CTexture(".\\Images\\Tilemap.tga"));
 
 	return true;
 }
 
 bool CEditor::PostInitialize()
 {
+	auto Objects = ECS::Util::Registry<ECS::CComponentBase>::GetRegisteredObjects();
+	for (auto& it: Objects)
+	{
+		std::cout << "Registered component: " << it << "\n";
+	}
 	return true;
 }
 

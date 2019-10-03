@@ -1,6 +1,9 @@
 #pragma once
 
-#include <core/definitions.hpp>
+#include <Core/CoreApi.hpp>
+#include <Core/Definitions.hpp>
+#include <Core/Containers/String.hpp>
+#include <Core/Containers/Array.hpp>
 
 /* Class and struct prefixes
 * C = Regular classes

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7D915F27-71AA-4E65-AEC8-EE9188154537}</ProjectGuid>
+    <ProjectGuid>{E3B0FE95-DEA8-42AA-9706-E817A23CB1B9}</ProjectGuid>
     <RootNamespace>Application</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <ProjectName>
@@ -47,10 +47,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir>L:\Git\Fade-Engine\Engine\Src\Runtime\Application\bin\$(Platform)_$(Configuration)\lib\</OutDir>
-    <IntDir>L:\Git\Fade-Engine\Engine\Src\Runtime\Application\intermediate\build\Application\</IntDir>
-    <LibraryPath>L:\Git\Fade-Engine\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\bin\$(Platform)_$(Configuration)\lib\;L:\Git\Fade-Engine\Engine\Src\External\glew\lib\windows\$(Configuration)\;$(LibraryPath)</LibraryPath>
-    <IncludePath>L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\implementations\Editor;L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\implementations\Default;L:\Git\Fade-Engine\Engine\Src\Runtime\Core\\includes\;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\public\;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\implementations\Windows;L:\Git\Fade-Engine\Engine\Src\Runtime\PlatformCore\\includes\;L:\Git\Fade-Engine\Engine\Src\External\glew\include;$(IncludePath)</IncludePath>
+    <OutDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\bin\$(Platform)_$(Configuration)\lib\</OutDir>
+    <IntDir>G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\intermediate\build\Application\</IntDir>
+    <LibraryPath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\bin\$(Platform)_$(Configuration)\lib\;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\bin\$(Platform)_$(Configuration)\lib\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\bin\$(Platform)_$(Configuration)\lib\;G:\Git\Fade-Engine2\Engine\Src\External\glew\lib\windows\$(Configuration);G:\Git\Fade-Engine2\Engine\Src\External\soil\lib\windows\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\implementations\Editor;G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Runtime\Core\\includes\;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\public\;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\implementations\Windows;G:\Git\Fade-Engine2\Engine\Src\Runtime\PlatformCore\\includes\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\public\;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\implementations\Default;G:\Git\Fade-Engine2\Engine\Src\Editor\ResourceImporterHub\\includes\;G:\Git\Fade-Engine2\Engine\Src\External\glew\include;G:\Git\Fade-Engine2\Engine\Src\External\glm\include;G:\Git\Fade-Engine2\Engine\Src\External\soil\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -67,7 +67,7 @@
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Core.lib;PlatformCore.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;PlatformCore.lib;ResourceImporterHub.lib;glew32s.lib;opengl32.lib;soil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
@@ -81,23 +81,46 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Core.lib;PlatformCore.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Core.lib;PlatformCore.lib;ResourceImporterHub.lib;glew32s.lib;opengl32.lib;.lib;soil.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\Implementations\Editor\Rendering\Pipeline\ShaderProgram.hpp" />
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Public\application\application.hpp" />
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Public\application\ApplicationApi.hpp" />
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\editor.hpp" />
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ECS.hpp" />
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\IRenderable.hpp" />
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\application.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\ApplicationApi.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\editor.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\stb_image.h" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Component.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ComponentStore.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ECS.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ECSUtil.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Entity.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\System.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\SystemManager.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Entity.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Transform.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\World.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Components\Component.h" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Components\Landscape2D.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\IRenderable.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Texture.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Pipeline\ShaderProgram.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\Resource.hpp" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\ResourceImporter.h" />
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\ResourceStorage.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Implementations\Editor\Rendering\Pipeline\ShaderProgram.cpp" />
-    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Public\application\Application.cpp" />
-    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\editor.cpp" />
-    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\Application.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\editor.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Component.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Entity.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\System.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\World.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Components\Landscape2D.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Texture.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Pipeline\ShaderProgram.cpp" />
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\ResourceStorage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

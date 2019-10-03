@@ -5,6 +5,8 @@
 #include <Core/Containers/Array.hpp>
 #include <Core/definitions.hpp>
 
+#include <Core/FileWatcher/FileWatcher.h>
+
 #include <glm.hpp>
 
 namespace Fade { namespace Rendering { namespace Pipeline {
@@ -20,7 +22,7 @@ enum class EShaderType : u8
 	NUM_SHADERTYPES = 4
 };
 
-class CShaderProgram
+class CShaderProgram : public FW::FileWatchListener
 {
 public:
 	CShaderProgram();
@@ -67,14 +69,25 @@ public:
 	void SetMat(std::string a_Name, glm::mat2 a_Mat);
 	void SetMat(std::string a_Name, glm::mat3 a_Mat);
 	void SetMat(std::string a_Name, glm::mat4 a_Mat);
-private:
-	bool GetUniformLocation(std::string a_Name, i32& oa_Location);
-	i32 LoadShader(std::string a_FileContents, EShaderType a_ShaderType);
+		// Textures
+	//void SetTexture(std::string a_Name, Fade::u32 a_TextureID);
 
+	i32 GetUniformLocation(std::string a_Name);
+
+protected: // FileWatchListener interface
+	virtual void handleFileAction(FW::WatchID a_WatchID, const FW::String& a_Dir, const FW::String& a_Filename, FW::Action a_Action) override;
+
+	bool		GetUniformLocation(std::string a_Name, i32& oa_Location);
+	EShaderType GetShaderType(std::string a_FilePath);
+
+	i32			LoadShader(std::string a_FileContents, EShaderType a_ShaderType, i32 a_Shader);
+	i32			LinkProgram();
+
+private:
+	TArray<i32> m_Shaders;
 	std::unordered_map<std::string, i32> m_UniformLocations;
 
 	u32 m_ProgramID;
-
 };
 
 }}}

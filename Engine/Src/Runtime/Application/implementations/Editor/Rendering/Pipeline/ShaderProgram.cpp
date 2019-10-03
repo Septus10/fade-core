@@ -33,9 +33,11 @@ int CShaderProgram::LoadShaderProgram(std::string a_FolderPath)
 		return -1;
 	}
 
+	FW::FileWatcher::Get().addWatch(a_FolderPath, this);
+
 	const usize NumShaders = static_cast<usize>(EShaderType::NUM_SHADERTYPES);
-	int Shaders[NumShaders];
-	std::fill_n(Shaders, NumShaders, -1);
+	m_Shaders.resize(NumShaders);
+	std::fill(m_Shaders.begin(), m_Shaders.end(), -1);
 	// Go through all the files in the directory
 	for (auto& It: std::filesystem::directory_iterator(Path))
 	{
@@ -44,19 +46,21 @@ int CShaderProgram::LoadShaderProgram(std::string a_FolderPath)
 		std::string StrPath = It.path().string();
 		std::transform(StrPath.begin(), StrPath.end(), StrPath.begin(), ::tolower);
 
-		EShaderType ShaderType = EShaderType::Unknown;
-		if (StrPath.find("vertex") != std::string::npos)
+		EShaderType ShaderType = GetShaderType(StrPath);
+		u32 GLShaderType;
+		switch (ShaderType)
 		{
-			ShaderType = EShaderType::Vertex;
+		case EShaderType::Vertex:
+			GLShaderType = GL_VERTEX_SHADER;
+			break;
+		case EShaderType::Fragment:
+			GLShaderType = GL_FRAGMENT_SHADER;
+			break;
+		case EShaderType::Geometry:
+			GLShaderType = GL_GEOMETRY_SHADER;
+			break;
 		}
-		else if (StrPath.find("fragment") != std::string::npos)
-		{
-			ShaderType = EShaderType::Fragment;
-		}
-		else if (StrPath.find("geometry") != std::string::npos)
-		{
-			ShaderType = EShaderType::Geometry;
-		}
+
 
 		if (ShaderType == EShaderType::Unknown)
 		{
@@ -64,12 +68,13 @@ int CShaderProgram::LoadShaderProgram(std::string a_FolderPath)
 			continue;
 		}
 		// Now that we have the shader path and type
-		i32 ShaderNum = LoadShader(StrPath, ShaderType);
-		if (ShaderNum == -1) // Check if we were able to load the shader, if not get us out of here
+		usize shaderTypeIndex = static_cast<usize>(ShaderType);
+		m_Shaders[shaderTypeIndex] = glCreateShader(GLShaderType);
+		i32 loadResult = LoadShader(StrPath, ShaderType, m_Shaders[shaderTypeIndex]);
+		if (loadResult == -1) // Check if we were able to load the shader, if not get us out of here
 		{
 			return -1;
 		}
-		Shaders[static_cast<usize>(ShaderType)] = ShaderNum;
 	}
 
 	// If we get to this point this means all our shaders have compiled
@@ -77,63 +82,13 @@ int CShaderProgram::LoadShaderProgram(std::string a_FolderPath)
 	// now bind all shaders to our program
 	for (int i = 0; i < NumShaders; ++i)
 	{
-		if (Shaders[i] != -1)
+		if (m_Shaders[i] != -1)
 		{
-			glAttachShader(m_ProgramID, Shaders[i]);
+			glAttachShader(m_ProgramID, m_Shaders[i]);
 		}
 	}
 
-	glLinkProgram(m_ProgramID);
-
-	// print linking errors if any
-	i32 Success;
-	glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &Success);
-	if(!Success)
-	{
-		char InfoLog[512];
-		glGetProgramInfoLog(m_ProgramID, 512, NULL, InfoLog);
-		std::cout << "Shader linking failed.\n\t" << InfoLog << "\n";
-		return SHADER_ERROR;
-	}
-
-	// Now that linking is done we can get rid of the shader handles
-	for (int i = 0; i < NumShaders; ++i)
-	{
-		if (Shaders[i] != -1)
-		{
-			glDeleteShader(Shaders[i]);
-		}
-	}
-
-	// Get uniforms
-	i32 UniformCount;
-	glGetProgramiv(m_ProgramID, GL_ACTIVE_UNIFORMS, &UniformCount);
-	std::cout << "Active Uniforms: " << UniformCount << "\n";
-
-	GLint MaxUniformNameLength = 0;
-	glGetProgramiv(m_ProgramID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &MaxUniformNameLength);
-	std::vector<GLchar> NameData(MaxUniformNameLength);
-
-	for (i32 i = 0; i < UniformCount; i++)
-	{
-		GLint	Size;			// size of the variable
-		GLenum	Type;			// type of the variable (float, vec3 or mat4, etc)
-		GLsizei ActualLength;	// name length
-
-		glGetActiveUniform(m_ProgramID, (GLuint)i, MaxUniformNameLength, &ActualLength, &Size, &Type, &NameData[0]);
-		std::string Name((char*)&NameData[0], ActualLength);
-
-		std::cout << "Attribute:\t" << i << "\nType:\t\t" << Type << "\nName:\t\t" << Name << "\n";
-	
-		i32 Location = glGetUniformLocation(m_ProgramID, Name.c_str());
-		if (Location == -1)
-		{
-			std::cout << "\nError couldn't get uniform with name: " << Name << "\n";
-			continue;
-		}
-
-		m_UniformLocations[Name] = Location;
-	}
+	LinkProgram();
 
 	return true;
 }
@@ -350,6 +305,31 @@ void CShaderProgram::SetMat(std::string a_Name, glm::mat4 a_Mat)
 	}
 }
 
+i32 CShaderProgram::GetUniformLocation(std::string a_Name)
+{
+	i32 OutUniformLocation;
+	GetUniformLocation(a_Name, OutUniformLocation);
+	return OutUniformLocation;
+}
+
+void CShaderProgram::handleFileAction(FW::WatchID a_WatchID, const FW::String & a_Dir, const FW::String & a_Filename, FW::Action a_Action)
+{
+	EShaderType shaderType = GetShaderType(a_Filename);
+	// first delete all the shaders
+	const usize shaderTypeIndex = static_cast<const usize>(shaderType);
+
+	std::string completePath = a_Dir + a_Filename;
+
+	i32 loadResult = LoadShader(completePath, shaderType, m_Shaders[shaderTypeIndex]);
+
+	if (loadResult == -1)
+	{
+		return;
+	}
+
+	LinkProgram();
+}
+
 bool CShaderProgram::GetUniformLocation(std::string a_Name, i32 & oa_Location)
 {
 	if (m_UniformLocations.find(a_Name) != m_UniformLocations.end())
@@ -361,7 +341,7 @@ bool CShaderProgram::GetUniformLocation(std::string a_Name, i32 & oa_Location)
 	return false;
 }
 
-int CShaderProgram::LoadShader(std::string a_FilePath, EShaderType a_ShaderType)
+int CShaderProgram::LoadShader(std::string a_FilePath, EShaderType a_ShaderType, i32 a_Shader)
 {
 	// Read shader file contents
 	std::ifstream File;
@@ -379,34 +359,96 @@ int CShaderProgram::LoadShader(std::string a_FilePath, EShaderType a_ShaderType)
 	std::string ShaderString = Buffer.str();
 	const char* ShaderCString = ShaderString.c_str();
 
-	u32 GLShaderType;
-	switch(a_ShaderType)
-	{
-		case EShaderType::Vertex:
-			GLShaderType = GL_VERTEX_SHADER;
-			break;
-		case EShaderType::Fragment:
-			GLShaderType = GL_FRAGMENT_SHADER;
-			break;
-		case EShaderType::Geometry:
-			GLShaderType = GL_GEOMETRY_SHADER;
-			break;
-	}
-	i32 Shader = glCreateShader(GLShaderType);
-	glShaderSource(Shader, 1, &ShaderCString, NULL);
-	glCompileShader(Shader);
+	glShaderSource(a_Shader, 1, &ShaderCString, NULL);
+	glCompileShader(a_Shader);
 
 	i32 Success;
 	char InfoLog[512];
-	glGetShaderiv(Shader, GL_COMPILE_STATUS, &Success);
+	glGetShaderiv(a_Shader, GL_COMPILE_STATUS, &Success);
 	if (!Success)
 	{
-		glGetShaderInfoLog(Shader, 512, NULL, InfoLog);
+		glGetShaderInfoLog(a_Shader, 512, NULL, InfoLog);
 		std::cout << "ERROR Shader compilation failed:\n\t" << InfoLog << "\n";
 		return -1;
 	}
 
-	return Shader;
+	return a_Shader;
+}
+
+i32 CShaderProgram::LinkProgram()
+{
+	glLinkProgram(m_ProgramID);
+
+	// print linking errors if any
+	i32 Success;
+	glGetProgramiv(m_ProgramID, GL_LINK_STATUS, &Success);
+	if (!Success)
+	{
+		char InfoLog[512];
+		glGetProgramInfoLog(m_ProgramID, 512, NULL, InfoLog);
+		std::cout << "Shader linking failed.\n\t" << InfoLog << "\n";
+		return SHADER_ERROR;
+	}
+
+	m_UniformLocations.clear();
+
+	// Get uniforms
+	i32 UniformCount;
+	glGetProgramiv(m_ProgramID, GL_ACTIVE_UNIFORMS, &UniformCount);
+	std::cout << "Active Uniforms: " << UniformCount << "\n";
+
+	GLint MaxUniformNameLength = 0;
+	glGetProgramiv(m_ProgramID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &MaxUniformNameLength);
+	std::vector<GLchar> NameData(MaxUniformNameLength);
+
+	for (i32 i = 0; i < UniformCount; i++)
+	{
+		GLint	Size;			// size of the variable
+		GLenum	Type;			// type of the variable (float, vec3 or mat4, etc)
+		GLsizei ActualLength;	// name length
+
+		glGetActiveUniform(m_ProgramID, (GLuint)i, MaxUniformNameLength, &ActualLength, &Size, &Type, &NameData[0]);
+		std::string Name((char*)&NameData[0], ActualLength);
+
+		std::cout << "Attribute:\t" << i << "\nType:\t\t" << Type << "\nName:\t\t" << Name << "\n";
+
+		i32 Location = glGetUniformLocation(m_ProgramID, Name.c_str());
+		if (Location == -1)
+		{
+			std::cout << "\nError couldn't get uniform with name: " << Name << "\n";
+			continue;
+		}
+
+		m_UniformLocations[Name] = Location;
+	}
+
+	return 0;
+}
+
+char asciitolower(char in) {
+	if (in <= 'Z' && in >= 'A')
+		return in - ('Z' - 'z');
+	return in;
+}
+
+EShaderType CShaderProgram::GetShaderType(std::string a_FilePath)
+{
+	// we need lower
+	std::transform(a_FilePath.begin(), a_FilePath.end(), a_FilePath.begin(), asciitolower);
+	EShaderType type = EShaderType::Unknown;
+	if (a_FilePath.find("vertex") != std::string::npos)
+	{
+		type = EShaderType::Vertex;
+	}
+	else if (a_FilePath.find("fragment") != std::string::npos)
+	{
+		type = EShaderType::Fragment;
+	}
+	else if (a_FilePath.find("geometry") != std::string::npos)
+	{
+		type = EShaderType::Geometry;
+	}
+	return type;
 }
 
 }}}

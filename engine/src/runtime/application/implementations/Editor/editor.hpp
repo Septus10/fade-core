@@ -11,12 +11,12 @@ namespace Fade
 {
 
 class CWindow;	
-class FADE_APPLICATION_API CEditor : public CApplication
+class CEditor : public CApplication
 {
 public:
 	CEditor() = default;
 
-	~CEditor() = default;
+	~CEditor() override = default;
 
 	ETickResult Tick(double a_DeltaTime) override;
 
@@ -34,7 +34,6 @@ public:
 
 private:
 	float m_CurTime;
-	bool* m_ShouldStop;
 
 	Fade::TUniquePtr<Fade::PlatformCore::CWindow> m_MainWindow;
 };

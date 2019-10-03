@@ -150,7 +150,8 @@ public:
 	/*
 	 * Move CTor get the pointer from the other unique pointer and invalidate theirs
 	 */
-	TUniquePtr(TUniquePtr&& a_Other) noexcept
+	TUniquePtr(TUniquePtr&& a_Other) noexcept :
+		m_Data(Ptr())
 	{
 		Reset(a_Other.Release());
 	}

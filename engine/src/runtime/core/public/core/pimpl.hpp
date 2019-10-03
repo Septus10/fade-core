@@ -13,7 +13,7 @@ private:								\
     __pragma(warning(pop))
 
 #define FADE_INIT_PIMPL(x) \
-    m_Impl(std::make_unique<x::CImpl>())
+    m_Impl(MakeUnique<x::CImpl>())
 
 /* Brief:
 *  Creates pimpl object using a unique_ptr
@@ -43,10 +43,10 @@ public:
 	const T& operator*() const { return *m_Ptr; }
 
 	// arrow operator
-	T* operator->() { return m_Ptr.get(); }
-	const T* operator->() const { return m_Ptr.get(); }
+	T* operator->() { return m_Ptr.Get(); }
+	const T* operator->() const { return m_Ptr.Get(); }
 
 	// get() function
-	T* get() { return m_Ptr.get(); }
-	const T* get() const { return m_Ptr.get(); }
+	T* get() { return m_Ptr.Get(); }
+	const T* get() const { return m_Ptr.Get(); }
 };

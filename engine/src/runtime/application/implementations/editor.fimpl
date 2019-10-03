@@ -21,6 +21,23 @@
 				"Min": "3.2.1",
 				"Max": "3.2.1"
 			}
+		},
+		{
+			"Name": "soil",
+			"External": true,
+			"RequiredVersion":
+			{
+				"Min": "7.7.08",
+				"Max": "7.7.08"
+			}
+		},
+		{
+			"Name": "ResourceImporterHub",
+			"RequiredVersion": 
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
 		}
 	],
 }

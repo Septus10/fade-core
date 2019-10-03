@@ -1,60 +1,136 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Public">
-      <UniqueIdentifier>08378847-5A84-44D6-8642-417266253E19</UniqueIdentifier>
+      <UniqueIdentifier>3DF1331C-FA32-4820-A10C-4B14C4385B66</UniqueIdentifier>
     </Filter>
-    <Filter Include="Public\application">
-      <UniqueIdentifier>9E3301F1-D607-4A90-83D1-6B2A593F0871</UniqueIdentifier>
+    <Filter Include="Public">
+      <UniqueIdentifier>BC32A664-C528-4312-B8FA-BE80CF842AE9</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor">
-      <UniqueIdentifier>8001CF5A-6FEF-4C76-AFB6-D19873414A7D</UniqueIdentifier>
+      <UniqueIdentifier>5A2A6F5D-1890-45B8-86E1-101958A24265</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\ECS">
-      <UniqueIdentifier>540E58F6-C763-4D63-8779-EC4261973BE3</UniqueIdentifier>
+      <UniqueIdentifier>F6844C77-6B93-4303-A473-A26629E64A75</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Gameplay">
+      <UniqueIdentifier>3DEAC959-4211-43B8-9EBC-0E2FBB63C10F</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Gameplay\Components">
+      <UniqueIdentifier>A815DF2F-E914-4391-9E57-2D184C6E5084</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Rendering">
-      <UniqueIdentifier>6735FF0A-0461-4496-8043-47C3874F4330</UniqueIdentifier>
+      <UniqueIdentifier>35F67355-0003-422D-8821-02843668EB29</UniqueIdentifier>
     </Filter>
     <Filter Include="Editor\Rendering\Pipeline">
-      <UniqueIdentifier>{fa3b794d-5535-4c68-82d7-bcffb2772a79}</UniqueIdentifier>
+      <UniqueIdentifier>65D701A0-3840-4234-B28A-26043C0B9B7A</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\Resources">
+      <UniqueIdentifier>A3164C23-63FF-4DD4-B8C3-70DF9DCA4585</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Public\application\application.hpp">
-      <Filter>Public\application</Filter>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\application.hpp">
+      <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Public\application\ApplicationApi.hpp">
-      <Filter>Public\application</Filter>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\ApplicationApi.hpp">
+      <Filter>Public</Filter>
     </ClInclude>
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\editor.hpp">
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\editor.hpp">
       <Filter>Editor</Filter>
     </ClInclude>
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ECS.hpp">
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\stb_image.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Component.hpp">
       <Filter>Editor\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\IRenderable.hpp">
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ComponentStore.hpp">
+      <Filter>Editor\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ECS.hpp">
+      <Filter>Editor\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\ECSUtil.hpp">
+      <Filter>Editor\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Entity.hpp">
+      <Filter>Editor\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\System.hpp">
+      <Filter>Editor\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\SystemManager.hpp">
+      <Filter>Editor\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Entity.hpp">
+      <Filter>Editor\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Transform.hpp">
+      <Filter>Editor\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\World.hpp">
+      <Filter>Editor\Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Components\Component.h">
+      <Filter>Editor\Gameplay\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Components\Landscape2D.hpp">
+      <Filter>Editor\Gameplay\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\IRenderable.hpp">
       <Filter>Editor\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.hpp">
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.hpp">
       <Filter>Editor\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\Implementations\Editor\Rendering\Pipeline\ShaderProgram.hpp">
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Texture.hpp">
+      <Filter>Editor\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Pipeline\ShaderProgram.hpp">
       <Filter>Editor\Rendering\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\Resource.hpp">
+      <Filter>Editor\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\ResourceImporter.h">
+      <Filter>Editor\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\ResourceStorage.hpp">
+      <Filter>Editor\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Public\application\Application.cpp">
-      <Filter>Public\application</Filter>
-    </ClCompile>
-    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\editor.cpp">
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\editor.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="L:\Git\Fade-Engine\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.cpp">
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Component.cpp">
+      <Filter>Editor\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\Entity.cpp">
+      <Filter>Editor\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\ECS\System.cpp">
+      <Filter>Editor\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\World.cpp">
+      <Filter>Editor\Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Gameplay\Components\Landscape2D.cpp">
+      <Filter>Editor\Gameplay\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\SpriteRenderer.cpp">
       <Filter>Editor\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\Implementations\Editor\Rendering\Pipeline\ShaderProgram.cpp">
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Texture.cpp">
+      <Filter>Editor\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Rendering\Pipeline\ShaderProgram.cpp">
       <Filter>Editor\Rendering\Pipeline</Filter>
     </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Implementations\Editor\Resources\ResourceStorage.cpp">
+      <Filter>Editor\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="G:\Git\Fade-Engine2\Engine\Src\Runtime\Application\\Public\Application\Application.cpp" />
   </ItemGroup>
 </Project>

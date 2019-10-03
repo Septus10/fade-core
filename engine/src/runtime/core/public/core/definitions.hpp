@@ -58,6 +58,11 @@ using c8  = char;
 using c16 = char16_t;
 using c32 = char32_t;
 
+/**
+ * Unsigned char types
+ */
+using uc8 = unsigned char;
+
 using cstr = const char*;
 
 //===========================
