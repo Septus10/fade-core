@@ -182,7 +182,7 @@ void CLandscapeChunk::Create(u32 a_ChunkWidth, u32 a_ChunkHeight)
 	LoadLandscapeProgram();
 }
 
-void CLandscapeChunk::SetTileAtlas(Rendering::CTexture a_TileAtlas)
+void CLandscapeChunk::SetTileAtlas(Rendering::CTileAtlas a_TileAtlas)
 {
 	m_TileAtlas = a_TileAtlas;
 }
@@ -202,7 +202,7 @@ void CLandscapeChunk::Draw(glm::mat4 a_MVP)
 	sm_Landscape2DProgram.SetFloatValue("HorizontalTiles", float(m_ChunkWidth));
 	sm_Landscape2DProgram.SetFloatValue("VerticalTiles", float(m_ChunkHeight));
 
-	sm_Landscape2DProgram.SetVec("TilesetResolution", glm::vec2(m_TileAtlas.GetWidth(), m_TileAtlas.GetHeight()));
+	sm_Landscape2DProgram.SetVec("TilesetResolution", glm::vec2(m_TileAtlas.GetTexture().GetWidth(), m_TileAtlas.GetTexture().GetHeight()));
 	sm_Landscape2DProgram.SetVec("TileResolution", glm::vec2(56.f));
 	sm_Landscape2DProgram.SetVec("TilePadding", glm::vec2(4.f));
 
@@ -210,7 +210,7 @@ void CLandscapeChunk::Draw(glm::mat4 a_MVP)
 	sm_Landscape2DProgram.SetIntValue("Tilemap", 1);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_TileAtlas.GetTextureID());
+	glBindTexture(GL_TEXTURE_2D, m_TileAtlas.GetTexture().GetTextureID());
 
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, m_Tilemap.GetTextureID());

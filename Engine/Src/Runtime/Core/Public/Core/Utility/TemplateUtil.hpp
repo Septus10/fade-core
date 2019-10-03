@@ -94,6 +94,10 @@ public:
 	}
 };
 
+#ifdef max
+#undef max
+#endif
+
 // Increment type addition
 class IncrementAddition
 {
@@ -105,6 +109,8 @@ public:
 		return PreviousID + 1;
 	}
 };
+
+
 
 template <class BaseClass, class IncrementClass>
 class TUniqueIDBase

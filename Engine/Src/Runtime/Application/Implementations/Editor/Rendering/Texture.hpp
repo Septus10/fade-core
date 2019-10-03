@@ -29,22 +29,4 @@ protected:
  	Fade::i32 m_Width, m_Height;
 };
 
-class CTileAtlas : public CTexture
-{
-public:
-	CTileAtlas() {}
-	CTileAtlas(fstl::String a_TexturePath, glm::vec2 a_TileDimensions, u32 a_PaddingWith);
-
-	u32 GetTileWidth();
-	u32 GetTileHeight();
-
-	glm::vec2 GetTileDimensions() { return m_TileDimensions; }
-
-	f32 GetPaddingWidth() { return m_PaddingWidth; }
-
-private:
-	glm::vec2 m_TileDimensions;
-	f32 m_PaddingWidth;
-};
-
 } }

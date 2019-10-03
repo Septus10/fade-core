@@ -4,6 +4,7 @@
 #include <Core/Containers/String.hpp>
 #include <Rendering/Pipeline/ShaderProgram.hpp>
 #include <Rendering/Texture.hpp>
+#include <Rendering/TileAtlas.hpp>
 
 namespace Fade {
 
@@ -16,7 +17,7 @@ public:
 
 	void Create(u32 a_ChunkWidth, u32 a_ChunkHeight);
 
-	void SetTileAtlas(Rendering::CTexture a_Texture);
+	void SetTileAtlas(Rendering::CTileAtlas a_TileAtlas);
 	void SetTilemap(Rendering::CTexture a_Texture);
 
 	void Draw(glm::mat4 a_MVP);
@@ -29,7 +30,10 @@ private:
 	static u32 sm_TileWidth;
 	static u32 sm_TileHeight;
 
-	Rendering::CTexture m_Tilemap, m_TileAtlas;
+	// Todo, make these pointers
+	Rendering::CTexture m_Tilemap;
+	Rendering::CTileAtlas m_TileAtlas;
+
 	u32 m_MapTileWidth, m_MapTileHeight;
 
 	u32 m_ChunkWidth, m_ChunkHeight, m_NumIndices;
