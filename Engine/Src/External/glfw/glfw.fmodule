@@ -1,0 +1,6 @@
+{
+	"Name": "glfw",
+	"Version": "3.2.1",
+	"ExternalLibrary": "true",
+	"LibraryName": "glfw3"
+}

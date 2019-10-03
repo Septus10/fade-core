@@ -1,0 +1,43 @@
+{
+	"$schema": "http://schema.vnunen.nl/fade_build_config.json#",
+	"Name": "Editor",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "glew",
+			"External":true,
+			"RequiredVersion":
+			{
+				"Min": "2.0.0",
+				"Max": "2.0.0"
+			}
+		},
+		{
+			"Name": "glm",
+			"External":true,
+			"RequiredVersion":
+			{
+				"Min": "3.2.1",
+				"Max": "3.2.1"
+			}
+		},
+		{
+			"Name": "soil",
+			"External": true,
+			"RequiredVersion":
+			{
+				"Min": "7.7.08",
+				"Max": "7.7.08"
+			}
+		},
+		{
+			"Name": "ResourceImporterHub",
+			"RequiredVersion": 
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		}
+	],
+}

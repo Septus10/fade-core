@@ -1,0 +1,6 @@
+{
+	"Name": "vulkan",
+	"Version": "1.0.42.1",
+	"ExternalLibrary": "true",
+	"LibraryName": "vulkan-1"
+}

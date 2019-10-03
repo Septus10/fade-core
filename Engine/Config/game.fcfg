@@ -1,0 +1,40 @@
+{
+	"Modules": 
+	[
+		{
+			"Name": "Application",
+			"Type": "Runtime",
+			"Implementation": "Game"
+		},
+		{
+			"Name": "Core",
+			"Type": "Runtime",
+			"Implementation": "Default"	
+		},
+		{
+			"Name": "PlatformCore",
+			"Type": "Runtime",
+			"Implementation": "Windows"
+		},
+		{
+			"Name": "Run",
+			"Type": "Runtime",
+			"Implementation": "Windows"	
+		},
+		{
+			"Name": "ResourceImporterHub",
+			"Type": "Editor",
+			"Implementation": "Default"
+		},
+		{
+			"Name": "ResourceImporter",
+			"Type": "Editor",
+			"Implementation" :"Model"
+		},
+		{
+			"Name": "ResourceImporter",
+			"Type": "Editor",
+			"Implementation" :"Texture"
+		}
+	]
+}
