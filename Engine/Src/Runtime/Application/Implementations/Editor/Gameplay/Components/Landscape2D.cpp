@@ -37,7 +37,7 @@ void CLandscape2D::Draw(glm::mat4 a_MVP)
 {
 	for (u32 i = 0; i < m_NumChunks; ++i)
 	{
-		m_Chunks[i]->Draw(a_MVP);
+		m_Chunks[i]->Draw(glm::vec2());
 	}
 }
 
@@ -123,22 +123,22 @@ void CLandscapeChunk::Create(u32 a_ChunkWidth, u32 a_ChunkHeight)
 			glm::vec2 UV = glm::vec2(float(x) / m_ChunkWidth + CellUVHalfWidth, float(y) / m_ChunkHeight + CellUVHalfHeight);
 
 			// Add vertices of quad
-				// Top left (0, 1)
+				// Top left (0, 0)
 			vertices.Add(SVertex2D(
 				glm::vec2(x * sm_TileWidth, y * sm_TileHeight + sm_TileHeight), 
-				glm::vec2(0.0001f, 0.9999f), UV));
-				// Bot left (0, 0)
+				glm::vec2(0.f, 0.f), UV));
+				// Bot left (0, 1)
 			vertices.Add(SVertex2D(
 				glm::vec2(x * sm_TileWidth, y * sm_TileHeight), 
-				glm::vec2(0.0001f, 0.0001f), UV));
-				// Bot right (1, 0)
+				glm::vec2(0.f, 1.f), UV));
+				// Bot right (1, 1)
 			vertices.Add(SVertex2D(
 				glm::vec2(x * sm_TileWidth + sm_TileWidth, y * sm_TileHeight), 
-				glm::vec2(0.9999f, 0.0001f), UV));
-				// Top right (1, 1)
+				glm::vec2(1.f, 1.f), UV));
+				// Top right (1, 0)
 			vertices.Add(SVertex2D(
 				glm::vec2(x * sm_TileWidth + sm_TileWidth, y * sm_TileHeight + sm_TileHeight), 
-				glm::vec2(0.9999f, 0.9999f), UV));
+				glm::vec2(1.f, 0.f), UV));
 			
 			// Add indices of quad
 				// first tri: tl, bl, br
@@ -192,7 +192,7 @@ void CLandscapeChunk::SetTilemap(Rendering::CTexture a_Texture)
 	m_Tilemap = a_Texture;
 }
 
-void CLandscapeChunk::Draw(glm::mat4 a_MVP)
+void CLandscapeChunk::Draw(glm::vec2 a_CamPos)
 {
 	// Use the landscape shader
 	sm_Landscape2DProgram.Use();
@@ -203,11 +203,12 @@ void CLandscapeChunk::Draw(glm::mat4 a_MVP)
 	sm_Landscape2DProgram.SetFloatValue("VerticalTiles", float(m_ChunkHeight));
 
 	sm_Landscape2DProgram.SetVec("TilesetResolution", glm::vec2(m_TileAtlas.GetTexture().GetWidth(), m_TileAtlas.GetTexture().GetHeight()));
-	sm_Landscape2DProgram.SetVec("TileResolution", glm::vec2(56.f));
-	sm_Landscape2DProgram.SetVec("TilePadding", glm::vec2(4.f));
+	sm_Landscape2DProgram.SetVec("TileResolution", glm::vec2(m_TileAtlas.GetTileDimensions()));
 
 	sm_Landscape2DProgram.SetIntValue("Tileset", 0);
 	sm_Landscape2DProgram.SetIntValue("Tilemap", 1);
+
+	sm_Landscape2DProgram.SetVec("CamPos", a_CamPos);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_TileAtlas.GetTexture().GetTextureID());

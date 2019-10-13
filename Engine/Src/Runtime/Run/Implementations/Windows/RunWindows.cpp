@@ -17,7 +17,7 @@ LRESULT CALLBACK WindowProcedure(HWND a_Window, UINT a_Message, WPARAM a_wParam,
 	switch (a_Message)
 	{
 	case WM_CREATE:
-		DragAcceptFiles(a_Window, false);
+		DragAcceptFiles(a_Window, true);
 		break;
 	case WM_DROPFILES:
 	{
@@ -35,6 +35,12 @@ LRESULT CALLBACK WindowProcedure(HWND a_Window, UINT a_Message, WPARAM a_wParam,
 		{
 			g_ShouldQuit = true;
 		}
+		break;
+	case WM_KEYDOWN:
+		g_Application->OnKeyDown(a_wParam);
+		break;
+	case WM_KEYUP:
+		g_Application->OnKeyUp(a_wParam);
 		break;
 	case WM_CHAR:
 		break;

@@ -14,15 +14,20 @@
 namespace Fade {
 namespace Rendering {
 
-CTexture::CTexture(fstl::String a_TexturePath)
+CTexture::CTexture(fstl::String a_TexturePath, u16 a_Flags)
 {
-	LoadTexture(a_TexturePath);
+	LoadTexture(a_TexturePath, a_Flags);
 }
 
-bool CTexture::LoadTexture(fstl::String a_TexturePath)
+bool CTexture::LoadTexture(fstl::String a_TexturePath, u16 a_Flags)
 {
 	u32 format;
-	Fade::uc8* imageData = getImageDataFromPath(a_TexturePath, format);
+	Fade::uc8* imageData = getImageDataFromPath(a_TexturePath, format, a_Flags);
+
+	if (!imageData)
+	{
+		return false;
+	}
 
 	glGenTextures(1, &m_TextureID);
 	glBindTexture(GL_TEXTURE_2D, m_TextureID);
@@ -42,9 +47,9 @@ bool CTexture::LoadTexture(fstl::String a_TexturePath)
 	return true;
 }
 
-Fade::uc8* CTexture::getImageDataFromPath(fstl::String a_Filepath, Fade::u32& a_OutFormat)
+Fade::uc8* CTexture::getImageDataFromPath(fstl::String a_Filepath, Fade::u32& a_OutFormat, u16 a_Flags)
 {
-	stbi_set_flip_vertically_on_load(1);
+	stbi_set_flip_vertically_on_load(a_Flags & FTIF_FLIP_VERTICALLY);
 	Fade::i32 channels;
 	Fade::uc8* imageData = stbi_load(a_Filepath.c_str(), &m_Width, &m_Height, &channels, 0);
 	if (!imageData)

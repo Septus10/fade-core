@@ -45,63 +45,73 @@ unsigned int indices[] = {
 	1, 2, 3  // second triangle
 };
 
-f32 g_XPosAdd = 0.f;
-float g_XPosTimer = 0.f;
-Rendering::CTexture texture;
-Rendering::CTexture sprite;
-Rendering::CTexture tilesheet;
-float g_AnimTime;
-float g_FrameTime = 0.25f;
-
-int g_Column = 0;
-
 CLandscapeChunk g_Chunk;
 
+float g_Right = 0.0f;
+float g_Up = 0.0f;
+
+void CEditor::OnKeyUp(i32 a_KeyIdx)
+{
+	switch (a_KeyIdx)
+	{
+	case 37:
+		g_Right = 0.0f;
+		break;
+	case 39:
+		g_Right = 0.0f;
+		break;
+	case 38:
+		g_Up = 0.0f;
+		break;
+	case 40:
+		g_Up = 0.0f;
+		break;
+	}
+}
+
+void CEditor::OnKeyDown(i32 a_KeyIdx)
+{
+	switch (a_KeyIdx)
+	{
+	case 37:
+		g_Right = -1.0f;
+		break;
+	case 39:
+		g_Right = 1.0f;
+		break;
+	case 38:
+		g_Up = 1.0f;
+		break;
+	case 40:
+		g_Up = -1.0f;
+		break;
+	}
+}
+
+const float g_Speed = 20.f;
 
 ETickResult CEditor::Tick(double a_DeltaTime)
 {
 	float fDeltaTime = float(a_DeltaTime);
-	g_XPosTimer += fDeltaTime;
-	g_XPosAdd = std::sin(g_XPosTimer);
 
 	glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
 
-	/*Program.Use();
-	
-	Program.SetFloatValue(std::string("xPos"), g_XPosAdd);
-	
-
-	glBindTexture(GL_TEXTURE_2D, texture.GetTextureID());
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-	SpriteProgram.Use();
-	
-	g_AnimTime += fDeltaTime;
-	if (g_AnimTime > g_FrameTime)
-	{
-		g_Column = (g_Column + 1) % 4;
-		g_AnimTime = 0.f;
-	}
-
-	const static float nx = 1.f / 9.f;
-	const static float ny = 1.f / 4.f;
-	
-	float Column = float(g_Column);
-	float Row = 0;
-
-	SpriteProgram.SetFloatValue("nx", nx);
-	SpriteProgram.SetFloatValue("ny", ny);
-	SpriteProgram.SetFloatValue("Column", Column);
-	SpriteProgram.SetFloatValue("Row", Row);
-	
-	glBindTexture(GL_TEXTURE_2D, sprite.GetTextureID());
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
-
 	FW::FileWatcher::Get().update();
+	
+	glm::vec2 input(g_Right, g_Up);
+	glm::vec2 normalizedInput;
+	float inputLength = glm::length(input);
+	if (inputLength > 0.0f)
+	{
+		normalizedInput = glm::normalize(input);
+	}
+	else
+	{
+		normalizedInput = input;
+	}
+	m_CamPos += normalizedInput * g_Speed * fDeltaTime;
 
-	g_Chunk.Draw(glm::mat4(0.f));
+	g_Chunk.Draw(m_CamPos);
 
 	SwapBuffers(DeviceContext);
 
@@ -115,6 +125,7 @@ void CEditor::FixedTick(double a_FixedDeltaTime)
 
 bool CEditor::PreInitialize()
 {
+	m_CamPos = glm::vec2(0.f);
 	m_MainWindow = GetWindow();
 	
 	auto& Components = Fade::ECS::Util::Registry<ECS::CComponentBase>::GetRegisteredObjects();
@@ -287,7 +298,7 @@ bool CEditor::Initialize()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	g_Chunk.Create(4, 4);
-	g_Chunk.SetTileAtlas(Rendering::CTileAtlas(Rendering::CTexture(".\\Images\\TempTilemap.tga"), 56, 4));
+	g_Chunk.SetTileAtlas(Rendering::CTileAtlas(Rendering::CTexture(".\\Images\\AWTileSheet.png"), 16));
 	g_Chunk.SetTilemap(Rendering::CTexture(".\\Images\\Tilemap.tga"));
 
 	return true;

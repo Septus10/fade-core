@@ -7,6 +7,8 @@
 #include <PlatformCore/Window/Window.hpp>
 #include <vector>
 
+#include <glm.hpp>
+
 namespace Fade
 {
 
@@ -32,8 +34,12 @@ public:
 
 	const PlatformCore::CWindow* GetMainWindowPtr() const override { return m_MainWindow.Get(); }
 
+	void OnKeyUp(i32 a_KeyIdx) override;
+	void OnKeyDown(i32 a_KeyIdx) override;
+
 private:
 	float m_CurTime;
+	glm::vec2 m_CamPos;
 
 	Fade::TUniquePtr<Fade::PlatformCore::CWindow> m_MainWindow;
 };

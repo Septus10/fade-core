@@ -20,7 +20,7 @@ public:
 	void SetTileAtlas(Rendering::CTileAtlas a_TileAtlas);
 	void SetTilemap(Rendering::CTexture a_Texture);
 
-	void Draw(glm::mat4 a_MVP);
+	void Draw(glm::vec2 a_CamPos);
 
 private:	
 	static Rendering::Pipeline::CShaderProgram sm_Landscape2DProgram;

@@ -7,13 +7,16 @@
 namespace Fade {
 namespace Rendering {
 
+// flags
+#define	FTIF_FLIP_VERTICALLY	0x01
+
 class CTexture
 {
 public:
 	CTexture() {}
-	CTexture(fstl::String a_TexturePath);
+	CTexture(fstl::String a_TexturePath, u16 a_Flags = 0);
 
-	bool LoadTexture(fstl::String a_TexturePath);
+	bool LoadTexture(fstl::String a_TexturePath, u16 a_Flags = 0);
 
 	u32 GetTextureID() const { return m_TextureID; }
 
@@ -21,7 +24,7 @@ public:
 	i32 GetHeight() const { return m_Height; }
 
 protected:
-	Fade::uc8* getImageDataFromPath(fstl::String a_Filepath, Fade::u32& a_OutFormat);
+	Fade::uc8* getImageDataFromPath(fstl::String a_Filepath, Fade::u32& a_OutFormat, u16 a_Flags);
 	void freeImageData(Fade::uc8* a_Data);
 
 	Fade::u32 m_TextureID;

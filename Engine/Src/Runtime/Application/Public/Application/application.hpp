@@ -52,6 +52,9 @@ public:
 	//
 	//bool DestroyWindow(u32 a_WindowIndex);
 
+	virtual void OnKeyDown(i32 a_KeyIdx) = 0;
+	virtual void OnKeyUp(i32 a_KeyIdx) = 0;
+
 protected:
 };
 

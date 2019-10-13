@@ -9,10 +9,9 @@ class CTileAtlas
 {
 public:
 	CTileAtlas() {}
-	CTileAtlas(CTexture a_Texture, u32 a_TileDimensions, u32 a_Padding) :
+	CTileAtlas(CTexture a_Texture, float a_TileDimensions) :
 		m_Texture(a_Texture),
-		m_TileDimensions(a_TileDimensions),
-		m_Padding(a_Padding)
+		m_TileDimensions(a_TileDimensions)
 	{ }
 	
 	const CTexture& GetTexture() const
@@ -20,11 +19,15 @@ public:
 		return m_Texture;
 	}
 
+	glm::vec2 GetTileDimensions() const
+	{
+		return m_TileDimensions;
+	}
+
 private:
 	CTexture m_Texture;
 
-	u32 m_TileDimensions;
-	u32 m_Padding;
+	glm::vec2 m_TileDimensions;
 };
 
 } }
