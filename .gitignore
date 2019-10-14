@@ -25,7 +25,8 @@
 *.lai
 *.la
 *.a
-[Ee]ngine/src/runtime/**/*.lib
+[Ee]ngine/[Ss]rc/[Rr]untime/**/*.lib
+[Ee]ngine/[Ss]rc/[Ee]ditor/**/*.lib
 
 # Executables
 *.exe
