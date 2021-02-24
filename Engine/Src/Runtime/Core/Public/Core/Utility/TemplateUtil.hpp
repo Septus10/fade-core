@@ -2,6 +2,14 @@
 
 #include <Core/definitions.hpp>
 
+/**
+ * This document is a custom implementation of template helpers that can be found in
+ * <type_traits> 
+ *
+ * The reason for using this is mainly for having functionality in a uniform coding style
+ * and additionally, it's great for learning purposes.
+ */
+
 namespace Fade {
 
 template <typename Type>
@@ -22,11 +30,35 @@ struct TRemoveReference<Type&&>
 	using TType = Type;
 };
 
-template <class Type> 
-inline constexpr typename TRemoveReference<Type>::TType&& Move(Type&& a_Arg) noexcept
+template <typename Type>
+struct TRemovePointer
+{	// Remove pointer from type
+	using TType = Type;
+};
+
+template <typename Type>
+struct TRemovePointer<Type*>
 {
-	return (static_cast<typename TRemoveReference<Type>::TType&&>(a_Arg));
-}
+	using TType = Type;
+};
+
+template <typename Type>
+struct TRemoveExtent 
+{
+	using TType = Type;
+};
+
+template <typename Type, usize Size>
+struct TRemoveExtent<Type[Size]>
+{
+	using TType = Type;
+};
+
+template <typename Type>
+struct TRemoveExtent<Type[]>
+{
+	using TType = Type;
+};
 
 template <class ValueType, ValueType Value>
 struct TStaticConstant
@@ -65,6 +97,62 @@ template <bool Value>
 struct TPredicateBase : TStaticConstant<bool, Value>
 {};
 
+// Check if type is pointer
+template <typename Type>
+struct TIsPointer : TBoolConstant<false>
+{ };
+
+template <typename Type>
+struct TIsPointer<Type*> : TBoolConstant<true>
+{ };
+
+// Check if type is a reference (both r-value and regular)
+template <typename Type>
+struct TIsReference : TBoolConstant<false>
+{ };
+
+template <typename Type>
+struct TIsReference<Type&> : TBoolConstant<true>
+{ };
+
+template <typename Type>
+struct TIsReference<Type&&> : TBoolConstant<true>
+{ };
+
+template <typename Type>
+struct TIsLvalueReference : TBoolConstant<false>
+{ };
+
+template <typename Type>
+struct TIsLvalueReference<Type&> : TBoolConstant<true>
+{ };
+
+template <typename Type>
+struct TIsRvalueReference : TBoolConstant<false>
+{ };
+
+template <typename Type>
+struct TIsRvalueReference<Type&&> : TBoolConstant<true> 
+{ };
+
+template <typename Type>
+inline constexpr bool TIsRvalueReferenceVal = TIsRvalueReference<Type>::sm_Value;
+
+template <typename Type>
+struct TIsArray : TBoolConstant<false>
+{ };
+
+template <typename Type>
+struct TIsArray<Type[]> : TBoolConstant<true>
+{ };
+
+template <typename Type, usize Size>
+struct TIsArray<Type[Size]> : TBoolConstant<true>
+{ };
+
+template <typename Type>
+inline constexpr bool TIsArrayVal = TIsArray<Type>::sm_Value;
+
 // Enable if default, no Type
 template <bool Test, class Type = void>
 struct TEnableIf
@@ -77,9 +165,74 @@ struct TEnableIf<true, ValueType>
 	typedef ValueType TType;
 };
 
+// Use type 1 if test is true
+template <bool Test, class Type1, class Type2>
+struct TConditional
+{
+	using TType = Type1;
+};
+
+// Use type 2 if test is false
+template <class Type1, class Type2>
+struct TConditional<false, Type1, Type2>
+{
+	using TType = Type2;
+};
+
 template<class From, class To>
-struct TIsConvertible : TPredicateBase<__is_convertible_to(From, To)>
+struct TIsConvertible 
+	: TPredicateBase<__is_convertible_to(From, To)>
 { };
+
+
+template <bool FirstValue, class First, class... Rest>
+struct TConjunctionBase
+{
+	using TType = First;
+};
+
+template <class True, class Next, class... Rest>
+struct TConjunctionBase<true, True, Next, Rest...>
+{
+	using TType = typename TConjunctionBase<Next::sm_Value, Next, Rest...>::TType;
+};
+
+/**
+ * If we have no traits, we are a true type
+ */
+template <class... Traits>
+struct TConjunction : TTrueType 
+{ };
+
+/**
+ * If we have traits, unpack until we find one that's false
+ */
+template <class First, class... Rest>
+struct TConjunction<First, Rest...>
+	: TConjunctionBase<First::sm_Value, First, Rest...>::TType
+{ };
+
+template <class... Traits>
+inline constexpr bool TConjunctionVal = TConjunction<Traits...>::sm_Value;
+
+template <class Type>
+inline constexpr Type&& Forward(TRemoveReference<Type>& a_Arg) noexcept
+{	// forward an lvalue as either an lvalue or an rvalue
+	return (static_cast<Type&&>(a_Arg));
+}
+
+template <class Type>
+inline constexpr Type&& Forward(TRemoveReference<Type>&& a_Arg) noexcept
+{	// forward an rvalue as an rvalue
+	static_assert(!is_lvalue_reference_v<Type>, "bad forward call")
+		return (static_cast<Type&&>(a_Arg));
+}
+
+template <class Type>
+inline constexpr typename TRemoveReference<Type>::TType&& Move(Type&& a_Arg) noexcept
+{	// Move function
+	return (static_cast<typename TRemoveReference<Type>::TType&&>(a_Arg));
+}
 
 
 // Increment type bitshift

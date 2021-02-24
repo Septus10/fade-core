@@ -4,6 +4,15 @@
 	"Version": "0.0.1",
 	"Dependencies":
 	[
+		{
+			"Name": "glm",
+			"External": true,
+			"RequiredVersion":
+			{
+				"Min": "3.2.1",
+				"Max": "3.2.1"
+			}
+		}
 	],
 	"Implementations": 
 	[

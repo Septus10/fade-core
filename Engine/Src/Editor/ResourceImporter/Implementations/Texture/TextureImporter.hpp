@@ -9,7 +9,7 @@ FADE_MODULE_DEFINE(TextureImporter)
 namespace Fade { namespace Resources {
 
 class CResource;
-class CTextureImporter : public CResourceImporter
+class CTextureImporter : public IResourceImporter
 {
 public:
 	CTextureImporter();

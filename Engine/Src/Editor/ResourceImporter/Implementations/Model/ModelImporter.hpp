@@ -8,7 +8,7 @@ FADE_MODULE_DEFINE(ModelImporter)
 namespace Fade { namespace Resources {
 
 class CResource;
-class CModelImporter : public CResourceImporter
+class CModelImporter : public IResourceImporter
 {
 public:
 	CModelImporter();

@@ -1,10 +1,17 @@
 #include "WindowsWindow.hpp"
 
+// STL includes
 #include <iostream>
+#include <unordered_map>
+
+// Engine includes
 #include <PlatformCore/PlatformCore.hpp>
+#include <Core/ServiceLocator/ServiceLocator.hpp>
 
 using namespace Fade;
 using namespace PlatformCore;
+
+const TCHAR CWindowsWindow::sm_AppWindowClass[] = TEXT("FadeWindow");
 
 CWindowsWindow::CWindowsWindow() :
 	m_WindowHandle(nullptr)
@@ -18,8 +25,6 @@ CWindowsWindow::~CWindowsWindow()
 	}
 }
 
-const TCHAR CWindowsWindow::sm_AppWindowClass[] = TEXT("FadeWindow");
-
 // https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Source/Runtime/ApplicationCore/Private/Windows/WindowsWindow.cpp
 // line 35 & 36
 static i32 WindowsAeroBorderSize		= 8;
@@ -27,6 +32,7 @@ static i32 WindowsStandardBorderSize	= 4;
 
 bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 {
+	CWindowsWindow* ParentWindow = dynamic_cast<CWindowsWindow*>(a_Parent);
 	m_WindowSettings = a_Settings;
 	// If there's already a window created
 	if (m_WindowHandle)
@@ -37,6 +43,11 @@ bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 
 	u32 WindowExStyle = 0;
 	u32 WindowStyle = 0;
+
+	u32 WidthToCreate = m_WindowSettings.m_Width;
+	u32 HeightToCreate = m_WindowSettings.m_Height;
+	u32 PosX = m_WindowSettings.m_PosX;
+	u32 PosY = m_WindowSettings.m_PosY;
 
 	if (!m_WindowSettings.m_HasBorder)
 	{
@@ -98,17 +109,17 @@ bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 		m_WindowSettings.m_PosX -= BorderRect.left;
 		m_WindowSettings.m_PosY -= BorderRect.top;
 		m_WindowSettings.m_Width -= BorderRect.right - BorderRect.left;
-		m_WindowSettings.m_Width -= BorderRect.bottom - BorderRect.top;
+		m_WindowSettings.m_Height -= BorderRect.bottom - BorderRect.top;
 	}
 
 	m_WindowHandle = CreateWindowEx(
 		WindowExStyle,
-		sg_WindowClassName,
+		sm_AppWindowClass,
 		m_WindowSettings.m_Title,
 		WindowStyle,
-		m_WindowSettings.m_PosX, m_WindowSettings.m_PosY,
-		m_WindowSettings.m_Width, m_WindowSettings.m_Height,
-		a_Parent ? static_cast<HWND>(a_Parent->GetWindowHandle()) : nullptr,
+		PosX, PosY,
+		WidthToCreate, HeightToCreate,
+		ParentWindow ? ParentWindow->GetWindowHandle() : nullptr,
 		nullptr, GetModuleHandle(NULL), nullptr);
 
 	if (m_WindowHandle == nullptr)
@@ -126,6 +137,11 @@ bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 		return false;
 	}
 
+	m_WindowPos.x = m_WindowSettings.m_PosX;
+	m_WindowPos.y = m_WindowSettings.m_PosY;
+	m_WindowSize.x = m_WindowSettings.m_Width;
+	m_WindowSize.y = m_WindowSettings.m_Height;
+	
 	return true;
 }
 
@@ -149,12 +165,26 @@ void CWindowsWindow::BringToFront()
 {
 }
 
-void CWindowsWindow::Focus()
+void CWindowsWindow::SetCapture(bool a_NewCapture)
 {
+	if (a_NewCapture)
+	{
+		::SetCapture(m_WindowHandle);
+	}
+	else
+	{
+		::ReleaseCapture();
+	}
+}
+
+void CWindowsWindow::SetFocus()
+{
+	::SetFocus(m_WindowHandle);	
 }
 
 void CWindowsWindow::Reshape(i32 a_X, i32 a_Y, i32 a_Width, i32 a_Height)
 {
+
 }
 
 void CWindowsWindow::Move(i32 a_X, i32 a_Y)
@@ -170,44 +200,17 @@ void CWindowsWindow::Maximize()
 	::ShowWindow(m_WindowHandle, SW_MAXIMIZE);
 }
 
-HRESULT Fade::PlatformCore::CWindowsWindow::QueryInterface(REFIID iid, void ** ppvObject)
+bool CWindowsWindow::IsCapture() const
 {
-	return E_NOTIMPL;
+	return ::GetCapture() == m_WindowHandle;
 }
 
-ULONG Fade::PlatformCore::CWindowsWindow::AddRef(void)
+bool CWindowsWindow::IsFocus() const
 {
-	return 0;
+	return ::GetFocus() == m_WindowHandle;
 }
 
-ULONG Fade::PlatformCore::CWindowsWindow::Release(void)
+TSharedPtr<CWindow> CWindow::Get()
 {
-	return 0;
-}
-
-HRESULT Fade::PlatformCore::CWindowsWindow::DragEnter(IDataObject * pDataObj, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect)
-{
-	std::cout << "Window::DragEnter: " << pDataObj << "\n";
-	return E_NOTIMPL;
-}
-
-HRESULT Fade::PlatformCore::CWindowsWindow::DragLeave()
-{
-	return E_NOTIMPL;
-}
-
-HRESULT Fade::PlatformCore::CWindowsWindow::DragOver(DWORD grfKeyState, POINTL pt, DWORD * pdwEffect)
-{
-	std::cout << "Window::DragOver: " << grfKeyState << "\n";
-	return E_NOTIMPL;
-}
-
-HRESULT Fade::PlatformCore::CWindowsWindow::Drop(IDataObject * pDataObj, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect)
-{
-	return E_NOTIMPL;
-}
-
-TUniquePtr<CWindow> GetWindow()
-{
-	return MakeUnique<CWindowsWindow>();
+	return std::make_shared<CWindowsWindow>();
 }

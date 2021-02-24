@@ -3,108 +3,10 @@
 #include <Core/CoreApi.hpp>
 
 #include <Core/Utility/TemplateUtil.hpp>
+#include <Core/Utility/MemoryUtil.hpp>
 #include <cassert>
 
 namespace Fade {
-
-// Default deleter for TUniquePtr
-template <typename ValueType>
-struct FADE_CORE_API TDefaultDelete
-{
-	/*
-	 * Default constructor
-	 */
-	constexpr TDefaultDelete() noexcept = default;
-
-	/*
-	 * Copy constructor
-	 */
-	constexpr TDefaultDelete(const TDefaultDelete&) noexcept = default;
-
-	/*
-	 * Destructor
-	 */
-	~TDefaultDelete() = default;
-
-	/*
-	 * Copy assignment
-	 */
-	TDefaultDelete& operator=(const TDefaultDelete&) noexcept = default;
-	
-	/*
-	 * Copy constructor for default deleter with other value type
-	 * Note this constructor is only available if our value type pointer and the other value type pointer are convertible
-	 */
-	template <
-		typename OtherType,
-		typename = typename TEnableIf<TIsConvertible<ValueType*, OtherType*>::sm_Value>::TType
-	>
-	TDefaultDelete(const TDefaultDelete<OtherType>&) noexcept
-	{}
-
-	/*
-	 * Parenthesis operator, takes pointer as parameter that will be deleted
-	 */
-	void operator()(ValueType* a_Ptr) const noexcept
-	{
-		static_assert(0 < sizeof(ValueType),
-			"Size of ValueType is 0, \
-			Unable to delete an incomplete type");
-		delete a_Ptr;
-	}
-};
-
-// Default array deleter for TUniquePtr
-template <typename ValueType>
-struct FADE_CORE_API TDefaultDelete<ValueType[]>
-{
-	/*
-	 * Default constructor
-	 */
-	constexpr TDefaultDelete() noexcept = default;
-
-	/*
-	 * Copy constructor
-	 */
-	constexpr TDefaultDelete(const TDefaultDelete&) noexcept = default;
-
-	/*
-	 * Destructor
-	 */
-	~TDefaultDelete() = default;
-
-	/*
-	 * Copy assignment
-	 */
-	TDefaultDelete& operator=(const TDefaultDelete&) noexcept = default;
-
-	/*
-	 * Copy constructor for default deleter with other value type
-	 * Note this constructor is only available if our value type and the other value type are convertible
-	 */
-	template <
-		typename OtherType,
-		typename = typename TEnableIf<TIsConvertible<OtherType(*)[], ValueType(*)[]>::sm_Value>::TType
-	> 
-	TDefaultDelete(const TDefaultDelete<OtherType[]>&) noexcept
-	{}
-
-	/*
-	 * Parenthesis operator
-	 * Note this function is only available if the pointers to arrays of our value type and the other value type are convertible
-	 */
-	template < 
-		typename OtherType,						// OtherType(*)[] and ValueType(*)[] are pointers-to-an-array
-		typename = typename TEnableIf<TIsConvertible<OtherType(*)[], ValueType(*)[]>::sm_Value>::TType 
-	> 
-	void operator()(OtherType* a_Ptr) const noexcept
-	{
-		static_assert(0 < sizeof(OtherType),
-			"Size of OtherType is 0, \
-			Unable to delete an incomplete type");
-		delete[] a_Ptr;
-	}
-};
 
 template <typename ValueType, typename Deleter = TDefaultDelete<ValueType>>
 class TUniquePtr
@@ -173,6 +75,16 @@ public:
 	//====================================================================================//
 	// Operators
 	//====================================================================================//
+	explicit operator bool() const
+	{
+		return IsValid();
+	}
+
+	bool operator!() const
+	{
+		return !IsValid();
+	}
+	
 	Ref operator* ()
 	{
 		return *m_Data;
@@ -180,12 +92,37 @@ public:
 
 	Ptr operator-> ()
 	{
+#if FADE_DEBUG
+		assert(m_Data != nullptr);
+#endif
 		return m_Data;
 	}
 
 	bool operator==(ConstPtr a_Other)
 	{
 		return m_Data == a_Other;
+	}
+
+	template <class OtherType, class OtherDeleter,
+		typename = TEnableIf<TIsConvertible<OtherType*, ValueType*>::sm_Value>::TType>
+	bool operator==(const TUniquePtr<OtherType, OtherDeleter>& a_Other)
+	{
+		return m_Data == a_Other.m_Data;
+	}
+
+	bool operator==(const TUniquePtr<ValueType, Deleter>& a_Other)
+	{
+		return m_Data == a_Other.m_Data;
+	}
+
+	bool operator==(nullptr_t)
+	{
+		return m_Data == nullptr;
+	}
+
+	bool operator!=(nullptr_t)
+	{
+		return m_Data != nullptr;
 	}
 
 	template <class OtherType, class OtherDeleter,
@@ -251,22 +188,29 @@ public:
 	}
 };
 
-template <typename T>
-TUniquePtr<T> MakeUnique()
+template <typename ObjectType>
+TUniquePtr<ObjectType> MakeUnique()
 {
-	return TUniquePtr<T>(new T());
+	return TUniquePtr<ObjectType>(new ObjectType());
 }
 
-template <typename T>
-TUniquePtr<T> MakeUnique(T* a_Pointer)
+template <typename ObjectType>
+TUniquePtr<ObjectType> MakeUnique(ObjectType* a_Pointer)
 {
-	return TUniquePtr<T>(a_Pointer);
+	return TUniquePtr<ObjectType>(a_Pointer);
 }
 
-template <typename T, typename... Args>
-TUniquePtr<T> MakeUnique(Args&&... a_Arguments)
+template <typename ObjectType, typename OtherType, 
+	typename = TEnableIf<TIsConvertible<OtherType, ObjectType>::sm_Value>::TType>
+TUniquePtr<ObjectType> MakeUnique(OtherType* a_Pointer)
 {
-	return TUniquePtr<T>(new T(std::forward(a_Arguments)));
+	return TUniquePtr<ObjectType>(a_Pointer);
+}
+
+template <typename ObjectType, typename... Args>
+TUniquePtr<ObjectType> MakeUnique(Args&&... a_Arguments)
+{
+	return TUniquePtr<ObjectType>(new ObjectType(std::forward<Args>(a_Arguments)...));
 }
 
 }

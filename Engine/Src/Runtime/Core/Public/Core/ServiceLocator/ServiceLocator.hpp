@@ -4,59 +4,69 @@
 #include <Core/definitions.hpp>
 #include <Core/Containers/UniquePointer.hpp>
 #include <Core/Containers/Array.hpp>
+#include <Core/Utility/TemplateUtil.hpp>
+#include <type_traits>
 
 namespace Fade
 {
 
-class FADE_CORE_API CService
+class FADE_CORE_API IService
 {
 public:
-	CService();
-	CService(const CService& a_Other) = delete;
-	virtual ~CService();
+	IService() { }
+	IService(const IService& a_Other) = delete;
+	virtual ~IService() { }
 };
 
-/*
- * Collection of all services that should be globally available
- */
-class FADE_CORE_API CServiceLocator
+namespace ServiceLocator
 {
-public:
-	CServiceLocator();
-	~CServiceLocator();
+	/**
+	 * Registers a new service to the service locator
+	 *
+	 * @param a_Service The service we want to add
+	 * @return a pointer to the newly registered service
+	 */
+	FADE_CORE_API IService* RegisterService(TUniquePtr<IService>&& a_Service);
+	
+	template <class ServiceClass,
+	typename = typename TEnableIf<std::is_base_of<IService, ServiceClass>::value>::TType>
+	ServiceClass* RegisterService()
+	{
+		return dynamic_cast<ServiceClass*>(RegisterService(MakeUnique<ServiceClass>()));
+	}
 
-	CServiceLocator(CServiceLocator&& a_Other) = delete;
-	CServiceLocator(const CServiceLocator& a_Other) = delete;
+	/**
+	 *  Unregisters a service from the service locator
+	 *
+	 * @param a_Service The service we want to remove
+	 */
+	FADE_CORE_API void UnregisterService(IService* a_Service);
 
-	CServiceLocator& operator=(CServiceLocator&& a_Other) = delete;
-	CServiceLocator& operator=(const CServiceLocator& a_Other) = delete;
+	/**
+	 * Gets an array of all the services
+	 *
+	 * @return The array of unique pointers which contains all the services
+	 */
+	FADE_CORE_API const TArray<TUniquePtr<IService>>& GetServices();
 
-	//template <
-	//	class ServiceClass,
-	//	typename = typename TEnableIf<std::is_base_of<CService, ServiceClass>::value>::TType
-	//> ServiceClass* GetService()
-	//{
-	//	for (usize i = 0; i < m_Services.size(); i++)
-	//	{
-	//		ServiceClass* ptr = dynamic_cast<ServiceClass*>(m_Services[i].Get());
-	//		if (ptr)
-	//		{
-	//			return ptr;
-	//		}
-	//	}
-	//	
-	//	// If we can't find the service, let's add the service
-	//	return RegisterService(std::move(Fade::MakeUnique<ServiceClass>()));
-	//}
+	/**
+	 *
+	 */
+	template <class ServiceClass,
+	typename = typename TEnableIf<std::is_base_of<IService, ServiceClass>::value>::TType>
+	ServiceClass* GetService()
+	{
+		for (auto& service : GetServices())
+		{
+			if (auto* ptr = dynamic_cast<ServiceClass*>(service.Get()))
+			{
+				return ptr;
+			}
+		}
 
-
-private:
-	TArray<TUniquePtr<CService>> m_Services;
-
-	CService* RegisterService(TUniquePtr<CService>&& a_Service);
-	void UnregisterService(CService* service);
-};
-
-CServiceLocator FADE_CORE_API &GetServiceLocator();
+		// If we can't find the service, let's add the service
+		return RegisterService<ServiceClass>();
+	}
+} 
 
 }

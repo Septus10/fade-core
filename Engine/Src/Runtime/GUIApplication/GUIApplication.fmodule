@@ -1,0 +1,52 @@
+{
+  "Name": "GUIApplication",
+  "Version": "0.0.1",
+  "Dependencies": [
+    {
+      "Name": "Core",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "PlatformCore",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "ApplicationBase",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "GUI",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "RHI",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "glm",
+      "External": true,
+      "RequiredVersion": {
+        "Min": "3.2.1",
+        "Max": "3.2.1"
+      }
+    }
+  ],
+  "Implementations": [
+    "Default"
+  ]
+}

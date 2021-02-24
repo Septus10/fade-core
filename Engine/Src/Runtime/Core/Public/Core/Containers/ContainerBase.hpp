@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Containers/DefaultAllocator.hpp>
+#include <Core/Utility/MemoryUtil.hpp>
 
 namespace Fade {
 

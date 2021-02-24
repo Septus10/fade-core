@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef FADE_EXPORT
+#ifdef FADE_APPLICATION_EXPORT
 #define FADE_APPLICATION_API __declspec(dllexport)
 #else
 #define FADE_APPLICATION_API __declspec(dllimport)

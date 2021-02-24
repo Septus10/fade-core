@@ -5,38 +5,30 @@
 namespace Fade
 {
 
-CService::CService()
-{}
-CService::~CService()
-{}
-CServiceLocator::CServiceLocator()
-{}
-CServiceLocator::~CServiceLocator()
-{}
-
-CService* CServiceLocator::RegisterService(TUniquePtr<CService>&& a_Service)
+struct CServiceLocator
 {
-	//m_Services.push_back(std::move(a_Service));
-	//return m_Services.back().Get();
-	return nullptr;
-}
+	TArray<TUniquePtr<IService>> m_Services;
+};
 
-void CServiceLocator::UnregisterService(CService* service)
-{
-	//for(int i = 0; i < m_Services.size(); i++)
-	//{
-	//	if (m_Services[i] == service)
-	//	{
-	//		m_Services.erase(m_Services.begin() + i);
-	//		return;
-	//	}
-	//}
-}
+static CServiceLocator g_ServiceLocator;
 
-CServiceLocator& GetServiceLocator()
+namespace ServiceLocator
 {
-	static CServiceLocator g_ServiceLocator;
-	return g_ServiceLocator;
+	IService* RegisterService(TUniquePtr<IService>&& a_Service)
+	{
+		g_ServiceLocator.m_Services.Add(Fade::Move(a_Service));
+		return g_ServiceLocator.m_Services.back().Get();
+	}
+
+	void UnregisterService(IService* a_Service)
+	{
+		
+	}
+
+	const TArray<TUniquePtr<IService>>& GetServices()
+	{
+		return g_ServiceLocator.m_Services;
+	}
 }
 
 }

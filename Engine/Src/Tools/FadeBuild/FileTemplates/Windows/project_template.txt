@@ -29,7 +29,7 @@
 	{
 @:    <RootNamespace>@(Model.Module.Name)</RootNamespace>	
 	}
-	}    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+	}    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName></ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,7 +40,7 @@
 @:Application</ConfigurationType> 
 	}else{ 
 @:DynamicLibrary</ConfigurationType> 
-	}}    <PlatformToolset>v140</PlatformToolset>
+	}}    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
@@ -83,7 +83,8 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <PreprocessorDefinitions>@if(!Model.Module.ImplementsMain){<text>FADE_EXPORT;</text>}FADE_PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+	</ClCompile>
 @{
 	if (!Model.Module.ImplementsMain)
 	{
@@ -94,6 +95,7 @@
 }  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
+      <PreprocessorDefinitions>FADE_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
@@ -129,6 +131,16 @@
 		{
 @:  <ClCompile Include="@(file.FileName)" />
 		}
+	}  </ItemGroup>
+  <ItemGroup>
+	@{
+@:    <None Include="@(Model.Module.ModuleFilePath)" />	
+		if (Model.Module.ImplementationFilePath.Length > 0)
+		{
+@:    <None Include="@(Model.Module.ImplementationFilePath)">
+@:      <Filter>@(Model.Module.ActiveImplementation)</Filter>
+@:    </None>
+        }
 	}  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

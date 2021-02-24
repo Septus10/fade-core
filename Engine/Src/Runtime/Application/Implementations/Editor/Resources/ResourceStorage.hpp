@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Containers/Array.hpp>
+#include <Core/Containers/String.hpp>
 #include <Core/definitions.hpp>
 
 namespace Fade {
@@ -12,7 +13,7 @@ class CResourceStorage
 {
 public:
 	CResource* GetResourceByHandle(AResourceHandle a_Handle);
-	CResource* GetResourceByName(std::string a_Name);
+	CResource* GetResourceByName(SString a_Name);
 	
 private:
 	TArray<CResource*> m_ResourcePointers;

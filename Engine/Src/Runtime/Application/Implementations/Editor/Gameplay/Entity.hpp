@@ -2,7 +2,7 @@
 
 #include <Core/Containers/Array.hpp> 
 
-namespace Fade {
+namespace Fade { namespace ECS {
 
 class CComponent;
 class CEntity
@@ -19,4 +19,4 @@ protected:
 	Fade::TArray<CEntity*>		m_Children;
 };
 
-}
+} }

@@ -5,9 +5,9 @@
 
 namespace Fade { namespace ECS {
 
-#define NUM_BYTES 10
+inline constexpr u32 g_NumBytes = 10;
 
-using ComponentKey = u8[NUM_BYTES];
+using ComponentKey = u8[g_NumBytes];
 using ComponentID = u16;
 
 static void UnpackSingle(ComponentKey& a_InOutKey, ComponentID a_ID)

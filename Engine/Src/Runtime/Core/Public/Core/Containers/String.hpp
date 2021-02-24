@@ -4,8 +4,5 @@
 
 namespace Fade
 {
-	namespace fstl
-	{
-		using String = std::string;
-	}
+	using SString = std::string;
 }

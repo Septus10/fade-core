@@ -3,7 +3,7 @@
 #include <PlatformCore/PlatformCoreApi.hpp>
 #include <Core/Core.hpp>
 
-namespace Fade { namespace PlatformCore {
+namespace Fade { inline namespace PlatformCore {
 
 enum class EWindowMode
 {
@@ -20,6 +20,7 @@ enum class EWindowType
 	Tooltip,
 	Notification,
 	Game,
+	Fake,
 	NumWindowTypes
 };
 
@@ -49,7 +50,7 @@ struct FADE_PLATFORMCORE_API SWindowSettings
 
 	// Window generic settings
 	const c8*	m_Title;
-	f32			m_Opacity;
+	float		m_Opacity;
 	bool		m_bIsEnabled;	
 };
 

@@ -134,6 +134,7 @@ namespace Fade
                 module.GUID = Guid.NewGuid();
                 module.Path = moduleFile.Substring(0, moduleFile.LastIndexOf('\\') + 1);
                 module.ActiveImplementation = implementation;
+                module.ModuleFilePath = moduleFile;
 
                 //================================================================
                 // Check if module has already been added
@@ -188,7 +189,7 @@ namespace Fade
                 //================================================================
                 // Check if there is are implementation specific dependencies
                 //================================================================
-                string implementationFile = $"{path}\\Implementations\\{module.ActiveImplementation}.fimpl";
+                string implementationFile = $"{path}Implementations\\{module.ActiveImplementation}.fimpl";
                 string implementationJson = FileToString(implementationFile);
                 if (implementationJson != "")
                 {
@@ -207,7 +208,16 @@ namespace Fade
                         {
                             module.ImplementationDependencies.Add(dep);
                         }
-                    }                    
+                    }
+
+                    //================================================================
+                    // Set seperate variables
+                    //================================================================
+                    module.ImplementationFilePath = implementationFile;
+                }
+                if (module.ImplementationFilePath == null)
+                {
+                    module.ImplementationFilePath = "";
                 }
 
                 //================================================================
@@ -476,7 +486,7 @@ namespace Fade
                     }
 
 
-                    string filterResult = Engine.Razor.RunCompile(filterTemplate, "filter", null, new { ModuleName = mod.Name, Filters = filters, HeaderFiles = headerFiles, SourceFiles = sourceFiles });
+                    string filterResult = Engine.Razor.RunCompile(filterTemplate, "filter", null, new { ModuleName = mod.Name, Filters = filters, HeaderFiles = headerFiles, SourceFiles = sourceFiles, ModuleFile = mod.ModuleFilePath, ImplFile = mod.ImplementationFilePath, ActiveImplementation = mod.ActiveImplementation });
                     string filterPath;
                     if (mod.DynamicallyLoaded)
                     {

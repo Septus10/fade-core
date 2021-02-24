@@ -12,8 +12,8 @@ private:								\
     TPimpl<CImpl> m_Impl;               \
     __pragma(warning(pop))
 
-#define FADE_INIT_PIMPL(x) \
-    m_Impl(MakeUnique<x::CImpl>())
+#define FADE_INIT_PIMPL(ClassName) \
+    m_Impl(MakeUnique<ClassName::CImpl>())
 
 /* Brief:
 *  Creates pimpl object using a unique_ptr

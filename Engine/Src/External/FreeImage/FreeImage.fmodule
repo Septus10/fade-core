@@ -1,0 +1,6 @@
+{
+	"Name": "FreeImage",
+	"Version": "3.8.10",
+	"ExternalLibrary": "true",
+	"LibraryName": "FreeImageLib"
+}

@@ -1,0 +1,27 @@
+{
+	"Name": "ApplicationBase",
+	"Version": "0.0.1",
+	"Dependencies":
+	[
+		{
+			"Name": "Core",
+			"RequiredVersion": 
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		},
+		{
+			"Name": "PlatformCore",
+			"RequiredVersion":
+			{
+				"Min": "0.0.1",
+				"Max": "0.0.1"
+			}
+		}
+	],
+	"Implementations": 
+	[
+		"Default"
+	]
+}

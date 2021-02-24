@@ -7,6 +7,11 @@
 			"Implementation": "Editor"
 		},
 		{
+			"Name": "ApplicationBase",
+			"Type": "Runtime",
+			"Implementation": "Default"
+		},
+		{
 			"Name": "Core",
 			"Type": "Runtime",
 			"Implementation": "Default"	
@@ -22,19 +27,19 @@
 			"Implementation": "Windows"	
 		},
 		{
-			"Name": "ResourceImporterHub",
-			"Type": "Editor",
-			"Implementation": "Default"
+			"Name": "RHI",
+			"Type": "Runtime",
+			"Implementation" :"OpenGL"
 		},
 		{
-			"Name": "ResourceImporter",
-			"Type": "Editor",
-			"Implementation" :"Model"
+			"Name": "GUI",
+			"Type": "Runtime",
+			"Implementation" :"Default"
 		},
 		{
-			"Name": "ResourceImporter",
-			"Type": "Editor",
-			"Implementation" :"Texture"
+			"Name": "GUIApplication",
+			"Type": "Runtime",
+			"Implementation" :"Default"
 		}
 	]
 }

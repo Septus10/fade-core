@@ -5,7 +5,6 @@
 #include <Core/Definitions.hpp>
 #include <Core/ServiceLocator/ServiceLocator.hpp>
 
-
 #include <iostream>
 
 #include <ResourceImporterHub/Resource.hpp>
@@ -16,11 +15,11 @@ using namespace Resources;
 
 FADE_BOOTSTRAP_MODULE(CModuleTextureImporter)
 FADE_BOOTSTRAP_ON_CONSTRUCT({
-	//auto* imp_hub = GetServiceLocator().GetService<CResourceImporterHub>();
-	//if (imp_hub)
-	//{
-	//	imp_hub->RegisterImporter<CTextureImporter>();
-	//}
+	auto* imp_hub = ServiceLocator::GetService<CResourceImporterHub>();
+	if (imp_hub)
+	{
+		imp_hub->RegisterImporter<CTextureImporter>();
+	}
 })
 
 CTextureImporter::CTextureImporter()

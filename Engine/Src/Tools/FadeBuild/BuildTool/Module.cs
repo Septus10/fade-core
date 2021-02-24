@@ -61,6 +61,8 @@ namespace Fade
             public bool InterfaceOnly { get; set; }
             public Guid GUID { get; set; }
             public string Path { get; set; }
+            public string ModuleFilePath { get; set; }
+            public string ImplementationFilePath { get; set; }
         }
 
         class Implementation

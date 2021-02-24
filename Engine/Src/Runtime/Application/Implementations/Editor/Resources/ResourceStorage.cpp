@@ -13,7 +13,7 @@ CResource* CResourceStorage::GetResourceByHandle(AResourceHandle a_Handle)
 	return nullptr;
 }
 
-CResource* CResourceStorage::GetResourceByName(std::string a_Name)
+CResource* CResourceStorage::GetResourceByName(SString a_Name)
 {
 	for (auto& Resource: m_ResourcePointers)
 	{

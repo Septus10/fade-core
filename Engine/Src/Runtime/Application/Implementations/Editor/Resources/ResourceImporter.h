@@ -2,7 +2,7 @@
 
 namespace Fade {
 
-class CResourceImporter
+class IResourceImporter
 {
 public:
 	

@@ -1,47 +1,38 @@
 #pragma once
 
-#include <Application/Application.hpp>
 #include <Application/ApplicationApi.hpp>
+#include <GUIApplication/GUIApplication.hpp>
 
 #include <Core/Containers/UniquePointer.hpp>
 #include <PlatformCore/Window/Window.hpp>
 #include <vector>
 
-#include <glm.hpp>
-
 namespace Fade
 {
 
 class CWindow;	
-class CEditor : public CApplication
+class CEditor : public GUI::CGUIApplication
 {
+	using Parent = GUI::CGUIApplication;
 public:
 	CEditor() = default;
 
 	~CEditor() override = default;
 
-	ETickResult Tick(double a_DeltaTime) override;
+	// IApplication {
+	virtual ETickResult Tick(float a_DeltaTime) override;
 
-	void FixedTick(double a_FixedDeltaTime) override;
+	virtual ETickResult PostTick(float a_DeltaTime) override;
 
-	bool PreInitialize() override;
+	virtual EInitializationResult Initialize() override;
 
-	bool Initialize() override;
+	virtual EInitializationResult PostInitialize() override;
 
-	bool PostInitialize() override;
-
-	bool DeInitialize() override;
-
-	const PlatformCore::CWindow* GetMainWindowPtr() const override { return m_MainWindow.Get(); }
-
-	void OnKeyUp(i32 a_KeyIdx) override;
-	void OnKeyDown(i32 a_KeyIdx) override;
+	virtual void Deinitialize() override;
+	// } IApplication
 
 private:
-	float m_CurTime;
-	glm::vec2 m_CamPos;
-
-	Fade::TUniquePtr<Fade::PlatformCore::CWindow> m_MainWindow;
+	AWindowHandle m_MainWindow;
 };
 
 }

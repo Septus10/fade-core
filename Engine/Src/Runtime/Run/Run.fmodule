@@ -1,37 +1,39 @@
 {
-	"Name": "Run",
-	"Version": "0.0.1",
-	"Dependencies":
-	[
-		{
-			"Name": "Core",
-			"RequiredVersion": 
-			{
-				"Min": "0.0.1",
-				"Max": "0.0.1"
-			}
-		},
-		{
-			"Name": "PlatformCore",
-			"RequiredVersion":
-			{
-				"Min": "0.0.1",
-				"Max": "0.0.1"
-			}
-		},
-		{
-			"Name": "Application",
-			"RequiredVersion":
-			{
-				"Min": "0.0.1",
-				"Max": "0.0.1"
-			}
-		}
-	],
-	"Implementations": 
-	[
-		"Default",
-		"Windows"
-	],
-	"ImplementsMain": true
+  "Name": "Run",
+  "Version": "0.0.1",
+  "Dependencies": [
+    {
+      "Name": "Core",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "PlatformCore",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "Application",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    },
+    {
+      "Name": "ApplicationBase",
+      "RequiredVersion": {
+        "Min": "0.0.1",
+        "Max": "0.0.1"
+      }
+    }
+  ],
+  "Implementations": [
+    "Default",
+    "Windows"
+  ],
+  "ImplementsMain": true
 }

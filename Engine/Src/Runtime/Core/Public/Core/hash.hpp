@@ -4,6 +4,7 @@
 #include <Core/CoreApi.hpp>
 #include <array>
 #include <vector>
+#include <string>
 
 #define FADE_HASH_FNV1A(content) __pragma(warning(push)) __pragma(warning(disable: 4307)) ::Fade::CHash::fnv1a(content) __pragma(warning(pop))
 

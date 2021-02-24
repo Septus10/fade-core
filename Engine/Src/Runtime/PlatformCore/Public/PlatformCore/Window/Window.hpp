@@ -1,18 +1,22 @@
 #pragma once
 
-#include <Core/Definitions.hpp>
-#include <Core/Containers/UniquePointer.hpp>
-#include <Core/Containers/Array.hpp>
+// Platform core defines
 #include <PlatformCore/PlatformCoreApi.hpp>
 #include <PlatformCore/Window/WindowSettings.hpp>
 
-namespace Fade { namespace PlatformCore {
+// Core defines
+#include <Core/Definitions.hpp>
+#include <Core/Math/Math.hpp>
+#include <Core/Containers/SharedPointer.hpp>
+#include <Core/Containers/UniquePointer.hpp>
 
-static const char* sg_WindowClassName = "FadeWindow";
+namespace Fade { inline namespace PlatformCore {
 
 class FADE_PLATFORMCORE_API CWindow
 {
 public:
+	static TSharedPtr<CWindow> Get();
+
 	CWindow() = default;
 	virtual ~CWindow() = default;
 
@@ -26,7 +30,9 @@ public:
 
 	virtual void BringToFront() = 0;
 
-	virtual void Focus() = 0;
+	virtual void SetCapture(bool a_NewCapture) = 0;
+
+	virtual void SetFocus() = 0;
 
 	virtual void Reshape(i32 a_X, i32 a_Y, i32 a_Width, i32 a_Height) = 0;
 
@@ -45,26 +51,37 @@ public:
 
 	virtual void SetText(const u8* const a_Text) {}
 
+	virtual void SetPosition(const Fade::Math::Vec2& a_Position) { m_WindowPos = a_Position; }
+
 	// Getters
 	virtual EWindowMode GetWindowMode() const { return EWindowMode::Fullscreen; }
 
-	virtual bool IsMaximized() const { return false; }
+	virtual bool IsWindowMaximized() const { return false; }
 
-	virtual bool IsMinimized() const { return false; }
+	virtual bool IsWindowMinimized() const { return false; }
 
 	virtual bool IsVisible() const { return false; }
 
 	virtual bool IsForegroundWindow() const { return false; }
 
-	virtual void* GetWindowHandle() const { return nullptr; }
+	virtual bool IsCapture() const { return false; }
 
-	u32 GetWidth() const { return m_WindowSettings.m_Width; }
-	u32 GetHeight() const { return m_WindowSettings.m_Height; }
+	virtual bool IsFocus() const { return false; }
+
+	virtual void* GetOSHandle() const { return nullptr; }
+
+	u32 GetWidth() const { return m_WindowSize.x; }
+	u32 GetHeight() const { return m_WindowSize.y; }
+
+	Fade::Math::iVec2 GetPosition() const { return m_WindowPos; }
 
 protected:
 	SWindowSettings					m_WindowSettings;
+
+	Fade::Math::iVec2				m_WindowPos;
+	Fade::Math::uVec2				m_WindowSize;
 };
 
-} }
 
-FADE_PLATFORMCORE_API Fade::TUniquePtr<Fade::PlatformCore::CWindow> GetWindow();
+
+} }

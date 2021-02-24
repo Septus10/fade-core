@@ -3,8 +3,6 @@
 #include <cstddef>
 #include <cinttypes>
 
-#include <memory>
-
 namespace Fade
 {
 
@@ -27,17 +25,6 @@ using u8  = std::uint8_t;
 using u16 = std::uint16_t;
 using u32 = std::uint32_t;
 using u64 = std::uint64_t;
-
-/**
- * Floating point types
- */
-using f32 = float;
-using f64 = double;
-
-/**
- * Boolean types
- */
-using b32 = bool;
 
 /**
  * Pointer types
@@ -63,6 +50,14 @@ using c32 = char32_t;
  */
 using uc8 = unsigned char;
 
+/**
+ * Char types
+ */
+using wchar = wchar_t;
+
+/**
+ * String types
+ */
 using cstr = const char*;
 
 //===========================
@@ -72,5 +67,6 @@ using cstr = const char*;
  * Fade void pointer
  */
 using vptr = void*;
+using nullptr_t = decltype(nullptr);
 
 }

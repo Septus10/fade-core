@@ -6,13 +6,13 @@
 namespace Fade { namespace Resources {
 
 class CResource;
-class FADE_RESOURCEIMPORTER_API CResourceImporter
+class FADE_RESOURCEIMPORTER_API IResourceImporter
 {
 public:
 	/**
 	 * Mandatory virtual destructor
 	 */
-	virtual ~CResourceImporter() = default;
+	virtual ~IResourceImporter() = default;
 
 	/**
 	 * Check whether this resource importer imports the files' extension

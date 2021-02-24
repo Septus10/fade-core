@@ -27,4 +27,14 @@
 @:    </ClCompile>
 		}
 	}  </ItemGroup>
+  <ItemGroup>
+	@{
+@:    <None Include="@(Model.ModuleFile)" />	
+		if (Model.ImplFile.Length > 0)
+		{
+@:    <None Include="@(Model.ImplFile)">
+@:      <Filter>@(Model.ActiveImplementation)</Filter>
+@:    </None>
+        }
+	}  </ItemGroup>
 </Project>

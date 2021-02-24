@@ -26,3 +26,5 @@
 *
 * Local variables do not have a prefix
 */
+
+#pragma warning (disable : 4251)
