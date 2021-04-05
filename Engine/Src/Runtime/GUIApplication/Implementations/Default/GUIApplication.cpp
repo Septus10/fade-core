@@ -51,7 +51,14 @@ void CGUIApplication::Deinitialize()
 
 ETickResult CGUIApplication::Tick(float a_DeltaTime)
 {
-	return sm_PlatformContext->IsQuitRequested() ? ETickResult::STOP : ETickResult::CONTINUE;
+	ETickResult TickResult = sm_PlatformContext->IsQuitRequested() ? ETickResult::STOP : ETickResult::CONTINUE;
+	
+	if (m_WindowManager->GetNumWindows() == 0)
+	{
+		TickResult = ETickResult::STOP;
+	}
+
+	return TickResult;
 }
 
 ETickResult CGUIApplication::PostTick(float a_DeltaTime)
@@ -73,6 +80,11 @@ void CGUIApplication::CloseWindow(AWindowHandle a_Window)
 
 }
 
+bool CGUIApplication::OnWindowClose(const TSharedPtr<CWindow>& a_Window)
+{
+	return m_WindowManager->CloseWindow(a_Window);
+}
+
 bool CGUIApplication::OnKeyDown(const u32 a_Key)
 {	
 	return true;
@@ -90,13 +102,13 @@ bool CGUIApplication::OnMouseMove(const u32 a_NewX, const u32 a_NewY, const u32 
 	return true;
 }
 
-bool CGUIApplication::OnMouseDown(TSharedPtr<PlatformCore::CWindow> a_Window, EMouseButton a_Button, Fade::Math::iVec2 a_Location)
+bool CGUIApplication::OnMouseDown(const TSharedPtr<CWindow>& a_Window, EMouseButton a_Button, Fade::Math::iVec2 a_Location)
 {
 	TUniquePtr<PlatformCore::CPlatformContext>& PlatformContext = sm_PlatformContext;
 
 	// If we have a valid window, set it as the current focus if it isn't already
 	// this is how windows works as well
-	if (IsValid(a_Window) && !a_Window->IsCapture())
+	if (a_Window.IsValid() && !a_Window->IsCapture())
 	{
 		a_Window->SetCapture(true);
 	}

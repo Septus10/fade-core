@@ -3,22 +3,6 @@
 #include <cstddef>
 #include <cinttypes>
 
-#ifndef FADE_HAS_NODISCARD
-	#ifndef __has_cpp_attribute
-	#define FADE_HAS_NODISCARD 0
-	#elif __has_cpp_attribute(nodiscard) >= 201603L
-	#define FADE_HAS_NODISCARD 1
-	#else
-	#define FADE_HAS_NODISCARD 0
-	#endif
-#endif
-
-#if FADE_HAS_NODISCARD
-	#define FADE_NODISCARD [[nodiscard]]
-#else
-	#define FADE_NODISCARD
-#endif
-
 namespace Fade
 {
 
