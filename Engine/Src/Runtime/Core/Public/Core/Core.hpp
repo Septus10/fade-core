@@ -28,3 +28,15 @@
 */
 
 #pragma warning (disable : 4251)
+
+namespace Fade {
+
+template <typename T>
+void Swap(T& a_From, T& a_To)
+{
+	T Temp = a_To;
+	a_To = a_From;
+	a_From = Temp;
+}
+
+}

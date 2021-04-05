@@ -63,6 +63,8 @@ struct FADE_RHI_API SWindowContext
 	SWindowContext& operator= (const SWindowContext& a_Other) noexcept;
 	SWindowContext& operator= (SWindowContext&& a_Other) noexcept;
 
+	bool operator== (const SWindowContext& a_Other) noexcept;
+	
 	bool Initialize(PlatformCore::CWindow* a_Window, bool a_ShouldDestroyWindow = false);
 
 	void Destroy();

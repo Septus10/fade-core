@@ -110,5 +110,27 @@ struct TDefaultDelete<ValueType[]>
 	}
 };
 
+template <class First, class Last>
+void DestroyRange(First a_First, Last a_Last) noexcept;
+
+template <class Type>
+void DestroyInPlace(Type& a_Object) noexcept
+{
+	if constexpr (TIsArray<Type>::sm_Value)
+	{
+
+	}
+	else
+	{
+		a_Object.~Type();
+	}
+}
+
+template <class First, class Last>
+void DestroyRange(First a_First, Last a_Last) noexcept
+{
+	
+}
+
 
 }

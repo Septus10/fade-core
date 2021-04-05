@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/definitions.hpp>
+#include <limits>
 
 /**
  * This document is a custom implementation of template helpers that can be found in
@@ -60,6 +61,9 @@ struct TRemoveExtent<Type[]>
 	using TType = Type;
 };
 
+template <typename Type>
+using TRemoveExtentType = typename TRemoveExtent<Type>::TType;
+
 template <class ValueType, ValueType Value>
 struct TStaticConstant
 {
@@ -97,6 +101,27 @@ template <bool Value>
 struct TPredicateBase : TStaticConstant<bool, Value>
 {};
 
+
+template <bool FirstValue, typename First, typename... Rest>
+struct TDisjunctionInternal {
+	using TType = First;
+};
+
+template <typename False, typename Next, typename... Rest>
+struct TDisjunctionInternal<false, False, Next, Rest...> {
+	using TType = typename TDisjunctionInternal<Next::sm_Value, Next, Rest...>::TType;
+};
+
+template <typename... Traits>
+struct TDisjunction : TFalseType {};
+
+template <typename First, typename... Rest>
+struct TDisjunction<First, Rest...> : TDisjunctionInternal<First::sm_Value, First, Rest...>::TType
+{ };
+
+template <typename First, typename... Rest>
+inline constexpr bool TDisjunctionValue = TDisjunction<First, Rest...>::sm_Value;
+
 // Check if type is pointer
 template <typename Type>
 struct TIsPointer : TBoolConstant<false>
@@ -104,6 +129,15 @@ struct TIsPointer : TBoolConstant<false>
 
 template <typename Type>
 struct TIsPointer<Type*> : TBoolConstant<true>
+{ };
+
+// Check if type is void
+template <typename Type>
+struct TIsVoid : TBoolConstant<false>
+{ };
+
+template <>
+struct TIsVoid<void> : TBoolConstant<true>
 { };
 
 // Check if type is a reference (both r-value and regular)
@@ -162,7 +196,7 @@ struct TEnableIf
 template <class ValueType>
 struct TEnableIf<true, ValueType>
 {
-	typedef ValueType TType;
+	using TType = ValueType;
 };
 
 // Use type 1 if test is true
@@ -181,9 +215,29 @@ struct TConditional<false, Type1, Type2>
 
 template<class From, class To>
 struct TIsConvertible 
-	: TPredicateBase<__is_convertible_to(From, To)>
+	: TPredicateBase<__is_convertible_to(const volatile From, const volatile To)>
 { };
 
+
+template <class Base, class Derived>
+struct TIsBaseOf
+	: TPredicateBase<__is_base_of(Base, Derived)> 
+{ };
+
+#ifndef FADE_CPP_VERSION
+#define FADE_CPP_VERSION 0
+#endif
+
+#ifndef FADE_CPP_20
+#define FADE_CPP_20 20
+#endif
+
+#if FADE_CPP_VERSION == FADE_CPP_20
+template <class Base, class Derived>
+concept TIsDerivedFrom = 
+	TIsBaseOf<Base, Derived>::sm_Value && 
+	TIsConvertible<const volatile Derived*, const volatile Base*>::sm_Value;
+#endif
 
 template <bool FirstValue, class First, class... Rest>
 struct TConjunctionBase
@@ -224,8 +278,8 @@ inline constexpr Type&& Forward(TRemoveReference<Type>& a_Arg) noexcept
 template <class Type>
 inline constexpr Type&& Forward(TRemoveReference<Type>&& a_Arg) noexcept
 {	// forward an rvalue as an rvalue
-	static_assert(!is_lvalue_reference_v<Type>, "bad forward call")
-		return (static_cast<Type&&>(a_Arg));
+	static_assert(!is_lvalue_reference_v<Type>, "bad forward call");
+	return (static_cast<Type&&>(a_Arg));
 }
 
 template <class Type>
@@ -234,6 +288,7 @@ inline constexpr typename TRemoveReference<Type>::TType&& Move(Type&& a_Arg) noe
 	return (static_cast<typename TRemoveReference<Type>::TType&&>(a_Arg));
 }
 
+#if 0
 
 // Increment type bitshift
 class IncrementBitshift
@@ -256,27 +311,25 @@ class IncrementAddition
 {
 public:
 	template <u32 PreviousID>
-	static inline constexpr u32 IncrementID()
+	static constexpr u32 IncrementID()
 	{
 		static_assert(PreviousID & std::numeric_limits<u32>::max(), "Unable to increment ID using addition, previous ID is already at max");
 		return PreviousID + 1;
 	}
 };
 
-
-
-template <class BaseClass, class IncrementClass>
+template <class BaseClass, class IncrementClass = IncrementAddition>
 class TUniqueIDBase
 {
-protected:
-	static constexpr u32 GetNextID()
-	{	
-		return IncrementClass::IncrementID<sm_IdCounter>();
-	}
-
 private:
 	// Unique ID generator for classes
 	static constexpr u32 sm_IdCounter = 1;
+
+protected:
+	static constexpr u32 GetNextID()
+	{	
+		return IncrementClass::IncrementID<sm_IdCounter++>();
+	}
 };
 
 //template <class BaseClass>
@@ -294,5 +347,7 @@ private:
 
 template <class BaseClass, class IDClass, typename IncrementNamespace>
 u32 TUniqueID<BaseClass, IDClass, IncrementNamespace>::sm_ID = TUniqueIDBase<BaseClass, IncrementNamespace>::GetNextID();
+
+#endif
 
 }

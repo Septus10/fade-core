@@ -147,8 +147,13 @@ bool CWindowsWindow::Create(SWindowSettings& a_Settings, CWindow* a_Parent)
 
 bool CWindowsWindow::Destroy()
 {
-	::DestroyWindow(m_WindowHandle);
-	return true;
+	bool bDestroyed = ::DestroyWindow(m_WindowHandle);
+	if (bDestroyed)
+	{
+		m_WindowHandle = nullptr;
+	}
+	
+	return bDestroyed;
 }
 
 void CWindowsWindow::Show()
@@ -212,5 +217,5 @@ bool CWindowsWindow::IsFocus() const
 
 TSharedPtr<CWindow> CWindow::Get()
 {
-	return std::make_shared<CWindowsWindow>();
+	return Fade::MakeShared<CWindowsWindow>();
 }

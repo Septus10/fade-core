@@ -248,6 +248,12 @@ SWindowContext& SWindowContext::operator=(SWindowContext&& a_Other) noexcept
 	return *this;
 }
 
+bool SWindowContext::operator==(const SWindowContext& a_Other) noexcept
+{
+	return m_DeviceContext == a_Other.m_DeviceContext 
+		&& m_Window == a_Other.m_Window;
+}
+
 bool SWindowContext::Initialize(Fade::PlatformCore::CWindow* a_Window, bool a_ShouldDestroyWindow)
 {
 	if (!g_IsRHIInitialized)
@@ -267,7 +273,7 @@ bool SWindowContext::Initialize(Fade::PlatformCore::CWindow* a_Window, bool a_Sh
 		m_Window = TSharedPtr<PlatformCore::CWindowsWindow>(dynamic_cast<Fade::PlatformCore::CWindowsWindow*>(a_Window));
 	}
 
-	if (InitializeModernContext(m_Window.get(), m_DeviceContext))
+	if (InitializeModernContext(m_Window.Get(), m_DeviceContext))
 	{
 		if (g_TempContext != nullptr)
 		{

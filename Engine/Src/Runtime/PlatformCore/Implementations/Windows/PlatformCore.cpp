@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include <Window/WindowsWindow.hpp>
-#include <Application/WindowsApplication.hpp>
+#include <Application/WindowsContext.hpp>
 
 #include <Core/Log.hpp>
 

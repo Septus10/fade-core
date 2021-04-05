@@ -71,8 +71,15 @@ u32 CWindowsContext::ProcessMessage(HWND a_WindowHandle, u32 a_Msg, WPARAM a_wPa
 	TSharedPtr<CWindowsWindow> Window = GetWindowFromHwnd(a_WindowHandle);
 	switch (a_Msg)
 	{
-	case WM_CLOSE:	
-		// handle window closing
+	case WM_CLOSE:
+	{
+		if (Window.IsValid())
+		{
+			// Called when the OS close button is pressed
+			m_MessageHandler->OnWindowClose(Window);
+		}
+		return 0;
+	}
 		break;
 	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
@@ -207,10 +214,10 @@ TSharedPtr<CWindowsWindow> CWindowsContext::GetWindowFromHwnd(HWND a_WindowHandl
 {
 	for (auto& Wnd : m_PlatformWindows)
 	{
-		CWindowsWindow* WindowsWnd = static_cast<CWindowsWindow*>(Wnd.get());
+		CWindowsWindow* WindowsWnd = static_cast<CWindowsWindow*>(Wnd.Get());
 		if (WindowsWnd != nullptr && WindowsWnd->GetWindowHandle() == a_WindowHandle)
 		{
-			return std::dynamic_pointer_cast<CWindowsWindow>(Wnd);
+			return Fade::DynamicPointerCast<CWindowsWindow>(Wnd);
 		}
 	}
 

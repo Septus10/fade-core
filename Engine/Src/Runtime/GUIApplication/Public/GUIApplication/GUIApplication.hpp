@@ -18,6 +18,7 @@
 namespace Fade { 
 
 using AWindowHandle = i32;
+inline constexpr AWindowHandle INVALID_HANDLE = -1;
 
 inline namespace GUI {
 
@@ -71,11 +72,12 @@ protected:
 	AWindowHandle CreatePlatformWindow(PlatformCore::SWindowSettings& a_Settings, AWindowHandle a_Parent = -1);
 
 	/** IPlatformMessageHandler interface */
-	virtual bool OnKeyDown(const u32 a_Key) override;
-	virtual bool OnKeyUp(const u32 a_Key) override;
-	virtual bool OnMouseMove(const u32 a_NewX, const u32 a_NewY, const u32 a_DX, const u32 a_DY) override;
-	virtual bool OnMouseDown(TSharedPtr<PlatformCore::CWindow> a_Window, EMouseButton a_Button, Fade::Math::iVec2 a_Location) override;
-	virtual bool OnMouseUp(EMouseButton a_Button, Fade::Math::iVec2 a_Location) override;
+	bool OnWindowClose(const TSharedPtr<CWindow>& a_Window) override;
+	bool OnKeyDown(const u32 a_Key) override;
+	bool OnKeyUp(const u32 a_Key) override;
+	bool OnMouseMove(const u32 a_NewX, const u32 a_NewY, const u32 a_DX, const u32 a_DY) override;
+	bool OnMouseDown(const TSharedPtr<CWindow>& a_Window, EMouseButton a_Button, Fade::Math::iVec2 a_Location) override;
+	bool OnMouseUp(EMouseButton a_Button, Fade::Math::iVec2 a_Location) override;
 	/**/
 
 private:
@@ -85,7 +87,7 @@ private:
 	TUniquePtr<class CWindowManager> m_WindowManager;
 
 	/** 
-	 * 
+	 *
 	 */
 	TUniquePtr<GUI::IRenderer> m_Renderer;
 };

@@ -13,13 +13,13 @@
 #include <PlatformCore/Window/Window.hpp>
 #include <iostream>
 
-#include <Application/WindowsApplication.hpp>
+#include <Application/WindowsContext.hpp>
 
 int WINAPI WinMain(
-	HINSTANCE a_InstanceHandle,
-	HINSTANCE a_PreviousInstanceHandle,
-	LPSTR a_CommandLine,
-	int a_CommandShow)
+	_In_ HINSTANCE a_InstanceHandle,
+	_In_opt_ HINSTANCE a_PreviousInstanceHandle,
+	_In_ LPSTR a_CommandLine,
+	_In_ int a_CommandShow)
 {	
 	// Instantiate the logger on the stack, then save a static pointer for the public getter function
 	Fade::CCompositeLogger CompositeLogger;
@@ -48,7 +48,7 @@ int WINAPI WinMain(
 
 	CompositeLogger.RegisterLogger(new Fade::CStreamLogger(&std::cout));
 	FADE_LOG(Info, Run, "Console created.");
-#endif	
+#endif
 
 	Fade::PlatformCore::Windows::g_InstanceHandle = a_InstanceHandle;
 

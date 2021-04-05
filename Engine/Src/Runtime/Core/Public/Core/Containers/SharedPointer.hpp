@@ -1,264 +1,436 @@
 #pragma once
 
+#include <Core/Core.hpp>
 #include <Core/Definitions.hpp>
 #include <Core/Utility/TemplateUtil.hpp>
 #include <Core/Utility/MemoryUtil.hpp>
 
+#include <Core/Containers/SmartPointerUtil.hpp>
+
 #include <memory>
+#include <cassert>
 
 namespace Fade {
 
 // TODO: If we ever need custom functionality, implement it here
-#if 0
+#if 1
 
-class CRefCounterBase
+enum class EReferenceMode
+{
+	NotThreadSafe,
+	ThreadSafe
+};
+
+template <EReferenceMode Mode>
+struct TReferenceControllerOperations;
+
+/**
+ * Reference controller base class
+ *
+ * Contains the counters
+ */
+class IReferenceControllerBase
 {
 public:
 	/**
-	 * Destroy managed resource
+	 * This function can be overridden to destroy the reference we're pointing towards.
 	 */
-	virtual void Destroy() noexcept = 0;
+	virtual void DeletePointer() noexcept = 0;
 
 	/**
-	 * Destroy self
+	 * This function can be overridden to destroy this entire object, should be done in a derived class.
 	 */
-	virtual void DeleteThis() noexcept = 0;
+	virtual void DeleteSelf() noexcept = 0;
+
+private:
+	/**
+	 * Number of shared references of our controlled reference.
+	 *
+	 * Once this reaches zero we can safely delete our pointer.
+	 */
+	u32 m_SharedRefCount = 1;
 
 	/**
-	 * 
+	 * Total number of weak references of our controlled reference.
+	 *
+	 * All shared references count as 1 weak reference, 
+	 * thus once this is created we set the weak ref count equal to that of shared references
 	 */
-	usize GetUseCount()
+	u32 m_WeakRefCount = 1;
+
+	/** make the operations implementations a friend class so they can access our counters */
+	friend struct TReferenceControllerOperations<EReferenceMode::NotThreadSafe>;
+	friend struct TReferenceControllerOperations<EReferenceMode::ThreadSafe>;
+};
+
+/**
+ * Inline reference controller
+ * 
+ * Used to create an object that holds a pointer + the reference count in one heap allocation
+ */
+template <class ObjectType>
+class TInlineReferenceController : public IReferenceControllerBase
+{
+public:
+	template <typename... ArgTypes>
+	explicit TInlineReferenceController(ArgTypes... a_Args)
 	{
-
+		new ((void*)&m_Storage) ObjectType(Fade::Forward<ArgTypes>(a_Args)...);
 	}
 
-	/**
-	 * Increase amount of references
-	 */
-	void IncreaseRef()
-	{
+	ObjectType m_Storage;
 
+private:
+	void DeletePointer() noexcept override
+	{
+		DestroyInPlace(m_Storage);
 	}
 
-	/**
-	 * Increase amount of weak references
-	 */
-	void IncreaseWeakRef()
+	void DeleteSelf() noexcept override
 	{
-
-	}
-
-	/**
-	 * Decrease amount of references
-	 */
-	void DecreaseRef()
-	{
-
-	}
-
-	/**
-	 * Decrease amount of weak references
-	 */
-	void DecreaseWeakRef()
-	{
-
+		delete this;
 	}
 };
 
-template <class ObjectType>
-class CRefCounter : public CRefCounterBase
+/**
+ * Reference controller class
+ *
+ * Keeps track of the count
+ */
+template <class ObjectType, class Deleter = TDefaultDelete<ObjectType>>
+class TReferenceController : public IReferenceControllerBase
 {
 public:
-	explicit CRefCounter(ObjectType* a_Ptr)
-		: CRefCounterBase()
-		, m_Ptr(a_Ptr)
-	{ }
-
-private:
-	virtual void Destroy() noexcept override
+	void DeletePointer() noexcept override
 	{
-		delete m_Ptr;
+		assert(m_Ptr != nullptr);
+		m_Deleter(m_Ptr);
+		m_Ptr = nullptr;
 	}
 
-	virtual void DeleteThis() noexcept override
+	void DeleteSelf() noexcept override
 	{
 		delete this;
 	}
 
+private:
+	Deleter m_Deleter;
 	ObjectType* m_Ptr;
 };
 
-/**
- * Forward declarations
- */
-template <class ObjectType>
-class TSharedPointer;
-
-
-template <class ObjectType, typename DeleterType = TDefaultDelete<ObjectType>>
-class TSharedBase
+template <>
+struct TReferenceControllerOperations<EReferenceMode::ThreadSafe>
 {
-public:
-	using ObjectTypeInternal = TRemoveExtent<ObjectType>;
-
-	usize UseCount() const noexcept
+	static inline void IncreaseSharedRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
 	{
-		return m_RefCtr ? m_RefCtr->GetUseCount() : 0;
+
 	}
 
-	/**
-	 * Deleted copy constructor and assignment operator
-	 */
-	TSharedBase(const TSharedBase&) = delete;
-	TSharedBase& operator=(const TSharedBase&) = delete;
+	static inline bool IncreaseSharedRefCountNonZero(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
 
-protected:
-	ObjectTypeInternal* Get() const noexcept
+	}
+
+	static inline void DecreaseSharedRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+
+	}
+
+	static inline void IncreaseWeakRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+
+	}
+
+	static inline void DecreaseWeakRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+
+	}
+};
+
+template <>
+struct TReferenceControllerOperations<EReferenceMode::NotThreadSafe>
+{
+	static inline void IncreaseSharedRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+		if (a_ReferenceController != nullptr)
+		{
+			++a_ReferenceController->m_SharedRefCount;
+		}
+	}
+
+	static inline bool IncreaseSharedRefCountNonZero(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+		if (a_ReferenceController != nullptr)
+		{
+			if (a_ReferenceController->m_SharedRefCount == 0)
+			{
+				return false;
+			}
+
+			++a_ReferenceController->m_SharedRefCount;
+			return true;
+		}
+	}
+
+	static inline void DecreaseSharedRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+		if (a_ReferenceController != nullptr)
+		{
+			assert(a_ReferenceController->m_SharedRefCount > 0);
+			if (--a_ReferenceController->m_SharedRefCount == 0)
+			{
+				a_ReferenceController->DeletePointer();
+				DecreaseWeakRefCount(a_ReferenceController);
+			}
+		}
+	}
+
+	static inline void IncreaseWeakRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+		if (a_ReferenceController != nullptr)
+		{
+			++a_ReferenceController->m_WeakRefCount;
+		}
+	}
+
+	static inline void DecreaseWeakRefCount(IReferenceControllerBase* a_ReferenceController) noexcept
+	{
+		if (a_ReferenceController != nullptr)
+		{
+			assert(a_ReferenceController->m_WeakRefCount > 0);
+			if (--a_ReferenceController->m_WeakRefCount == 0)
+			{
+				a_ReferenceController->DeleteSelf();
+			}
+		}
+	}
+};
+
+// Forward declaration
+template <class ObjectType, EReferenceMode Mode = EReferenceMode::NotThreadSafe>
+class TSharedPtr;
+template <typename ObjectType, EReferenceMode Mode = EReferenceMode::NotThreadSafe>
+class TWeakPtr;
+
+template <class ObjectType, EReferenceMode Mode = EReferenceMode::NotThreadSafe>
+class TRefPointerBase
+{
+public:
+	using APtr = TRemoveExtentType<ObjectType>*;
+	using AConstPtr = const APtr;
+	using ARef = ObjectType&;
+	using AConstRef = const ARef;
+
+	APtr Get() const noexcept
 	{
 		return m_Ptr;
 	}
 
-	/**
-	 * Default constructor and destructor
-	 */
-	constexpr TSharedBase() noexcept = default;
-	~TSharedBase() = default;
-
-	/**
-	 * Move construct function
-	 */
-	template <class OtherType>
-	void MoveConstructFrom(TSharedBase<OtherType>&& a_Other) noexcept
+	bool IsValid() const noexcept
 	{
-		m_Ptr = a_Other.m_Ptr;
-		m_RefCtr = a_Other.m_RefCtr;
-
-		a_Other.m_Ptr = nullptr;
-		a_Other.m_RefCtr = nullptr;
+		return m_Ptr != nullptr;
 	}
 
-	template <class OtherType>
-	void CopyConstructFrom(const TSharedPointer<OtherType>& a_Other) noexcept
+	explicit operator bool() const noexcept
 	{
-		if (a_Other.m_RefCtr)
+		return IsValid();
+	}
+
+	bool operator!() const noexcept
+	{
+		return !IsValid();
+	}
+
+	ARef operator* () const noexcept
+	{
+		return *Get();
+	}
+
+	APtr operator-> () const noexcept
+	{
+#if FADE_DEBUG
+		assert(m_Ptr != nullptr);
+#endif
+		return Get;
+	}
+
+	bool operator==(AConstPtr a_Other) const noexcept
+	{
+		return m_Ptr == a_Other;
+	}
+
+	bool operator==(nullptr_t)  const noexcept
+	{
+		return m_Ptr == nullptr;
+	}
+
+	bool operator!=(nullptr_t) const noexcept
+	{
+		return m_Ptr != nullptr;
+	}
+
+protected:
+	using TControllerOps = TReferenceControllerOperations<Mode>;
+
+	template <typename PointerType>
+	void CopyConstructFrom(const TSharedPtr<PointerType>& a_Other) noexcept
+	{
+		TReferenceControllerOperations<Mode>::IncreaseSharedRefCount(a_Other.m_Controller);
+		m_Ptr			= a_Other.m_Ptr;
+		m_Controller	= a_Other.m_Controller;
+	}
+
+	template <typename PointerType>
+	void MoveConstructFrom(TSharedPtr<PointerType>&& a_Other) noexcept
+	{
+		m_Ptr			= a_Other.m_Ptr;
+		m_Controller	= a_Other.m_Controller;
+
+		a_Other.m_Ptr			= nullptr;
+		a_Other.m_Controller	= nullptr;
+	}
+
+	template <class PointerType>
+	void AliasConstructFrom(const TSharedPtr<PointerType>& a_Other, APtr a_Ptr) noexcept
+	{
+		TReferenceControllerOperations<Mode>::IncreaseSharedRefCount(a_Other.m_Controller);
+
+		m_Ptr			= a_Ptr;
+		m_Controller	= a_Other.m_Controller;
+	}
+
+	template <class PointerType>
+	void AliasMoveConstructFrom(TSharedPtr<PointerType>&& a_Other, APtr a_Ptr) noexcept
+	{
+		m_Ptr			= a_Ptr;
+		m_Controller	= a_Other.m_Controller;
+
+		a_Other.m_Ptr			= nullptr;
+		a_Other.m_Controller	= nullptr;
+	}
+
+	template <typename PointerType>
+	void Swap(TSharedPtr<PointerType>& a_Other) noexcept
+	{
+		Fade::Swap(m_Ptr, a_Other.m_Ptr);
+		Fade::Swap(m_Controller, a_Other.m_Controller);
+	}
+
+	template <typename PointerType>
+	void InitFromPtrAndCtrl(PointerType* const a_Pointer, IReferenceControllerBase* const a_ReferenceController) noexcept
+	{
+		m_Ptr			= a_Pointer;
+		m_Controller	= a_ReferenceController;
+	}
+
+	template <class PointerType, EReferenceMode Mode>
+	friend class TWeakPtr;
+
+	template <typename PointerType>
+	bool ConstructFromWeak(const TWeakPtr<PointerType>& a_Other) noexcept
+	{
+		if (TControllerOps::IncreaseSharedRefCountNonZero(a_Other.m_Controller))
 		{
-			a_Other.m_RefCtr->IncreaseRef();
+			m_Ptr			= a_Other.m_Ptr;
+			m_Controller	= a_Other.m_Controller;
+			return true;
 		}
 
-		m_Ptr = a_Other.m_Ptr;
-		m_RefCtr = a_Other.m_RefCtr;
+		return false;
 	}
-	
-	template <class OtherType>
-	void AliasConstructFrom(const TSharedPointer<OtherType>& a_Other, ObjectTypeInternal* a_Ptr) noexcept
+
+	template <typename PointerType>
+	void WeaklyConstructFrom(const TRefPointerBase<PointerType>& a_Other) noexcept
 	{
-		if (a_Other.m_RefCtrl)
+		if (a_Other.m_Controller != nullptr)
 		{
-			a_Other.m_RefCtrl->IncreaseRef();
-		}
-
-		m_Ptr = a_Other.m_Ptr;
-		m_RefCtr = a_Other.m_RefCtr;
-	}
-
-	template <class OtherType>
-	void AliasMoveConstructFrom(TSharedPointer<OtherType>&& a_Other, ObjectTypeInternal* a_Ptr) noexcept
-	{
-		m_Ptr = a_Ptr;
-		m_RefCtr = a_Other.m_RefCtr;
-
-		a_Other.m_Ptr = nullptr;
-		a_Other.m_RefCtr = nullptr;
-	}
-
-	void DecreaseRef() noexcept
-	{
-		if (m_RefCtr)
-		{
-			m_RefCtr->DecreaseRef();
+			TControllerOps::IncreaseWeakRefCount(a_Other.m_Controller);
+			m_Ptr			= a_Other.m_Ptr;
+			m_Controller	= a_Other.m_Controller;
 		}
 	}
 
-	void Swap(TSharedBase& a_Other) noexcept
+	void IncreaseSharedReferences() const noexcept
 	{
-		// TODO learn how std::swap works and implement it
-		std::swap(m_Ptr, a_Other.m_Ptr);
-		std::swap(m_RefCtr, a_Other.m_RefCtr);
-	}
-
-	template <class OtherType>
-	void WeaklyConstructFrom(const TSharedBase<OtherType>& a_Other) noexcept
-	{
-		if (a_Other.m_RefCtr)
+		if (m_Controller != nullptr)
 		{
-			m_Ptr = a_Other.m_Ptr;
-			m_RefCtr = a_Other.m_RefCtr;
-			m_RefCtr->IncreaseWeakRef();
+			TControllerOps::IncreaseSharedRefCount(m_Controller);
 		}
 	}
 
-	void DecreaseWeakRef() noexcept
+	void DecreaseSharedReferences() const noexcept
 	{
-		if (m_RefCtr)
+		if (m_Controller != nullptr)
 		{
-			m_RefCtr->DecreaseWeakRef();
+			TControllerOps::DecreaseSharedRefCount(m_Controller);
 		}
 	}
 
-	/**
-	 * The object in question
-	 */
-	ObjectTypeInternal* m_Ptr{ nullptr };
+	void IncreaseWeakReferences() const noexcept
+	{
+		if (m_Controller != nullptr)
+		{
+			TControllerOps::IncreaseWeakRefCount(m_Controller);
+		}
+	}
 
-	/**
-	 * The reference counter
-	 */
-	CRefCounterBase* m_RefCtr{ nullptr };
+	void DecreaseWeakReferences() const noexcept
+	{
+		if (m_Controller != nullptr)
+		{
+			TControllerOps::DecreaseWeakRefCount(m_Controller);
+		}
+	}
+
+protected:
+	APtr m_Ptr								= nullptr;
+	IReferenceControllerBase* m_Controller	= nullptr;
+
+	template <class OtherType, EReferenceMode Mode>
+	friend class TRefPointerBase;
+
+	friend TSharedPtr<ObjectType>;
 };
 
 template <class ObjectType>
-struct TTempOwner
+struct TTemporaryOwner 
 {
 	ObjectType* m_Ptr;
 
-	explicit TTempOwner(ObjectType* const a_Ptr) noexcept
+	explicit TTemporaryOwner(ObjectType* const a_Ptr) noexcept 
 		: m_Ptr(a_Ptr)
 	{ }
 
-	TTempOwner(const TTempOwner&) = delete;
-	TTempOwner& operator=(const TTempOwner&) = delete;
+	// copy constructor and assignment operator are explicitly deleted
+	TTemporaryOwner(const TTemporaryOwner&) = delete;
+	TTemporaryOwner& operator=(const TTemporaryOwner&) = delete;
 
-	~TTempOwner()
+	// Constructor with regular delete
+	~TTemporaryOwner()
 	{
 		delete m_Ptr;
 	}
 };
 
-template <class ObjectType, class Deleter>
-struct TTempOwnerDeleter
+template <class PointerType, class Deleter>
+struct TTemporaryOwnerWithDeleter 
 {
-	ObjectType m_Ptr;
+	PointerType m_Ptr;
 	Deleter& m_Deleter;
 	bool m_CallDeleter = true;
 
-	/**
-	 * Construct from pointer and deleter
-	 */
-	explicit TTempOwnerDeleter(const ObjectType a_Ptr, Deleter& a_Deleter) noexcept
+	explicit TTemporaryOwnerWithDeleter(const PointerType a_Ptr, Deleter& a_Deleter) noexcept
 		: m_Ptr(a_Ptr)
 		, m_Deleter(a_Deleter)
-	{ }
+	{
+	}
 
-	/**
-	 * Delete copy constructor and copy assignment operator
-	 */
-	TTempOwnerDeleter(const TTempOwnerDeleter&) = delete;
-	TTempOwnerDeleter& operator=(const TTempOwnerDeleter&) = delete;
+	// Copy constructor and assignment operator are explicitly deleted
+	TTemporaryOwnerWithDeleter(const TTemporaryOwnerWithDeleter&) = delete;
+	TTemporaryOwnerWithDeleter& operator=(const TTemporaryOwnerWithDeleter&) = delete;
 	
-	/**
-	 * Destructor
-	 */
-	~TTempOwnerDeleter()
+	// Destructor with deleter
+	~TTemporaryOwnerWithDeleter()
 	{
 		if (m_CallDeleter)
 		{
@@ -267,123 +439,350 @@ struct TTempOwnerDeleter
 	}
 };
 
-template <class ObjectType>
-class TSharedPointer : public TSharedBase<ObjectType>
+template <class ObjectType, EReferenceMode Mode>
+class TSharedPtr : public TRefPointerBase<ObjectType, Mode>
 {
-	using Ptr = ObjectType*;
-	using ConstPtr = const Ptr;
-	using Ref = ObjectType&;
-	using ConstRef = const Ref;
-	using ThisType = TSharedPointer<ObjectType>;
+	using Super = TRefPointerBase<ObjectType, Mode>;
 public:
 	/**
-	 * Construct empty shared pointer
+	 * Default constructor
+	 *
+	 * Constructs an empty shared pointer of our object type.
 	 */
-	constexpr TSharedPointer() noexcept {}
+	constexpr TSharedPtr() noexcept = default;
 
 	/**
-	 * Construct empty shared pointer
+	 * Nullptr constructor
+	 *
+	 * Constructs an empty shared pointer of our object type.
 	 */
-	constexpr TSharedPointer(Fade::nullptr_t) noexcept {}
+	constexpr TSharedPtr(std::nullptr_t) noexcept
+	{ }
 
 	/**
-	 * Construct with pointer
+	 * Raw pointer constructor of same type
 	 */
-	template <class OtherType,
-		TEnableIf<TConjunctionVal<TConditional<TIsArrayVal<ObjectType>, 
-	explicit TSharedPointer(OtherType* a_Object)
+	TSharedPtr(ObjectType* a_Pointer)
 	{
-#if _HAS_IF_CONSTEXPR
-		if constexpr (TIsArrayVal<ObjectType>)
-		{
-			SetPointerAndDeleter(a_Object, TDefaultDelete<OtherType>{});
-		}
-		else
-		{
-			TTempOwner<OtherType> Owner(a_Object);
-			SetAndEnableShared(Owner.m_Ptr, new CRefCounter<OtherType>(Owner.m_Ptr));
-			Owner.m_Ptr = nullptr;
-		}
-#else
-		SetPointer(a_Object, TIsArray<ObjectType>{});
-#endif		
+		m_Ptr = a_Pointer;
+		m_Controller = new TReferenceController<ObjectType>();
 	}
 
 	/**
-	 * Construct with pointer and deleter
+	 * Raw pointer constructor
+	 *
+	 * Constructs a shared pointer from a raw pointer.
+	 * This constructor creates and initializes the reference counter.
 	 */
-	template <class OtherType, class DeleterType>
-	TSharedPointer(OtherType * a_Ptr, DeleterType a_Deleter)
+	template <class PointerType>
+	TSharedPtr(PointerType* a_Pointer)
 	{
-		SetPointerAndDeleter(a_Ptr, Move(a_Deleter));
+		static_assert(TIsBaseOf<ObjectType, PointerType>::sm_Value, "Unable to instantiate shared pointer with unrelated pointer");
+		m_Ptr			= a_Pointer;
+		m_Controller	= new TReferenceController<ObjectType>();
 	}
+
+	/**
+	 * 
+	 */
+	TSharedPtr(const TSharedPtr& a_Other)
+	{
+		CopyConstructFrom(a_Other);
+	}
+
+	/**
+	 * Copy constructor
+	 *
+	 * Constructs a shared pointer object from an existing one of a connected type.
+	 * This constructor increases the reference counter.
+	 */
+	template <class PointerType>
+	TSharedPtr(const TSharedPtr<PointerType>& a_Other)
+	{
+		static_assert(TIsBaseOf<ObjectType, PointerType>::sm_Value, "Unable to copy construct a shared pointer from another unrelated shared pointer");
+		CopyConstructFrom(a_Other);
+	}
+
+	/**
+	 * Move constructor from same type
+	 */
+	TSharedPtr(TSharedPtr&& a_Other)
+	{
+		MoveConstructFrom(Fade::Move(a_Other));
+	}
+
+	/**
+	 * Move constructor from other type
+	 *
+	 *
+	 */
+	template <class PointerType>
+	TSharedPtr(TSharedPtr<PointerType>&& a_Other)
+	{
+		static_assert(TIsBaseOf<ObjectType, PointerType>::sm_Value, "Unable to move construct a shared pointer from another unrelated shared pointer");
+		MoveConstructFrom(Fade::Move(a_Other));
+	}
+
+	/**
+	 * Alias copy constructor
+	 * 
+	 * 
+	 */
+	template <class PointerType>
+	TSharedPtr(const TSharedPtr<PointerType>& a_Other, APtr a_Ptr) noexcept
+	{
+		AliasConstructFrom(a_Other, a_Ptr);
+	}
+
+	/**
+	 * Alias move constructor
+	 */
+	template <class PointerType>
+	TSharedPtr(TSharedPtr<PointerType>&& a_Other, APtr a_Ptr) noexcept
+	{
+		AliasMoveConstructFrom(a_Other, a_Ptr);
+	}
+
+	/**
+	 * Copy assignment from same type
+	 */
+	TSharedPtr& operator= (const TSharedPtr& a_Other) noexcept
+	{
+		TSharedPtr(a_Other).Swap(*this);
+		return *this;
+	}
+
+	/**
+	 * Copy assignment from other type
+	 *
+	 * 
+	 */
+	template <class PointerType>
+	TSharedPtr& operator= (const TSharedPtr<PointerType>& a_Other) noexcept
+	{
+		static_assert(TIsBaseOf<ObjectType, PointerType>::sm_Value, "Unable to copy assign a shared pointer from another unrelated shared pointer");
+		TSharedPtr(a_Other).Swap(*this);
+		return *this;
+	}
+
+	/**
+	 * Move assignment from same type
+	 * 
+	 * We consume the other shared pointer
+	 */
+	TSharedPtr& operator= (TSharedPtr&& a_Other) noexcept
+	{
+		TSharedPtr(Fade::Move(a_Other)).Swap(*this);
+		return *this;
+	}
+
+	/**
+	 * Move assignment from other type
+	 *
+	 * We consume the other shared pointer
+	 */
+	template <class PointerType>
+	TSharedPtr& operator= (TSharedPtr<PointerType>&& a_Other) noexcept
+	{
+		static_assert(TIsBaseOf<ObjectType, PointerType>::sm_Value, "Unable to move assign a shared pointer from another unrelated shared pointer");
+		TSharedPtr(Fade::Move(a_Other)).Swap(*this);
+		return *this;
+	}
+
+	/**
+	 * Release resource and convert to empty shared_ptr object
+	 */
+	void Reset() noexcept
+	{
+		TSharedPtr().Swap(*this);
+	}
+
+	/**
+	 * Release resource and take ownership of the new pointer
+	 */
+	template <class PointerType>
+	void Reset(PointerType* a_Ptr)
+	{
+		TSharedPtr(a_Ptr).Swap(*this);
+	}
+
+	using TRefPointerBase<ObjectType>::Get;
+
+	/**
+	 * Operators
+	 */
+	template <typename PointerType = ObjectType, typename = TEnableIf<!TIsArray<ObjectType>::sm_Value>::TType>
+	FADE_NODISCARD PointerType* operator->() const noexcept
+	{
+		return Get();
+	}
+
+	template <typename PointerType = ObjectType, typename = TEnableIf<!TDisjunctionValue<TIsArray<ObjectType>, TIsVoid<ObjectType>>>::TType>
+	FADE_NODISCARD ObjectType& operator*() const noexcept
+	{
+		return *Get();
+	}
+
 private:
+	template <class PointerType, class Deleter>
+	void SetPointerDeleter(const PointerType a_Ptr, Deleter a_Deleter)
+	{
+		TTemporaryOwnerWithDeleter<PointerType, Deleter> Owner(a_Ptr, a_Deleter);
+		EnableSharedFromPtrAndCtrl(
+			Owner.m_Ptr, 
+			new TReferenceController<PointerType, Deleter>(
+				Owner.m_Ptr,
+				Fade::Move(a_Deleter)
+			)
+		);
+		Owner.m_CallDeleter = false;
+	}
+
+	template <class ObjectType, class... Types>
+	friend TSharedPtr<ObjectType> MakeShared(Types&&... a_Args);
 
 	template <class PointerType>
-	void SetPointer(const PointerType a_Ptr, TTrueType)
+	void EnableSharedFromPtrAndCtrl(ObjectType* const a_Ptr, IReferenceControllerBase* const a_Controller) noexcept
 	{
-
+		m_Ptr			= a_Ptr;
+		m_Controller	= a_Controller;
 	}
 
 	template <class PointerType>
-	void SetPointer(const PointerType a_Ptr, TFalseType)
+	void EnableSharedFromPtrAndCtrl(Fade::nullptr_t, IReferenceControllerBase* const a_Controller) noexcept
 	{
-
+		m_Ptr			= nullptr;
+		m_Controller	= a_Controller;
 	}
-
-	template <class PointerOrNullptr, class Deleter>
-	void SetPointerAndDeleter(const PointerOrNullptr a_Ptr, Deleter a_Deleter)
-	{
-
-	}
-
-	template <class OtherType>
-	void SetAndEnableShared(ObjectTypeInternal* const a_Ptr, CRefCounterBase* const a_RefCtr) noexcept
-	{
-		m_Ptr = a_Ptr;
-		m_RefCtr = a_RefCtr;
-	}
-
-private:
-	
 };
 
-template <typename ObjectType>
-TSharedPointer<ObjectType>&& MakeShared()
+/**
+ * Shared pointer operators
+ */
+template <class A, class B>
+bool operator== (const TSharedPtr<A>& a_Lhs, const TSharedPtr<B>& a_Rhs) noexcept
 {
-#ifdef _DEBUG
-	static_assert(!TIsPointer<ObjectType>::sm_Value && !TIsReference<ObjectType>::sm_Value, "Please make sure the type passed as template isn't a pointer or reference");
-#endif
-	return TSharedPointer(new ObjectType);
+	return a_Lhs.Get() == a_Rhs.Get();
 }
 
-template <typename ObjectType, typename... Args>
-TSharedPointer<ObjectType>&& MakeShared(Args&&... a_Arguments)
+template <class A, class B>
+bool operator== (const TSharedPtr<A>& a_Lhs, Fade::nullptr_t) noexcept
 {
-#ifdef _DEBUG
-	static_assert(!TIsPointer<ObjectType>::sm_Value && !TIsReference<ObjectType>::sm_Value, "Please make sure the type passed as template isn't a pointer or reference");
-#endif
-	return TSharedPointer(new ObjectType(Forward(a_Arguments)));
+	return a_Lhs.Get() == nullptr;
 }
 
-template <typename ObjectType>
-TSharedPointer<ObjectType>&& MakeShared(ObjectType* a_Object)
+template <class A, class B>
+bool operator== (Fade::nullptr_t, const TSharedPtr<A>& a_Rhs) noexcept
 {
-#ifdef _DEBUG
-	static_assert(!TIsPointer<ObjectType>::sm_Value && !TIsReference<ObjectType>::sm_Value, "Please make sure the type passed as template isn't a pointer or reference");
-#endif
-	return TSharedPointer(a_Object);
+	return nullptr == a_Rhs.Get();
 }
 
-#endif
+template <class A, class B>
+bool operator!= (const TSharedPtr<A>& a_Lhs, const TSharedPtr<B>& a_Rhs) noexcept
+{
+	return a_Lhs.Get() != a_Rhs.Get();
+}
 
+template <class A, class B>
+bool operator!= (const TSharedPtr<A>& a_Lhs, Fade::nullptr_t) noexcept
+{
+	return a_Lhs.Get() != nullptr;
+}
+
+template <class A, class B>
+bool operator!= (Fade::nullptr_t, const TSharedPtr<B>& a_Rhs) noexcept
+{
+	return nullptr != a_Rhs.Get();
+}
+
+template <class A, class B>
+bool operator< (const TSharedPtr<A>& a_Lhs, const TSharedPtr<B>& a_Rhs) noexcept
+{
+	return a_Lhs.Get() < a_Rhs.Get();
+}
+
+template <class A, class B>
+bool operator> (const TSharedPtr<A>& a_Lhs, const TSharedPtr<B>& a_Rhs) noexcept
+{
+	return a_Lhs.Get() > a_Rhs.Get();
+}
+
+template <class A, class B>
+bool operator<= (const TSharedPtr<A>& a_Lhs, const TSharedPtr<B>& a_Rhs) noexcept
+{
+	return a_Lhs.Get() <= a_Rhs.Get();
+}
+
+template <class A, class B>
+bool operator>= (const TSharedPtr<A>& a_Lhs, const TSharedPtr<B>& a_Rhs) noexcept
+{
+	return a_Lhs.Get() >= a_Rhs.Get();
+}
+
+/**
+ * Dynamic pointer cast to downcast to a derived class
+ * This requires RTTI
+ * 
+ * This function invokes a copy construction
+ */
+template <class To, class From>
+FADE_NODISCARD TSharedPtr<To> DynamicPointerCast(const TSharedPtr<From>& a_Other) noexcept
+{
+	const auto Ptr = dynamic_cast<TSharedPtr<To>::APtr>(a_Other.Get());
+
+	if (Ptr != nullptr)
+	{
+		return TSharedPtr<To>(a_Other, Ptr);
+	}
+
+	return nullptr;
+}
+
+/**
+ * Dynamic pointer cast to downcast to a derived class
+ * This requires RTTI
+ *
+ * This function invokes a move construction
+ */
+template <class To, class From>
+FADE_NODISCARD TSharedPtr<To> DynamicPointerCast(TSharedPtr<From>&& a_Other) noexcept
+{
+	const To* Ptr = dynamic_cast<TSharedPtr<To>::APtr>(a_Other.Get());
+
+	if (Ptr != nullptr)
+	{
+		return TSharedPtr<To>(Fade::Move(a_Other), Ptr);
+	}
+
+	return nullptr;
+}
+
+template <class ObjectType, class... Types>
+TSharedPtr<ObjectType> MakeShared(Types&&... a_Args)
+{
+	const auto Ctrl = new TInlineReferenceController<ObjectType>(Fade::Forward<Types>(a_Args)...);
+	TSharedPtr<ObjectType> Return;
+	Return.InitFromPtrAndCtrl(__builtin_addressof(Ctrl->m_Storage), Ctrl);
+	return Return;
+}
+
+template <typename ObjectType, EReferenceMode Mode>
+class TWeakPtr
+{
+
+};
+#else
 template <typename T>
 using TSharedPtr = std::shared_ptr<T>;
+
+template <typename T>
+using TWeakPtr = std::weak_ptr<T>;
 
 template <typename Type>
 bool IsValid(const TSharedPtr<Type>& a_SharedPtr)
 {
 	return a_SharedPtr.get() != nullptr;
 }
+#endif
 
 }

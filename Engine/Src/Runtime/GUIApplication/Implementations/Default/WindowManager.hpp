@@ -19,24 +19,29 @@ struct SWindowContainer
 	{
 	}
 
-	// Copy constructor deleted since we're working with a unique pointer
-	SWindowContainer(const SWindowContainer& a_Other) = delete;
-
-	// Move constructor
-	SWindowContainer(SWindowContainer&& a_Other) noexcept
+	~SWindowContainer()
 	{
-		m_WindowRenderContext = a_Other.m_WindowRenderContext;
-		m_Window = Fade::Move(a_Other.m_Window);
-		m_BaseWidget = Fade::Move(a_Other.m_BaseWidget);
+		if (m_Window.IsValid())
+		{
+			m_Window.Reset();
+		}
 
-		a_Other.m_WindowRenderContext = RHI::SWindowContext();
-		a_Other.m_Window = nullptr;
-		a_Other.m_BaseWidget = nullptr;
+		if (m_BaseWidget.IsValid())
+		{
+			m_BaseWidget.Reset();
+		}
+	}
+
+	bool operator== (const SWindowContainer& a_Other)
+	{
+		return m_WindowRenderContext == a_Other.m_WindowRenderContext 
+			&& m_Window == a_Other.m_Window
+			&& m_BaseWidget == a_Other.m_BaseWidget;
 	}
 
 	RHI::SWindowContext					m_WindowRenderContext;
 	TSharedPtr<PlatformCore::CWindow>	m_Window;
-	TUniquePtr<GUI::CWidget>			m_BaseWidget;
+	TSharedPtr<GUI::CWidget>			m_BaseWidget;
 };
 
 class CWindowManager
@@ -46,8 +51,15 @@ public:
 
 	AWindowHandle CreatePlatformWindow(TSharedPtr<PlatformCore::CWindow> a_Window, PlatformCore::SWindowSettings& a_WindowSettings, AWindowHandle a_ParentHandle);
 	
+	AWindowHandle GetWindowHandleFromWindow(const TSharedPtr<PlatformCore::CWindow>& a_Window);
+
+	bool CloseWindow(AWindowHandle a_Handle);
+	bool CloseWindow(const TSharedPtr<PlatformCore::CWindow>& a_Window);
+
 	void RenderWindows(GUI::IRenderer* a_Renderer);
 	
+	usize GetNumWindows() const;
+
 private:
 	TArray<SWindowContainer> m_Windows;
 	std::map<AWindowHandle, u32> m_WindowIndexMap;
