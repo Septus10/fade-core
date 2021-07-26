@@ -29,17 +29,17 @@
 		{
 			"Name": "RHI",
 			"Type": "Runtime",
-			"Implementation" :"OpenGL"
+			"Implementation": "OpenGL"
 		},
 		{
 			"Name": "GUI",
 			"Type": "Runtime",
-			"Implementation" :"Default"
+			"Implementation": "Default"
 		},
 		{
 			"Name": "GUIApplication",
 			"Type": "Runtime",
-			"Implementation" :"Default"
+			"Implementation": "Default"
 		}
 	]
 }

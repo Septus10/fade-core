@@ -33,8 +33,8 @@ void CRenderer::Begin(Fade::PlatformCore::CWindow* a_Window)
 	}
 
 	m_Program.Bind();
-	m_Program.SetFloatValue("aWidth", a_Window->GetWidth());
-	m_Program.SetFloatValue("aHeight", a_Window->GetHeight());
+	m_Program.SetFloatValue("aWidth", float(a_Window->GetWidth()));
+	m_Program.SetFloatValue("aHeight", float(a_Window->GetHeight()));
 }
 
 void CRenderer::End()
@@ -105,7 +105,7 @@ void CRenderer::AddVert(const float a_X, const float a_Y,
 		a_TexID				// TexID
 	};
 
-	m_Vertices.Add(Vert);
+	m_Vertices.push_back(Vert);
 }
 
 TUniquePtr<IRenderer> CreateRenderer()

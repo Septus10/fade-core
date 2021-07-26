@@ -1,19 +1,17 @@
 #pragma once
 
-#include <string>
+#include <Core/Definitions.hpp>
+#include <Core/Containers/Array.hpp>
 
 namespace Fade { 
 
-class CResource
+class CResource // : public CSerializableObject
 {
 public:
-	const std::string& GetName()
-	{
-		return m_Name;
-	}
+	
 
 private:
-	std::string m_Name;
+	
 };
 
 }

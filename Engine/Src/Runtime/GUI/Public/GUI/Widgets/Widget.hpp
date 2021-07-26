@@ -30,7 +30,17 @@ public:
 	virtual bool OnQuit() { return false; }
 
 protected:
+	/**
+	 * Rect for our widget
+	 */
 	SRect<u32> m_Rect;
+	
+	struct SAnchor {
+		float m_X;
+		float m_Y;
+	} m_Anchor;
+
 };
+
 
 } }

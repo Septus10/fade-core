@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GUI/Widgets/Widget.hpp>
+#include <GUI/Widgets/CompositeWidget.hpp>
 
 #include <Core/Definitions.hpp>
 
@@ -11,19 +11,20 @@ namespace Fade { inline namespace GUI {
  * 
  * Handles window input such as resizing/minimizing/maximizing/closing
  */
-class FADE_GUI_API CWindowFrame : public CWidget
+class FADE_GUI_API CWindowFrame : public CCompositeWidget
 {
 public:
 	CWindowFrame();
 	//explicit CWindowFrame() noexcept;
 	virtual ~CWindowFrame() override = default;
 
-	virtual void Render(IRenderer* a_Renderer) override;
-	virtual void Cleanup() override;
+	void Render(IRenderer* a_Renderer) override;
+	void Cleanup() override { }
 
 	// Input
-	//virtual bool OnMouseMove(int a_X, int a_Y, int a_DX, int a_DY) override;
-	//virtual bool OnMouseButton(EMouseButton a_Button, bool a_Down, bool a_Repeat) override;
+	bool OnMouseMove(int a_X, int a_Y, int a_DX, int a_DY) override;
+	//virtual bool OnMouseButtonDown(EMouseButton a_Button, bool a_Repeat) override;
+	virtual bool OnMouseButtonUp(EMouseButton a_Button) override;
 	//virtual bool OnKey(int a_Key, bool a_Down, bool a_Repeat) override;
 	//virtual bool OnChar(wchar_t a_Char) override;
 	//virtual bool OnMouseWheel(int a_Value) override;

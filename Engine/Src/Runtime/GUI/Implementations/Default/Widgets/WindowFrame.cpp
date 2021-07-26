@@ -1,5 +1,7 @@
 #include <GUI/Widgets/WindowFrame.hpp>
 
+#include <GUI/Widgets/Button.hpp>
+
 #include <PlatformCore/PlatformCore.hpp>
 
 namespace Fade { inline namespace GUI {
@@ -12,17 +14,19 @@ CWindowFrame::CWindowFrame()
 	, m_IsHoveringLeft(false)
 	, m_IsHoveringTop(false)
 	, m_IsHoveringBot(false)
-{ }
+{
+	CButton* Close = new CButton();
 
-/*CWindowFrame::CWindowFrame() noexcept
-	: m_IsHoveringExit(false)
-	, m_IsHoveringMaximize(false)
-	, m_IsHoveringMinimize(false)
-	, m_IsHoveringRight(false)
-	, m_IsHoveringLeft(false)
-	, m_IsHoveringTop(false)
-	, m_IsHoveringBot(false)
-{ }*/
+	AddWidget(Close);
+
+	CButton* Restore = new CButton();
+
+	AddWidget(Restore);
+
+	CButton* Minimize = new CButton();
+	
+	AddWidget(Minimize);
+}
 
 void CWindowFrame::Render(IRenderer* a_Renderer)
 {
@@ -59,7 +63,6 @@ void CWindowFrame::Render(IRenderer* a_Renderer)
 	a_Renderer->DrawFilledQuad(SRect(m_Rect.m_Left, m_Rect.m_Left + 4, m_Rect.m_Top, m_Rect.m_Bottom), Fade::SColor::Cyan);
 }
 
-/*
 bool CWindowFrame::OnMouseMove(int a_X, int a_Y, int a_DX, int a_DY)
 {
 	a_Y = m_Rect.m_Top - a_Y;
@@ -100,14 +103,14 @@ bool CWindowFrame::OnMouseMove(int a_X, int a_Y, int a_DX, int a_DY)
 	return false;
 }
 
-bool CWindowFrame::OnMouseButton(EMouseButton a_Button, bool a_Down, bool a_Repeat)
+bool CWindowFrame::OnMouseButtonUp(EMouseButton a_Button)
 {
-	if (a_Button == EMouseButton::Left && !a_Down)
+	if (a_Button == EMouseButton::Left)
 	{
 		if (m_IsHoveringExit)
 		{
 			// Close the window
-			m_Window->Close();
+			//m_Window->Close();
 		}
 		else if (m_IsHoveringMaximize)
 		{
@@ -122,32 +125,6 @@ bool CWindowFrame::OnMouseButton(EMouseButton a_Button, bool a_Down, bool a_Repe
 	}
 
 	return false;
-}
-
-bool CWindowFrame::OnKey(int a_Key, bool a_Down, bool a_Repeat)
-{
-	return false;
-}
-
-bool CWindowFrame::OnChar(wchar_t a_Char)
-{
-	return false;
-}
-
-bool CWindowFrame::OnMouseWheel(int a_Value)
-{
-	return false;
-}
-
-bool CWindowFrame::OnQuit()
-{
-	return false;
-}
-*/
-
-void CWindowFrame::Cleanup()
-{
-	
 }
 
 } }

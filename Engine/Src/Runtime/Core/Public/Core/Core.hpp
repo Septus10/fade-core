@@ -27,7 +27,7 @@
 * Local variables do not have a prefix
 */
 
-#pragma warning (disable : 4251);
+#pragma warning (disable : 4251)
 
 #ifndef FADE_HAS_NODISCARD
 #ifndef __has_cpp_attribute

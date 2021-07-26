@@ -4,19 +4,24 @@
 #include <Core/Containers/String.hpp>
 #include <Core/definitions.hpp>
 
+#include <Core/Containers/SharedPointer.hpp>
+
 namespace Fade {
 
 using AResourceHandle = u32;
 
 class CResource;
-class CResourceStorage
+
+/**
+ * Resource cache is our object that caches and handles these cached resources
+ */
+class CResourceCache
 {
 public:
-	CResource* GetResourceByHandle(AResourceHandle a_Handle);
-	CResource* GetResourceByName(SString a_Name);
+	
 	
 private:
-	TArray<CResource*> m_ResourcePointers;
+	TArray<TWeakPtr<CResource>> m_CachedResources;
 };
 
 }
