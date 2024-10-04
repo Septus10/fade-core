@@ -1,9 +1,0 @@
-{
-	"Name": "glew",
-	"Version": "2.0.0",
-	"ExternalLibrary": "true",
-	"LibraryName": "glew32s",
-	"RequiredLibraries": [
-		"opengl32"
-	]
-}
