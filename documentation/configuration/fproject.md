@@ -1,1 +1,0 @@
-# 4.1 Project Configuration
